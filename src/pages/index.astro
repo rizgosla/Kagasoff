@@ -44,26 +44,47 @@ import { practiceAreas } from '../data/practiceAreas';
 
   <!-- ===== PRACTICE AREAS ===== -->
   <section class="mx-auto max-w-[1180px] px-10 py-[84px]">
-    <div class="mb-12 text-center">
-      <p class="mb-3.5 text-xs uppercase tracking-[0.32em] text-brass">Our Practice</p>
-      <h2 class="font-serif text-[42px] font-medium text-navy">Seven areas. One standard of care.</h2>
-    </div>
-    <div class="border-t border-line">
-      {
-        practiceAreas.map((a, i) => (
-          <a
-            href={`/practice/${a.slug}`}
-            class="prow grid grid-cols-[62px_1fr_auto] items-center gap-7 border-b border-line px-2 py-6"
-          >
-            <span class="font-serif text-[23px] text-brass">{String(i + 1).padStart(2, '0')}</span>
-            <span class="flex flex-wrap items-baseline gap-[22px]">
-              <span class="font-serif text-[27px] font-semibold text-navy">{a.name}</span>
-              <span class="text-[14.5px] font-light text-ink">{a.short}</span>
-            </span>
-            <span class="parrow text-[19px] text-brass">→</span>
-          </a>
-        ))
-      }
+    <div class="md:flex md:gap-20">
+
+      <!-- Left sticky column — stacks above list on mobile, fixed sidebar on desktop -->
+      <div class="mb-10 text-center md:mb-0 md:w-[38%] md:shrink-0 md:text-left">
+        <div class="md:sticky md:top-12">
+          <p class="mb-3.5 text-xs uppercase tracking-[0.32em] text-brass">Our Practice</p>
+          <h2 class="mb-5 font-serif text-[34px] font-medium leading-[1.2] text-navy">
+            Seven areas. One standard of care.
+          </h2>
+          <p class="text-[15px] font-light leading-[1.75] text-ink">
+            Whatever life brings — an accident, a criminal charge, a custody dispute, a licensing
+            board complaint — the firm provides the same direct, attorney-led counsel across every
+            matter. You never have to start over with a new lawyer or lose the context you've built.
+          </p>
+          <p class="mt-4 text-[15px] font-light leading-[1.75] text-ink">
+            One relationship. Continuity of counsel. Across every area we practice.
+          </p>
+        </div>
+      </div>
+
+      <!-- Right column: numbered list, unchanged -->
+      <div class="md:flex-1">
+        <div class="border-t border-line">
+          {
+            practiceAreas.map((a, i) => (
+              <a
+                href={`/practice/${a.slug}`}
+                class="prow grid grid-cols-[62px_1fr_auto] items-center gap-7 border-b border-line px-2 py-6"
+              >
+                <span class="font-serif text-[23px] text-brass">{String(i + 1).padStart(2, '0')}</span>
+                <span class="flex flex-wrap items-baseline gap-[22px]">
+                  <span class="font-serif text-[27px] font-semibold text-navy">{a.name}</span>
+                  <span class="text-[14.5px] font-light text-ink">{a.short}</span>
+                </span>
+                <span class="parrow text-[19px] text-brass">→</span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
     </div>
   </section>
 
