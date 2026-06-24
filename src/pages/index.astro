@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Placeholder from '../components/Placeholder.astro';
 import PracticeCTA from '../components/PracticeCTA.astro';
 import { practiceAreas } from '../data/practiceAreas';
 ---
@@ -8,11 +7,13 @@ import { practiceAreas } from '../data/practiceAreas';
 <BaseLayout title="Kagasoff Law Firm, A.P.C. | Orange County Attorney" active="Home">
   <!-- ===== HERO ===== -->
   <section class="relative overflow-hidden bg-navy text-paper">
-    <Placeholder
-      label="Courthouse / firm photograph — full bleed"
-      dark
-      class="absolute inset-0 opacity-[0.16]"
+    <img
+      src="/hero.jpg"
+      alt=""
+      aria-hidden="true"
+      class="absolute inset-0 h-full w-full object-cover object-center"
     />
+    <div class="absolute inset-0 bg-navy/75"></div>
     <div class="relative mx-auto max-w-[1180px] px-10 pb-[112px] pt-[104px] text-center">
       <p class="mb-[26px] text-xs uppercase tracking-[0.36em] text-brasslight">
         Serving Orange County, California
