@@ -1,4 +1,6 @@
 ---
+import { practiceAreas } from '../data/practiceAreas';
+
 interface Props {
   active?: string;
 }
@@ -7,7 +9,6 @@ const { active = '' } = Astro.props;
 const nav = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
-  { label: 'Practice Areas', href: '/practice/personal-injury' },
   { label: 'Contact', href: '/contact' },
 ];
 ---
@@ -38,6 +39,36 @@ const nav = [
           </a>
         ))
       }
+
+      <!-- Services dropdown -->
+      <div class="services-dropdown relative">
+        <button
+          class:list={[
+            'flex items-center gap-1 transition-opacity hover:opacity-100 cursor-pointer bg-transparent border-0 p-0 font-[inherit] text-[inherit] tracking-[inherit] text-paper',
+            active === 'Practice Areas'
+              ? 'border-b border-brass pb-[3px] opacity-100'
+              : 'opacity-80',
+          ]}
+        >
+          Services
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mt-[1px]" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </button>
+        <div class="services-menu absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 hidden bg-[#0f1c2e] border border-white/10 rounded-lg py-2 min-w-[220px] z-50 shadow-xl">
+          {
+            practiceAreas.map((area) => (
+              <a
+                href={`/practice/${area.slug}`}
+                class="block px-5 py-[10px] text-[13px] text-paper/70 hover:text-paper hover:bg-white/5 transition-colors"
+              >
+                {area.name}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
       <a
         href="tel:6572184947"
         class="lift rounded-[7px] border border-brass px-4 py-[9px] tracking-[0.05em] text-gold"
@@ -46,3 +77,10 @@ const nav = [
     </nav>
   </div>
 </header>
+
+<style>
+  .services-dropdown:hover .services-menu,
+  .services-dropdown:focus-within .services-menu {
+    display: block;
+  }
+</style>
