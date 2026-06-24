@@ -16,10 +16,6 @@ const { area } = Astro.props;
   <!-- ===== PAGE HERO ===== -->
   <section class="bg-navy text-paper">
     <div class="mx-auto max-w-[1180px] px-10 pb-[70px] pt-[64px]">
-      <p class="mb-[18px] text-xs tracking-[0.3em] text-slate">
-        <a href="/" class="text-slate">Home</a> &nbsp;/&nbsp; Practice Areas &nbsp;/&nbsp;
-        <span class="text-brasslight">{area.name}</span>
-      </p>
       <h1 class="mb-[18px] font-serif text-[58px] font-medium leading-[1.05]">{area.name}</h1>
       <p class="max-w-[600px] text-[17px] font-light leading-[1.7] text-mist">{area.blurb}</p>
     </div>
@@ -98,11 +94,6 @@ const { area } = Astro.props;
         }
       </div>
 
-      <div class="rounded-r-md border-l-[3px] border-brass bg-cream px-8 py-7">
-        <p class="font-serif text-[23px] font-normal italic leading-[1.4] text-navy">
-          “There is no lawyer more eloquent than the heart.”
-        </p>
-      </div>
     </div>
   </section>
 
