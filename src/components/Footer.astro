@@ -6,48 +6,63 @@ const secondary = practiceAreas.slice(4);
 ---
 
 <footer class="bg-navydark text-slate">
-  <div class="grid grid-cols-1 gap-12 px-[clamp(24px,5vw,72px)] pb-[30px] pt-14 md:grid-cols-[1.4fr_1fr_1fr]">
-    <div>
-      <div class="mb-1.5 font-serif text-[22px] text-paper">Kagasoff Law Firm, A.P.C.</div>
-      <div class="text-[13px] leading-[1.7]">
-        14541 Brookhurst St, Suite D4<br />Westminster, CA 92683
+  <!-- thin brass accent at top of footer -->
+  <div class="h-px bg-gradient-to-r from-transparent via-brass/40 to-transparent"></div>
+
+  <div class="px-[clamp(24px,5vw,72px)] pb-8 pt-14">
+    <!-- main grid -->
+    <div class="grid grid-cols-1 gap-12 md:grid-cols-[1.6fr_1fr_1fr]">
+
+      <!-- brand column -->
+      <div>
+        <div class="mb-1 font-serif text-[21px] leading-snug text-paper">Kagasoff Law Firm, A.P.C.</div>
+        <div class="mt-3 text-[12.5px] leading-[1.85] text-slate/70">
+          14541 Brookhurst St, Suite D4<br />Westminster, CA 92683
+        </div>
+        <div class="mt-3 flex flex-col gap-1 text-[12.5px] leading-[1.85]">
+          <a href="tel:6572184947" class="group flex items-center gap-2 text-gold/80 transition-colors hover:text-gold">
+            <span class="inline-block h-px w-4 bg-gold/40 transition-all group-hover:w-6 group-hover:bg-gold"></span>
+            (657) 218-4947
+          </a>
+        </div>
       </div>
-      <div class="mt-2.5 text-[13px] leading-[1.7]">
-        Office: <a href="tel:6572184947" class="text-gold">(657) 218-4947</a>
+
+      <!-- practice links -->
+      <div>
+        <div class="mb-4 text-[10.5px] uppercase tracking-[0.22em] text-brass/80">Practice</div>
+        <div class="flex flex-col gap-[10px] text-[12.5px]">
+          {
+            primary.map((a) => (
+              <a href={`/practice/${a.slug}`} class="text-slate/70 transition-colors hover:text-paper">
+                {a.name}
+              </a>
+            ))
+          }
+        </div>
       </div>
+
+      <!-- firm links -->
+      <div>
+        <div class="mb-4 text-[10.5px] uppercase tracking-[0.22em] text-brass/80">Firm</div>
+        <div class="flex flex-col gap-[10px] text-[12.5px]">
+          <a href="/about" class="text-slate/70 transition-colors hover:text-paper">About</a>
+          <a href="/contact" class="text-slate/70 transition-colors hover:text-paper">Contact</a>
+          {
+            secondary.map((a) => (
+              <a href={`/practice/${a.slug}`} class="text-slate/70 transition-colors hover:text-paper">
+                {a.name}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
     </div>
 
-    <div>
-      <div class="mb-3.5 text-[11px] uppercase tracking-[0.2em] text-brass">Practice</div>
-      <div class="flex flex-col gap-[9px] text-[13px]">
-        {
-          primary.map((a) => (
-            <a href={`/practice/${a.slug}`} class="opacity-80 transition-opacity hover:opacity-100">
-              {a.name}
-            </a>
-          ))
-        }
-      </div>
+    <!-- bottom bar -->
+    <div class="mt-12 flex flex-col justify-between gap-2 border-t border-paper/10 pt-5 text-[11px] tracking-[0.01em] text-slate/50 sm:flex-row">
+      <span>© {new Date().getFullYear()} Kagasoff Law Firm, A.P.C. All rights reserved.</span>
+      <span>Attorney advertising. Prior results do not guarantee a similar outcome.</span>
     </div>
-
-    <div>
-      <div class="mb-3.5 text-[11px] uppercase tracking-[0.2em] text-brass">Firm</div>
-      <div class="flex flex-col gap-[9px] text-[13px]">
-        <a href="/about" class="opacity-80 transition-opacity hover:opacity-100">About</a>
-        <a href="/contact" class="opacity-80 transition-opacity hover:opacity-100">Contact</a>
-        {
-          secondary.map((a) => (
-            <a href={`/practice/${a.slug}`} class="opacity-80 transition-opacity hover:opacity-100">
-              {a.name}
-            </a>
-          ))
-        }
-      </div>
-    </div>
-  </div>
-
-  <div class="mx-[clamp(24px,5vw,72px)] flex flex-col justify-between gap-2 border-t border-paper/10 pb-10 pt-[18px] text-[11.5px] sm:flex-row">
-    <span>© {new Date().getFullYear()} Kagasoff Law Firm, A.P.C. All rights reserved.</span>
-    <span>Attorney advertising. Prior results do not guarantee a similar outcome.</span>
   </div>
 </footer>
