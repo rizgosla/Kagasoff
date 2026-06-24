@@ -1,0 +1,130 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { practiceAreas, process } from '../../data/practiceAreas';
+
+export function getStaticPaths() {
+  return practiceAreas.map((area) => ({
+    params: { slug: area.slug },
+    props: { area },
+  }));
+}
+
+const { area } = Astro.props;
+---
+
+<BaseLayout title={`${area.name} | Kagasoff Law Firm, A.P.C.`} active="Practice Areas">
+  <!-- ===== PAGE HERO ===== -->
+  <section class="bg-navy text-paper">
+    <div class="mx-auto max-w-[1180px] px-10 pb-[70px] pt-[64px]">
+      <p class="mb-[18px] text-xs tracking-[0.3em] text-slate">
+        <a href="/" class="text-slate">Home</a> &nbsp;/&nbsp; Practice Areas &nbsp;/&nbsp;
+        <span class="text-brasslight">{area.name}</span>
+      </p>
+      <h1 class="mb-[18px] font-serif text-[58px] font-medium leading-[1.05]">{area.name}</h1>
+      <p class="max-w-[600px] text-[17px] font-light leading-[1.7] text-mist">{area.blurb}</p>
+    </div>
+  </section>
+
+  <!-- ===== BODY: SIDEBAR + CONTENT ===== -->
+  <section class="mx-auto grid max-w-[1180px] grid-cols-1 items-start gap-16 px-10 py-[72px] md:grid-cols-[260px_1fr]">
+    <!-- sidebar -->
+    <aside class="md:sticky md:top-6">
+      <div class="mb-[18px] text-[11px] uppercase tracking-[0.24em] text-brass">Practice Areas</div>
+      <div class="flex flex-col">
+        {
+          practiceAreas.map((a) => {
+            const isActive = a.slug === area.slug;
+            return (
+              <a
+                href={`/practice/${a.slug}`}
+                class:list={[
+                  'sidelink py-[13px] pl-4 font-serif text-[19px] border-l-2',
+                  isActive
+                    ? 'border-brass bg-cream text-navy'
+                    : 'border-line text-[#6f6857]',
+                ]}
+              >
+                {a.name}
+              </a>
+            );
+          })
+        }
+      </div>
+      <div class="mt-[30px] rounded-md bg-navy px-6 py-[26px] text-paper">
+        <div class="mb-2 font-serif text-[21px]">Free consultation</div>
+        <p class="mb-4 text-[13px] font-light leading-[1.6] text-mist">
+          We'll review your situation and tell you honestly how we can help.
+        </p>
+        <a
+          href="tel:6572184947"
+          class="lift block rounded-[7px] bg-brass py-3 text-center text-[13px] font-semibold text-navy"
+          >Call (657) 218-4947</a
+        >
+      </div>
+    </aside>
+
+    <!-- content -->
+    <div>
+      <h2 class="mb-[18px] font-serif text-[34px] font-medium text-navy">How we can help</h2>
+      {
+        area.overview.map((p) => (
+          <p class="mb-[18px] text-[15.5px] font-light leading-[1.8] text-ink">{p}</p>
+        ))
+      }
+
+      <h3 class="mb-5 mt-9 font-serif text-[24px] font-semibold text-navy">{area.casesHeading}</h3>
+      <div class="mb-11 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
+        {
+          area.cases.map((c) => (
+            <div class="flex items-baseline gap-3 text-[15px] text-[#3a4458]">
+              <span class="text-brass">—</span> {c}
+            </div>
+          ))
+        }
+      </div>
+
+      <h3 class="mb-6 font-serif text-[24px] font-semibold text-navy">What to expect</h3>
+      <div class="mb-12 border-t border-line">
+        {
+          process.map((step, i) => (
+            <div class="grid grid-cols-[54px_1fr] gap-5 border-b border-line py-[22px]">
+              <div class="font-serif text-[26px] text-brass">{String(i + 1).padStart(2, '0')}</div>
+              <div>
+                <div class="mb-1.5 text-base font-semibold text-navy">{step.title}</div>
+                <p class="text-sm font-light leading-[1.65] text-ink">{step.body}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="rounded-r-md border-l-[3px] border-brass bg-cream px-8 py-7">
+        <p class="font-serif text-[23px] font-normal italic leading-[1.4] text-navy">
+          “There is no lawyer more eloquent than the heart.”
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="bg-navy text-paper">
+    <div class="mx-auto max-w-[1180px] px-10 py-[70px] text-center">
+      <h2 class="mb-3.5 font-serif text-[40px] font-medium">Have a {area.name.toLowerCase()} matter?</h2>
+      <p class="mb-[30px] text-base font-light text-mist">
+        Let's talk today. Your first consultation is free and confidential.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a
+          href="tel:6572184947"
+          class="lift rounded-[7px] bg-brass px-[30px] py-4 text-sm font-semibold tracking-[0.04em] text-navy"
+          >Call (657) 218-4947</a
+        >
+        <a
+          href="/contact"
+          class="lift rounded-[7px] border border-paper/40 px-[30px] py-4 text-sm font-medium tracking-[0.04em] text-paper"
+          >Send a message</a
+        >
+      </div>
+    </div>
+  </section>
+</BaseLayout>

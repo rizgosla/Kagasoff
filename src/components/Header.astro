@@ -1,0 +1,48 @@
+---
+interface Props {
+  active?: string;
+}
+const { active = '' } = Astro.props;
+
+const nav = [
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/about' },
+  { label: 'Practice Areas', href: '/practice/personal-injury' },
+  { label: 'Contact', href: '/contact' },
+];
+---
+
+<header class="bg-navy text-paper">
+  <div class="flex items-center justify-between px-[clamp(24px,5vw,72px)] py-[18px]">
+    <a href="/" class="flex flex-col gap-0.5">
+      <span class="font-serif text-2xl font-semibold leading-none tracking-[0.02em]"
+        >Kagasoff Law Firm</span
+      >
+      <span class="text-[9.5px] uppercase tracking-[0.34em] text-brass"
+        >A Professional Corporation</span
+      >
+    </a>
+    <nav class="flex items-center gap-8 text-[13.5px] tracking-[0.03em]">
+      {
+        nav.map((n) => (
+          <a
+            href={n.href}
+            class:list={[
+              'transition-opacity hover:opacity-100',
+              active === n.label
+                ? 'border-b border-brass pb-[3px] opacity-100'
+                : 'opacity-80',
+            ]}
+          >
+            {n.label}
+          </a>
+        ))
+      }
+      <a
+        href="tel:6572184947"
+        class="lift rounded-[7px] border border-brass px-4 py-[9px] tracking-[0.05em] text-gold"
+        >657·218·4947</a
+      >
+    </nav>
+  </div>
+</header>
