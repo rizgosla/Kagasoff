@@ -74,9 +74,9 @@ import { practiceAreas } from '../data/practiceAreas';
                 class="prow grid grid-cols-[62px_1fr_auto] items-center gap-7 border-b border-line px-2 py-6"
               >
                 <span class="font-serif text-[23px] text-brass">{String(i + 1).padStart(2, '0')}</span>
-                <span class="flex flex-wrap items-baseline gap-[22px]">
-                  <span class="font-serif text-[27px] font-semibold text-navy">{a.name}</span>
-                  <span class="text-[14.5px] font-light text-ink">{a.short}</span>
+                <span class="flex min-w-0 items-baseline gap-[22px] overflow-hidden">
+                  <span class="shrink-0 font-serif text-[27px] font-semibold text-navy">{a.name}</span>
+                  <span class="truncate text-[14.5px] font-light text-ink">{a.short}</span>
                 </span>
                 <span class="parrow text-[19px] text-brass">→</span>
               </a>
