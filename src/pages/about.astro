@@ -1,45 +1,45 @@
 ---
+/** About — page hero, vision two-column, cream "what you can expect" values,
+    the navy attorney bio band, and a closing CTA. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Placeholder from '../components/Placeholder.astro';
 import PracticeCTA from '../components/PracticeCTA.astro';
 
 const values = [
-  {
-    numeral: 'I.',
-    title: 'Attentiveness',
-    body: 'We stay fully present and engaged — listening to your concerns and shaping legal solutions around your unique situation.',
-  },
-  {
-    numeral: 'II.',
-    title: 'Relentless preparation',
-    body: 'Every case is prepared as if it will be tried. That readiness is what creates leverage at the table.',
-  },
-  {
-    numeral: 'III.',
-    title: 'Straight answers',
-    body: 'We tell you where you stand in plain language, so you can make decisions with confidence.',
-  },
+  { numeral: 'I.', title: 'Attentiveness', body: 'We stay fully present and engaged — listening to your concerns and shaping legal solutions around your unique situation.' },
+  { numeral: 'II.', title: 'Relentless preparation', body: 'Every case is prepared as if it will be tried. That readiness is what creates leverage at the table.' },
+  { numeral: 'III.', title: 'Straight answers', body: 'We tell you where you stand in plain language, so you can make decisions with confidence.' },
+];
+
+const credentials = [
+  { k: '17+ years', v: 'Of trial & advocacy experience' },
+  { k: 'UCLA', v: 'B.A., 2003' },
+  { k: 'Chapman', v: 'J.D., School of Law, 2007' },
 ];
 ---
 
-<BaseLayout title="About | Kagasoff Law Firm, A.P.C." active="About">
-  <!-- ===== PAGE HERO ===== -->
+<BaseLayout title="About — Kagasoff Law Firm, A.P.C.">
+  <!-- HERO -->
   <section class="bg-navy text-paper">
-    <div class="mx-auto max-w-[1180px] px-10 pb-[78px] pt-[74px]">
-      <p class="mb-[22px] text-xs uppercase tracking-[0.36em] text-brasslight">About the Firm</p>
-      <h1 class="max-w-[740px] font-serif text-[56px] font-medium leading-[1.08]">
-        A small firm, by design — so your case never gets lost.
-      </h1>
+    <div class="mx-auto max-w-[1180px] px-10 pb-[104px] pt-24">
+      <p class="mb-7 text-xs uppercase tracking-[0.32em] text-brasslight">About the Firm</p>
+      <h1 class="mb-9 max-w-[900px] font-serif text-[64px] font-medium leading-[1.05] tracking-[-0.01em]">A small firm, by design.</h1>
+      <div class="flex max-w-[720px] items-start gap-7">
+        <span aria-hidden="true" class="mt-4 h-px w-14 shrink-0 bg-brass"></span>
+        <p class="text-[18px] font-light leading-[1.75] text-mist">
+          One attorney, a deliberately limited caseload, and the time to give every matter the
+          preparation it deserves — so your case never gets lost.
+        </p>
+      </div>
     </div>
   </section>
 
-  <!-- ===== VISION ===== -->
-  <section class="mx-auto grid max-w-[1180px] grid-cols-1 items-start gap-16 px-10 py-[78px] md:grid-cols-2">
+  <!-- VISION -->
+  <section class="mx-auto grid max-w-[1180px] grid-cols-2 items-start gap-16 px-10 py-[78px]">
     <div>
-      <p class="mb-[18px] text-xs uppercase tracking-[0.3em] text-brass">Our Vision</p>
-      <p class="mb-6 font-serif text-[27px] font-normal leading-[1.4] text-navy">
-        To provide exceptional legal counsel and representation that exceeds our clients'
-        expectations.
+      <p class="mb-[18px] text-xs uppercase tracking-[0.32em] text-brass">Our Vision</p>
+      <p class="mb-6 font-serif text-[27px] leading-[1.4] text-navy">
+        To provide exceptional legal counsel and representation that exceeds our clients' expectations.
       </p>
       <p class="mb-[18px] text-[15.5px] font-light leading-[1.8] text-ink">
         Based in Westminster and serving clients throughout Orange County, the firm handles matters
@@ -52,21 +52,23 @@ const values = [
         whether that calls for a quiet negotiation or a fight in the courtroom.
       </p>
     </div>
-    <Placeholder label="Firm / office photograph" class="min-h-[440px] rounded" />
+    <div class="relative">
+      <div aria-hidden="true" class="pointer-events-none absolute rounded-[4px] border border-line" style="inset:-18px 18px 18px -18px"></div>
+      <Placeholder label="Firm / office photograph" class="relative min-h-[460px] rounded-[4px]" />
+    </div>
   </section>
 
-  <!-- ===== VALUES ===== -->
+  <!-- VALUES -->
   <section class="bg-cream">
     <div class="mx-auto max-w-[1180px] px-10 py-[74px]">
-      <h2 class="mb-[46px] text-center font-serif text-[38px] font-medium text-navy">
-        What you can expect
-      </h2>
-      <div class="grid grid-cols-1 gap-10 md:grid-cols-3">
+      <p class="mb-4 text-center text-xs uppercase tracking-[0.32em] text-brass">Our Commitment</p>
+      <h2 class="mb-[52px] text-center font-serif text-[40px] font-medium text-navy">What you can expect</h2>
+      <div class="grid grid-cols-3 gap-12">
         {
           values.map((v) => (
-            <div>
-              <div class="mb-3 font-serif text-[30px] text-brass">{v.numeral}</div>
-              <h3 class="mb-2.5 font-serif text-[23px] font-semibold text-navy">{v.title}</h3>
+            <div class="border-t border-line pt-[22px]">
+              <div class="mb-[14px] font-serif text-[32px] text-brass">{v.numeral}</div>
+              <h3 class="mb-3 font-serif text-[23px] font-semibold text-navy">{v.title}</h3>
               <p class="text-[14.5px] font-light leading-[1.7] text-ink">{v.body}</p>
             </div>
           ))
@@ -75,35 +77,38 @@ const values = [
     </div>
   </section>
 
-  <!-- ===== ATTORNEY ===== -->
-  <section class="bg-navydark">
-    <div class="mx-auto grid max-w-[1180px] grid-cols-1 md:grid-cols-[0.85fr_1.15fr]">
-      <Placeholder label="Ashley Kagasoff portrait" dark class="min-h-[460px]" />
-      <div class="px-14 py-[74px] text-paper">
-        <p class="mb-[18px] text-xs uppercase tracking-[0.3em] text-brass">The Attorney</p>
-        <h2 class="mb-1.5 font-serif text-[36px] font-medium">Ashley Kagasoff</h2>
-        <div class="mb-[26px] text-[13px] tracking-[0.04em] text-brasslight">
-          Attorney at Law · Founder
-        </div>
-        <p class="mb-4 text-[15px] font-light leading-[1.8] text-mist">
+  <!-- ATTORNEY -->
+  <section class="bg-navydark text-paper">
+    <div class="mx-auto grid max-w-[1180px] grid-cols-[0.82fr_1.18fr] items-center gap-[92px] px-10 py-[100px]">
+      <div class="relative">
+        <div aria-hidden="true" class="pointer-events-none absolute rounded-[4px] border border-[rgba(201,190,159,0.45)]" style="inset:20px -20px -20px 20px"></div>
+        <Placeholder label="Ashley Kagasoff portrait" dark class="relative min-h-[500px] rounded-[4px]" />
+      </div>
+
+      <div>
+        <p class="mb-[22px] text-xs uppercase tracking-[0.32em] text-brasslight">The Attorney</p>
+        <h2 class="mb-1.5 font-serif text-[42px] font-medium leading-[1.05]">Ashley Kagasoff</h2>
+        <div class="mb-[30px] text-[12.5px] uppercase tracking-[0.16em] text-brasslight">Attorney at Law · Founder</div>
+        <p class="mb-4 max-w-[620px] text-[15.5px] font-light leading-[1.8] text-mist">
           Ashley has dedicated over 17 years to results-driven advocacy and personalized service.
           Her practice spans criminal defense, professional license defense, personal injury,
-          employment, and family law — giving clients comprehensive solutions tailored to their
-          needs.
+          employment, and family law — giving clients comprehensive solutions tailored to their needs.
         </p>
-        <p class="mb-4 text-[15px] font-light leading-[1.8] text-mist">
+        <p class="mb-[38px] max-w-[620px] text-[15.5px] font-light leading-[1.8] text-mist">
           Having worked both sides of the law — as a law clerk for the Orange County District
           Attorney's and Public Defender's offices, then fifteen years in private defense — she
-          brings a rare perspective to every matter. She has represented clients in state and
-          federal court and before California licensing boards including the Medical, Nursing,
-          Dental, Real Estate, and Contractors' boards, the State Bar, and the Commission on Teacher
-          Credentialing, and has fought for millions in settlements for injured clients.
+          brings a rare perspective to every matter she takes on.
         </p>
-        <p class="text-[15px] font-light leading-[1.8] text-mist">
-          She earned her undergraduate degree from UCLA (2003) and her J.D. from Chapman University
-          School of Law (2007). She is licensed in California and admitted to the Eastern, Central,
-          and Southern District Courts.
-        </p>
+        <div class="grid max-w-[600px] grid-cols-3 gap-7">
+          {
+            credentials.map((c) => (
+              <div class="border-t border-[rgba(201,190,159,0.35)] pt-4">
+                <div class="mb-[5px] font-serif text-[22px] font-medium text-paper">{c.k}</div>
+                <div class="text-[13px] font-light leading-[1.5] text-mist">{c.v}</div>
+              </div>
+            ))
+          }
+        </div>
       </div>
     </div>
   </section>

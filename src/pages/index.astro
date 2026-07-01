@@ -1,24 +1,21 @@
 ---
+/** Home — navy hero over the marble-columns image, the practice-area index,
+    the navy "approach" band, and the closing cream CTA. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Placeholder from '../components/Placeholder.astro';
 import PracticeCTA from '../components/PracticeCTA.astro';
 import { practiceAreas } from '../data/practiceAreas';
+
+const values = ['Direct attorney access', 'Flexible scheduling', 'A free consultation'];
 ---
 
-<BaseLayout title="Kagasoff Law Firm, A.P.C. | Orange County Attorney" active="Home">
-  <!-- ===== HERO ===== -->
+<BaseLayout>
+  <!-- HERO -->
   <section class="relative overflow-hidden bg-navy text-paper">
-    <img
-      src="/hero.jpg"
-      alt=""
-      aria-hidden="true"
-      class="absolute inset-0 h-full w-full object-cover object-[50%_65%]"
-    />
-    <div class="absolute inset-0 bg-navy/75"></div>
+    <img src="/hero.jpg" alt="" aria-hidden="true" class="absolute inset-0 h-full w-full object-cover object-[50%_65%]" />
+    <div class="absolute inset-0 bg-[rgba(22,36,61,0.75)]"></div>
     <div class="relative mx-auto max-w-[1180px] px-10 pb-[112px] pt-[104px] text-center">
-      <p class="mb-[26px] text-xs uppercase tracking-[0.36em] text-brasslight">
-        Serving Orange County, California
-      </p>
+      <p class="mb-[26px] text-xs uppercase tracking-[0.32em] text-brasslight">Serving Orange County, California</p>
       <h1 class="mx-auto max-w-[780px] font-serif text-[66px] font-medium leading-[1.05] tracking-[0.005em]">
         Trusted counsel<br />when it matters most.
       </h1>
@@ -28,55 +25,36 @@ import { practiceAreas } from '../data/practiceAreas';
         personal advocacy to every client across seven practice areas.
       </p>
       <div class="flex flex-wrap justify-center gap-4">
-        <a
-          href="tel:6572184947"
-          class="lift rounded-[7px] bg-brass px-[30px] py-4 text-sm font-semibold tracking-[0.04em] text-navy"
-          >Call (657) 218-4947</a
-        >
-        <a
-          href="/contact"
-          class="lift rounded-[7px] border border-paper/40 px-[30px] py-4 text-sm font-medium tracking-[0.04em] text-paper"
-          >Request a free consultation</a
-        >
+        <a href="tel:6572184947" class="lift inline-block rounded-[7px] bg-brass px-9 py-[18px] text-[15px] font-semibold tracking-[0.04em] text-navy">Call (657) 218-4947</a>
+        <a href="/contact" class="lift inline-block rounded-[7px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-[15px] font-semibold tracking-[0.04em] text-paper">Request a free consultation</a>
       </div>
     </div>
   </section>
 
-  <!-- ===== PRACTICE AREAS ===== -->
+  <!-- PRACTICE AREAS -->
   <section class="mx-auto max-w-[1180px] px-10 py-[84px]">
-    <div class="md:flex md:gap-20">
-
-      <!-- Left sticky column — stacks above list on mobile, fixed sidebar on desktop -->
-      <div class="mb-10 text-center md:mb-0 md:w-[38%] md:shrink-0 md:text-left">
-        <div class="md:sticky md:top-12">
-          <p class="mb-3.5 text-xs uppercase tracking-[0.32em] text-brass">Our Practice</p>
-          <h2 class="mb-5 font-serif text-[34px] font-medium leading-[1.2] text-navy">
-            Seven areas. One standard of care.
-          </h2>
-          <p class="text-[15px] font-light leading-[1.75] text-ink">
-            Whatever life brings — an accident, a criminal charge, a custody dispute, a licensing
-            board complaint — the firm provides the same direct, attorney-led counsel across every
-            matter. You never have to start over with a new lawyer or lose the context you've built.
-          </p>
-          <p class="mt-4 text-[15px] font-light leading-[1.75] text-ink">
-            One relationship. Continuity of counsel. Across every area we practice.
-          </p>
-        </div>
+    <div class="flex items-start gap-14">
+      <div class="sticky top-12 w-1/3 shrink-0">
+        <p class="mb-[14px] text-xs uppercase tracking-[0.32em] text-brass">Our Practice</p>
+        <h2 class="font-serif text-[27px] font-medium leading-[1.2] text-navy">Seven areas. One standard of care.</h2>
+        <p class="mt-[18px] max-w-[560px] text-[15px] font-light leading-[1.75] text-ink">
+          Whatever life brings — an accident, a criminal charge, a custody dispute, a licensing board
+          complaint — the firm provides the same direct, attorney-led counsel across every matter.
+        </p>
+        <p class="mt-4 text-[15px] font-light leading-[1.75] text-ink">
+          One relationship. Continuity of counsel. Across every area we practice.
+        </p>
       </div>
 
-      <!-- Right column: numbered list, unchanged -->
-      <div class="md:flex-1">
+      <div class="flex-1">
         <div class="border-t border-line">
           {
             practiceAreas.map((a, i) => (
-              <a
-                href={`/practice/${a.slug}`}
-                class="prow grid grid-cols-[62px_1fr_auto] items-center gap-7 border-b border-line px-2 py-6"
-              >
+              <a href={`/practice/${a.slug}`} class="prow grid grid-cols-[62px_1fr_auto] items-center gap-7 border-b border-line px-2 py-6">
                 <span class="font-serif text-[23px] text-brass">{String(i + 1).padStart(2, '0')}</span>
-                <span class="flex min-w-0 items-baseline gap-[22px] overflow-hidden">
-                  <span class="shrink-0 font-serif text-[27px] font-semibold text-navy">{a.name}</span>
-                  <span class="truncate text-[14.5px] font-light text-ink">{a.short}</span>
+                <span class="flex flex-wrap items-baseline gap-[22px]">
+                  <span class="font-serif text-[27px] font-semibold text-navy">{a.name}</span>
+                  <span class="text-[14.5px] font-light text-ink" set:html={a.short} />
                 </span>
                 <span class="parrow text-[19px] text-brass">→</span>
               </a>
@@ -84,32 +62,36 @@ import { practiceAreas } from '../data/practiceAreas';
           }
         </div>
       </div>
-
     </div>
   </section>
 
-  <!-- ===== APPROACH BAND ===== -->
-  <section class="bg-navydark">
-    <div class="mx-auto grid max-w-[1180px] grid-cols-1 md:grid-cols-2">
-      <Placeholder label="Attorney portrait" dark class="min-h-[400px]" />
-      <div class="px-14 py-[72px] text-paper">
-        <p class="mb-5 text-xs uppercase tracking-[0.32em] text-brass">The Kagasoff Approach</p>
-        <p class="mb-7 font-serif text-[31px] font-normal italic leading-[1.35] text-paper">
-          “There is no lawyer more eloquent than the heart.”
-        </p>
-        <p class="mb-[18px] text-[15px] font-light leading-[1.75] text-mist">
+  <!-- APPROACH BAND -->
+  <section class="bg-navydark text-paper">
+    <div class="mx-auto grid max-w-[1180px] grid-cols-[0.82fr_1.18fr] items-center gap-[92px] px-10 py-[100px]">
+      <div class="relative">
+        <div aria-hidden="true" class="pointer-events-none absolute rounded-[4px] border border-[rgba(201,190,159,0.45)]" style="inset:20px -20px -20px 20px"></div>
+        <Placeholder label="Attorney portrait" dark class="relative min-h-[480px] rounded-[4px]" />
+      </div>
+
+      <div>
+        <p class="mb-[26px] text-xs uppercase tracking-[0.32em] text-brasslight">The Kagasoff Approach</p>
+        <h2 class="mb-2 font-serif text-[52px] font-medium leading-[1.02] text-paper">Ashley Kagasoff</h2>
+        <div class="mb-[38px] text-[12.5px] uppercase tracking-[0.16em] text-brasslight">Founding Attorney</div>
+        <p class="mb-10 max-w-[580px] text-[15.5px] font-light leading-[1.8] text-mist">
           Every matter is handled directly by an attorney who knows your name and your goals. We
           prepare each case as if it will be tried — because that preparation is what earns the
           strongest outcomes.
         </p>
-        <p class="text-[15px] font-light leading-[1.75] text-mist">
-          Direct attorney access. Flexible scheduling. A free initial consultation.
-        </p>
-        <a
-          href="/about"
-          class="mt-[26px] inline-block border-b border-brass pb-[3px] text-[13px] tracking-[0.05em] text-gold"
-          >More about the firm →</a
-        >
+        <div class="mb-[38px] grid max-w-[600px] grid-cols-3 gap-7">
+          {
+            values.map((v) => (
+              <div class="border-t border-[rgba(201,190,159,0.35)] pt-4 font-serif text-[16.5px] font-medium leading-[1.35] text-paper">
+                {v}
+              </div>
+            ))
+          }
+        </div>
+        <a href="/about" class="lift inline-block border-b border-brass pb-1.5 text-sm font-semibold tracking-[0.05em] text-gold">More about the firm →</a>
       </div>
     </div>
   </section>

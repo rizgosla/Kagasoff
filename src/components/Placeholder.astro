@@ -1,10 +1,14 @@
 ---
+/** Striped image placeholder — swap for real photography.
+    Size it with the `class` prop (e.g. class="min-h-[480px] rounded-[4px]").
+    Use `dark` on navy grounds. */
 interface Props {
   label: string;
   dark?: boolean;
   class?: string;
 }
-const { label, dark = false, class: className = '' } = Astro.props;
+
+const { label, dark = false, class: cls = '' } = Astro.props;
 ---
 
-<div class:list={['ph', { 'ph-dark': dark }, className]} data-label={label}></div>
+<div class:list={['ph', dark && 'ph-dark', cls]} data-label={label}></div>

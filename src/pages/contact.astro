@@ -1,17 +1,21 @@
 ---
+/** Contact — navy hero, the consultation form (client-side validated, with a
+    confirmation state), and the office info column with a map placeholder. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Placeholder from '../components/Placeholder.astro';
 import { practiceAreas } from '../data/practiceAreas';
+
+const matterOptions = [...practiceAreas.map((a) => a.name), 'Not sure / Other'];
+
+const labelCls = 'mb-2 block text-xs uppercase tracking-[0.08em] text-ink';
 ---
 
-<BaseLayout title="Contact | Kagasoff Law Firm, A.P.C." active="Contact">
-  <!-- ===== PAGE HERO ===== -->
+<BaseLayout title="Contact — Kagasoff Law Firm, A.P.C.">
+  <!-- HERO -->
   <section class="bg-navy text-paper">
-    <div class="mx-auto max-w-[1180px] px-10 pb-[68px] pt-[64px]">
-      <p class="mb-5 text-xs uppercase tracking-[0.36em] text-brasslight">Contact</p>
-      <h1 class="mb-4 max-w-[680px] font-serif text-[56px] font-medium leading-[1.06]">
-        Tell us what happened.
-      </h1>
+    <div class="mx-auto max-w-[1180px] px-10 pb-[68px] pt-16">
+      <p class="mb-5 text-xs uppercase tracking-[0.32em] text-brasslight">Contact</p>
+      <h1 class="mb-4 max-w-[680px] font-serif text-[56px] font-medium leading-[1.06]">Tell us what happened.</h1>
       <p class="max-w-[560px] text-[17px] font-light leading-[1.7] text-mist">
         Reach out for a free, confidential consultation. We'll review your situation and tell you
         honestly how we can help.
@@ -19,162 +23,119 @@ import { practiceAreas } from '../data/practiceAreas';
     </div>
   </section>
 
-  <!-- ===== BODY: FORM + INFO ===== -->
-  <section class="mx-auto grid max-w-[1180px] grid-cols-1 items-start gap-16 px-10 py-[72px] md:grid-cols-[1.4fr_1fr]">
-    <!-- form -->
+  <!-- BODY -->
+  <section class="mx-auto grid max-w-[1180px] grid-cols-[1.4fr_1fr] items-start gap-16 px-10 py-[72px]">
+    <!-- FORM / CONFIRM -->
     <div>
-      <!-- success state (hidden until submit) -->
-      <div id="confirm" class="hidden rounded-lg bg-navy px-11 py-12 text-paper">
-        <div class="mb-3.5 font-serif text-[34px]">Thank you<span id="confirm-name"></span>.</div>
-        <p class="mb-2 text-base font-light leading-[1.7] text-mist">
-          Your message has been received. An attorney will be in touch shortly — typically within
-          one business day.
-        </p>
-        <p class="mb-7 text-base font-light leading-[1.7] text-mist">
-          If your matter is urgent, please call us directly.
-        </p>
-        <div class="flex flex-wrap gap-3.5">
-          <a
-            href="tel:6572184947"
-            class="lift rounded-[7px] bg-brass px-[26px] py-3.5 text-sm font-semibold text-navy"
-            >Call (657) 218-4947</a
-          >
-          <button
-            id="reset-btn"
-            type="button"
-            class="lift rounded-[7px] border border-paper/40 px-[26px] py-3.5 text-sm font-medium text-paper"
-            >Send another message</button
-          >
-        </div>
-      </div>
-
-      <!-- form state -->
-      <form id="contact-form" novalidate>
-        <h2 class="mb-1.5 font-serif text-[30px] font-medium text-navy">
-          Request a free consultation
-        </h2>
-        <p class="mb-[30px] text-sm font-light text-ink">
+      <form id="consult-form" novalidate>
+        <h2 class="mb-1.5 font-serif text-[30px] font-medium text-navy">Request a free consultation</h2>
+        <p class="mb-[30px] text-[14px] font-light text-ink">
           Fields marked <span class="text-brass">*</span> are required.
         </p>
 
-        <div class="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div class="mb-5 grid grid-cols-2 gap-5">
           <div>
-            <label class="mb-2 block text-xs uppercase tracking-[0.08em] text-ink" for="name"
-              >Name <span class="text-brass">*</span></label
-            >
-            <input id="name" name="name" type="text" class="fld" placeholder="Your full name" required />
+            <label class={labelCls} for="name">Name <span class="text-brass">*</span></label>
+            <input class="fld" id="name" name="name" type="text" placeholder="Your full name" />
           </div>
           <div>
-            <label class="mb-2 block text-xs uppercase tracking-[0.08em] text-ink" for="phone"
-              >Phone <span class="text-brass">*</span></label
-            >
-            <input id="phone" name="phone" type="tel" class="fld" placeholder="(657) 000-0000" required />
+            <label class={labelCls} for="phone">Phone <span class="text-brass">*</span></label>
+            <input class="fld" id="phone" name="phone" type="tel" placeholder="(657) 000-0000" />
           </div>
         </div>
 
         <div class="mb-5">
-          <label class="mb-2 block text-xs uppercase tracking-[0.08em] text-ink" for="email"
-            >Email</label
-          >
-          <input id="email" name="email" type="email" class="fld" placeholder="you@email.com" />
+          <label class={labelCls} for="email">Email</label>
+          <input class="fld" id="email" name="email" type="email" placeholder="you@email.com" />
         </div>
 
         <div class="mb-5">
-          <label class="mb-2 block text-xs uppercase tracking-[0.08em] text-ink" for="area"
-            >Matter type</label
-          >
-          <select id="area" name="area" class="fld">
-            {practiceAreas.map((a) => <option>{a.name}</option>)}
-            <option>Not sure / Other</option>
+          <label class={labelCls} for="area">Matter type</label>
+          <select class="fld" id="area" name="area">
+            {matterOptions.map((o) => <option value={o}>{o}</option>)}
           </select>
         </div>
 
         <div class="mb-6">
-          <label class="mb-2 block text-xs uppercase tracking-[0.08em] text-ink" for="message"
-            >How can we help? <span class="text-brass">*</span></label
-          >
-          <textarea
-            id="message"
-            name="message"
-            class="fld"
-            placeholder="Briefly describe your situation. Do not include confidential details you wouldn't want sent by email."
-            required></textarea>
+          <label class={labelCls} for="message">How can we help? <span class="text-brass">*</span></label>
+          <textarea class="fld" id="message" name="message" placeholder="Briefly describe your situation. Do not include confidential details you wouldn't want sent by email."></textarea>
         </div>
 
-        <div
-          id="form-error"
-          class="mb-5 hidden rounded-md border border-[#e0b9ad] bg-[#f7ece9] px-4 py-3 text-[13.5px] text-[#8a3b25]"
-        >
+        <div id="form-error" class="mb-5 hidden rounded-md border border-[#d8b4b4] bg-[#f7ecec] px-4 py-3 text-[13.5px] text-[#8a3838]">
           Please enter your name, a phone number, and a short message.
         </div>
 
-        <button
-          type="submit"
-          class="lift cursor-pointer rounded-[7px] bg-navy px-9 py-4 text-sm font-semibold tracking-[0.04em] text-paper"
-          >Submit request</button
-        >
-        <p class="mt-5 max-w-[460px] text-xs font-light leading-[1.6] text-[#8a7f63]">
+        <button type="submit" class="lift inline-block rounded-[7px] bg-navy px-[30px] py-4 text-sm font-semibold tracking-[0.04em] text-paper">Submit request</button>
+        <p class="mt-5 max-w-[460px] text-[12px] font-light leading-[1.6] text-ink/70">
           Submitting this form does not create an attorney–client relationship. Information sent
           through this form is not confidential until an engagement is established.
         </p>
       </form>
+
+      <!-- Confirmation (hidden until submit) -->
+      <div id="confirm-panel" class="hidden rounded-lg bg-navy p-[48px_44px] text-paper" style="padding:48px 44px">
+        <div class="mb-3.5 font-serif text-[34px]">Thank you, <span id="confirm-name">there</span>.</div>
+        <p class="mb-2 text-[16px] font-light leading-[1.7] text-mist">
+          Your message has been received. An attorney will be in touch shortly — typically within
+          one business day.
+        </p>
+        <p class="mb-7 text-[16px] font-light leading-[1.7] text-mist">
+          If your matter is urgent, please call us directly.
+        </p>
+        <div class="flex flex-wrap gap-3.5">
+          <a href="tel:6572184947" class="lift inline-block rounded-[7px] bg-brass px-[30px] py-4 text-sm font-semibold tracking-[0.04em] text-navy">Call (657) 218-4947</a>
+          <button type="button" id="reset-form" class="lift inline-block rounded-[7px] border border-[rgba(250,248,243,0.4)] px-[30px] py-4 text-sm font-semibold tracking-[0.04em] text-paper">Send another message</button>
+        </div>
+      </div>
     </div>
 
-    <!-- info column -->
+    <!-- INFO -->
     <div>
-      <div class="mb-6 rounded-lg bg-cream px-[30px] py-8">
-        <div class="mb-[18px] text-[11px] uppercase tracking-[0.24em] text-brass">Office</div>
+      <div class="mb-6 rounded-lg bg-cream" style="padding:32px 30px">
+        <p class="mb-[18px] text-[11px] uppercase tracking-[0.22em] text-brass">Office</p>
         <div class="mb-4 font-serif text-[21px] leading-[1.4] text-navy">
           14541 Brookhurst St,<br />Suite D4<br />Westminster, CA 92683
         </div>
-        <div class="text-sm leading-[1.9] text-ink">
-          <div>
-            Phone: <a href="tel:6572184947" class="border-b border-[#c9bfa6] text-navy"
-              >(657) 218-4947</a
-            >
-          </div>
+        <div class="text-[14px] leading-[1.9] text-ink">
+          <div>Phone: <a href="tel:6572184947" class="border-b border-[#c9bfa6] text-navy">(657) 218-4947</a></div>
           <div>Hours: By appointment, Mon–Fri</div>
         </div>
       </div>
       <Placeholder label="Map — Westminster office" class="min-h-[240px] rounded-lg" />
     </div>
   </section>
+
+  <script>
+    // Client-side validation + confirmation state.
+    // NOTE: this only SHOWS a confirmation — it does NOT deliver the message.
+    // Wire delivery here: add data-netlify="true" to the <form> (Netlify Forms),
+    // POST to Formspree, or handle it in an Astro API route under src/pages/api/.
+    const form = document.getElementById('consult-form') as HTMLFormElement | null;
+    const errorBox = document.getElementById('form-error');
+    const confirmPanel = document.getElementById('confirm-panel');
+    const nameOut = document.getElementById('confirm-name');
+
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const name = (data.get('name') || '').toString().trim();
+      const phone = (data.get('phone') || '').toString().trim();
+      const message = (data.get('message') || '').toString().trim();
+
+      if (name && phone && message) {
+        errorBox?.classList.add('hidden');
+        if (nameOut) nameOut.textContent = name.split(/\s+/)[0];
+        form.style.display = 'none';
+        confirmPanel?.classList.remove('hidden');
+      } else {
+        errorBox?.classList.remove('hidden');
+      }
+    });
+
+    document.getElementById('reset-form')?.addEventListener('click', () => {
+      form?.reset();
+      confirmPanel?.classList.add('hidden');
+      if (form) form.style.display = 'block';
+    });
+  </script>
 </BaseLayout>
-
-<script>
-  const form = document.getElementById('contact-form') as HTMLFormElement | null;
-  const confirm = document.getElementById('confirm');
-  const errorBox = document.getElementById('form-error');
-  const confirmName = document.getElementById('confirm-name');
-  const resetBtn = document.getElementById('reset-btn');
-
-  function val(id: string): string {
-    const el = document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement | null;
-    return el ? el.value.trim() : '';
-  }
-
-  form?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = val('name');
-    const phone = val('phone');
-    const message = val('message');
-
-    if (name && phone && message) {
-      // NOTE: wire this to your backend / email service (e.g. a Netlify form,
-      // Formspree, or an Astro API route) to actually deliver the message.
-      if (confirmName) confirmName.textContent = ', ' + name.split(/\s+/)[0];
-      errorBox?.classList.add('hidden');
-      form.classList.add('hidden');
-      confirm?.classList.remove('hidden');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      errorBox?.classList.remove('hidden');
-    }
-  });
-
-  resetBtn?.addEventListener('click', () => {
-    form?.reset();
-    confirm?.classList.add('hidden');
-    form?.classList.remove('hidden');
-  });
-</script>

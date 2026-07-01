@@ -4,14 +4,13 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
 interface Props {
-  title: string;
+  title?: string;
   description?: string;
-  active?: string;
 }
+
 const {
-  title,
-  description = 'Kagasoff Law Firm, A.P.C. — personal injury, criminal defense, professional license defense, family law, restraining orders, employment, and real estate. Serving Orange County from Westminster, CA.',
-  active = '',
+  title = 'Kagasoff Law Firm, A.P.C. — Trusted counsel when it matters most',
+  description = 'Boutique Orange County law firm serving Westminster and greater Orange County across seven practice areas. Direct, attorney-led counsel. Free consultation.',
 } = Astro.props;
 ---
 
@@ -20,7 +19,6 @@ const {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -30,11 +28,9 @@ const {
       rel="stylesheet"
     />
   </head>
-  <body class="font-sans text-ink antialiased">
-    <Header active={active} />
-    <main>
-      <slot />
-    </main>
+  <body class="bg-paper font-sans text-ink antialiased">
+    <Header />
+    <slot />
     <Footer />
   </body>
 </html>

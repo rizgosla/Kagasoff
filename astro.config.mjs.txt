@@ -1,0 +1,14 @@
+// @ts-check
+// ⚠️  Rename this file to `astro.config.mjs` after copying it into your repo.
+//     (It ships as .txt only so the design-system bundler leaves it alone.)
+import { defineConfig } from 'astro/config';
+import tailwind from '@tailwindcss/vite';
+
+// Tailwind CSS v4 is wired through the Vite plugin. The design tokens
+// (bg-navy, text-brass, font-serif, …) are declared in src/styles/global.css
+// under the @theme block and picked up automatically.
+export default defineConfig({
+  vite: {
+    plugins: [tailwind()],
+  },
+});
