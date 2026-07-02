@@ -11,10 +11,10 @@ const year = new Date().getFullYear();
 <footer class="bg-navydark text-slate">
   <div class="h-px bg-gradient-to-r from-transparent via-brass/40 to-transparent"></div>
 
-  <div class="mx-auto max-w-[1180px] px-10 pb-8 pt-14">
-    <div class="grid grid-cols-[1.6fr_1fr_1fr] gap-12">
+  <div class="mx-auto max-w-[1180px] px-5 pb-8 pt-12 md:px-10 md:pt-14">
+    <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-[1.6fr_1fr_1fr] md:gap-12">
       <!-- Brand -->
-      <div>
+      <div class="sm:col-span-2 md:col-span-1">
         <div class="mb-1 flex items-center gap-3">
           <span class="h-[26px] w-0.5 shrink-0 bg-brass"></span>
           <span class="font-serif text-[21px] leading-[1.3] text-paper">Kagasoff Law Firm, A.P.C.</span>
@@ -61,7 +61,7 @@ const year = new Date().getFullYear();
     </div>
 
     <!-- Disclaimer -->
-    <div class="mt-12 flex flex-wrap justify-between gap-2 border-t border-paper/10 pt-5 text-[11px] text-slate/50">
+    <div class="mt-10 flex flex-col gap-2 border-t border-paper/10 pt-5 text-[11px] text-slate/50 sm:flex-row sm:flex-wrap sm:justify-between md:mt-12">
       <span>© {year} Kagasoff Law Firm, A.P.C. All rights reserved.</span>
       <span>Attorney advertising. Prior results do not guarantee a similar outcome.</span>
     </div>

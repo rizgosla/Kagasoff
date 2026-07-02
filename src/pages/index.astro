@@ -14,29 +14,29 @@ const values = ['Direct attorney access', 'Flexible scheduling', 'A free consult
   <section class="relative overflow-hidden bg-navy text-paper">
     <img src="/hero.jpg" alt="" aria-hidden="true" class="absolute inset-0 h-full w-full object-cover object-[50%_65%]" />
     <div class="absolute inset-0 bg-[rgba(22,36,61,0.75)]"></div>
-    <div class="relative mx-auto max-w-[1180px] px-10 pb-[112px] pt-[104px] text-center">
+    <div class="relative mx-auto max-w-[1180px] px-5 pb-16 pt-14 text-center md:px-10 md:pb-[112px] md:pt-[104px]">
       <p class="mb-[26px] text-xs uppercase tracking-[0.32em] text-brasslight">Serving Orange County, California</p>
-      <h1 class="mx-auto max-w-[780px] font-serif text-[66px] font-medium leading-[1.05] tracking-[0.005em]">
+      <h1 class="mx-auto max-w-[780px] font-serif text-[38px] font-medium leading-[1.1] tracking-[0.005em] md:text-[66px] md:leading-[1.05]">
         Trusted counsel<br />when it matters most.
       </h1>
       <div class="mx-auto my-[34px] h-0.5 w-[54px] bg-brass"></div>
-      <p class="mx-auto mb-10 max-w-[580px] text-[17px] font-light leading-[1.7] text-mist">
+      <p class="mx-auto mb-10 max-w-[580px] text-[16px] font-light leading-[1.7] text-mist md:text-[17px]">
         From the courtroom to the negotiating table, the Kagasoff Law Firm brings disciplined,
         personal advocacy to every client across seven practice areas.
       </p>
-      <div class="flex flex-wrap justify-center gap-4">
-        <a href="tel:6572184947" class="lift inline-block rounded-[7px] bg-brass px-9 py-[18px] text-[15px] font-semibold tracking-[0.04em] text-navy">Call (657) 218-4947</a>
-        <a href="/contact" class="lift inline-block rounded-[7px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-[15px] font-semibold tracking-[0.04em] text-paper">Request a free consultation</a>
+      <div class="flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center">
+        <a href="tel:6572184947" class="lift inline-block w-full rounded-[7px] bg-brass px-9 py-[18px] text-center text-[15px] font-semibold tracking-[0.04em] text-navy sm:w-auto">Call (657) 218-4947</a>
+        <a href="/contact" class="lift inline-block w-full rounded-[7px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[15px] font-semibold tracking-[0.04em] text-paper sm:w-auto">Request a free consultation</a>
       </div>
     </div>
   </section>
 
   <!-- PRACTICE AREAS -->
-  <section class="mx-auto max-w-[1180px] px-10 py-[84px]">
-    <div class="flex items-start gap-14">
-      <div class="sticky top-12 w-1/3 shrink-0">
+  <section class="mx-auto max-w-[1180px] px-5 py-14 md:px-10 md:py-[84px]">
+    <div class="flex flex-col items-start gap-8 md:flex-row md:gap-14">
+      <div class="w-full shrink-0 md:sticky md:top-12 md:w-1/3">
         <p class="mb-[14px] text-xs uppercase tracking-[0.32em] text-brass">Our Practice</p>
-        <h2 class="font-serif text-[27px] font-medium leading-[1.2] text-navy">Seven areas. One standard of care.</h2>
+        <h2 class="font-serif text-[24px] font-medium leading-[1.2] text-navy md:text-[27px]">Seven areas. One standard of care.</h2>
         <p class="mt-[18px] max-w-[560px] text-[15px] font-light leading-[1.75] text-ink">
           Whatever life brings — an accident, a criminal charge, a custody dispute, a licensing board
           complaint — the firm provides the same direct, attorney-led counsel across every matter.
@@ -46,17 +46,17 @@ const values = ['Direct attorney access', 'Flexible scheduling', 'A free consult
         </p>
       </div>
 
-      <div class="flex-1">
+      <div class="w-full flex-1">
         <div class="border-t border-line">
           {
             practiceAreas.map((a, i) => (
-              <a href={`/practice/${a.slug}`} class="prow grid grid-cols-[62px_1fr_auto] items-center gap-7 border-b border-line px-2 py-6">
-                <span class="font-serif text-[23px] text-brass">{String(i + 1).padStart(2, '0')}</span>
-                <span class="flex flex-wrap items-baseline gap-[22px]">
-                  <span class="font-serif text-[27px] font-semibold text-navy">{a.name}</span>
-                  <span class="text-[14.5px] font-light text-ink" set:html={a.short} />
+              <a href={`/practice/${a.slug}`} class="prow grid grid-cols-[36px_1fr] items-center gap-4 border-b border-line px-1 py-5 md:grid-cols-[62px_1fr_auto] md:gap-7 md:px-2 md:py-6">
+                <span class="font-serif text-[18px] text-brass md:text-[23px]">{String(i + 1).padStart(2, '0')}</span>
+                <span class="flex flex-wrap items-baseline gap-x-[22px] gap-y-1">
+                  <span class="font-serif text-[21px] font-semibold text-navy md:text-[27px]">{a.name}</span>
+                  <span class="text-[13.5px] font-light text-ink md:text-[14.5px]" set:html={a.short} />
                 </span>
-                <span class="parrow text-[19px] text-brass">→</span>
+                <span class="parrow hidden text-[19px] text-brass md:block">→</span>
               </a>
             ))
           }
@@ -67,22 +67,22 @@ const values = ['Direct attorney access', 'Flexible scheduling', 'A free consult
 
   <!-- APPROACH BAND -->
   <section class="bg-navydark text-paper">
-    <div class="mx-auto grid max-w-[1180px] grid-cols-[0.82fr_1.18fr] items-center gap-[92px] px-10 py-[100px]">
+    <div class="mx-auto grid max-w-[1180px] grid-cols-1 items-center gap-10 px-5 py-14 md:grid-cols-[0.82fr_1.18fr] md:gap-[92px] md:px-10 md:py-[100px]">
       <div class="relative">
         <div aria-hidden="true" class="pointer-events-none absolute rounded-[4px] border border-[rgba(201,190,159,0.45)]" style="inset:20px -20px -20px 20px"></div>
-        <Placeholder label="Attorney portrait" dark class="relative min-h-[480px] rounded-[4px]" />
+        <Placeholder label="Attorney portrait" dark class="relative min-h-[280px] rounded-[4px] md:min-h-[480px]" />
       </div>
 
       <div>
         <p class="mb-[26px] text-xs uppercase tracking-[0.32em] text-brasslight">The Kagasoff Approach</p>
-        <h2 class="mb-2 font-serif text-[52px] font-medium leading-[1.02] text-paper">Ashley Kagasoff</h2>
+        <h2 class="mb-2 font-serif text-[36px] font-medium leading-[1.05] text-paper md:text-[52px] md:leading-[1.02]">Ashley Kagasoff</h2>
         <div class="mb-[38px] text-[12.5px] uppercase tracking-[0.16em] text-brasslight">Founding Attorney</div>
         <p class="mb-10 max-w-[580px] text-[15.5px] font-light leading-[1.8] text-mist">
           Every matter is handled directly by an attorney who knows your name and your goals. We
           prepare each case as if it will be tried — because that preparation is what earns the
           strongest outcomes.
         </p>
-        <div class="mb-[38px] grid max-w-[600px] grid-cols-3 gap-7">
+        <div class="mb-[38px] grid max-w-[600px] grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-7">
           {
             values.map((v) => (
               <div class="border-t border-[rgba(201,190,159,0.35)] pt-4 font-serif text-[16.5px] font-medium leading-[1.35] text-paper">

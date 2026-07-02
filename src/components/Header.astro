@@ -16,18 +16,18 @@ const servicesActive = path.startsWith('/practice');
 ---
 
 <header class="bg-navy text-paper">
-  <div class="mx-auto flex max-w-[1180px] items-center justify-between px-10 py-[18px]">
+  <div class="mx-auto flex max-w-[1180px] items-center justify-between px-5 py-3.5 md:px-10 md:py-[18px]">
     <!-- Wordmark lockup -->
-    <a href="/" class="flex items-center gap-3.5">
-      <span class="h-[38px] w-0.5 shrink-0 bg-brass"></span>
+    <a href="/" class="flex items-center gap-2.5 md:gap-3.5">
+      <span class="h-8 w-0.5 shrink-0 bg-brass md:h-[38px]"></span>
       <span class="flex flex-col gap-[3px]">
-        <span class="font-serif text-2xl font-semibold leading-none tracking-[0.02em] text-paper">Kagasoff Law Firm</span>
-        <span class="text-[9.5px] uppercase tracking-[0.34em] text-brass">A Professional Corporation</span>
+        <span class="font-serif text-lg font-semibold leading-none tracking-[0.02em] text-paper md:text-2xl">Kagasoff Law Firm</span>
+        <span class="text-[8px] uppercase tracking-[0.24em] text-brass md:text-[9.5px] md:tracking-[0.34em]">A Professional Corporation</span>
       </span>
     </a>
 
-    <!-- Primary nav -->
-    <nav class="flex items-center gap-8 font-sans text-[13.5px]">
+    <!-- Primary nav (desktop) -->
+    <nav class="hidden items-center gap-8 font-sans text-[13.5px] md:flex">
       {
         nav.map((item) => (
           <a
@@ -88,5 +88,83 @@ const servicesActive = path.startsWith('/practice');
         657&middot;218&middot;4947
       </a>
     </nav>
+
+    <!-- Mobile menu toggle -->
+    <button
+      type="button"
+      id="mobile-menu-toggle"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      class="flex h-9 w-9 shrink-0 items-center justify-center text-paper md:hidden"
+    >
+      <svg id="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+      <svg id="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" class="hidden">
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile menu panel -->
+  <div id="mobile-menu" class="hidden border-t border-white/10 md:hidden">
+    <nav class="flex flex-col gap-1 px-5 py-4 font-sans text-[14.5px]">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'rounded-md px-2 py-2.5 tracking-[0.02em]',
+              isActive(item.href) ? 'text-brasslight' : 'text-paper/85',
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+
+      <div class="mt-2 border-t border-white/10 pt-3">
+        <div class="mb-1.5 px-2 text-[10.5px] uppercase tracking-[0.22em] text-brass/80">Services</div>
+        <div class="flex flex-col">
+          {
+            practiceAreas.map((a) => (
+              <a href={`/practice/${a.slug}`} class="rounded-md px-2 py-2 text-[13.5px] text-paper/70">
+                {a.name}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Phone CTA -->
+      <a
+        href="tel:6572184947"
+        class="mt-4 inline-flex items-center justify-center gap-2 rounded-[7px] border border-brass px-4 py-3 tracking-[0.05em] text-gold"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
+        </svg>
+        657&middot;218&middot;4947
+      </a>
+    </nav>
   </div>
 </header>
+
+<script>
+  const toggle = document.getElementById('mobile-menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('menu-icon-open');
+  const iconClose = document.getElementById('menu-icon-close');
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = !menu?.classList.contains('hidden');
+    menu?.classList.toggle('hidden');
+    iconOpen?.classList.toggle('hidden');
+    iconClose?.classList.toggle('hidden');
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+  });
+</script>

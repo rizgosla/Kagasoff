@@ -13,27 +13,27 @@ const {
 <section class="relative overflow-hidden bg-cream">
   <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brass/60 to-transparent"></div>
 
-  <div class="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-10 px-10 py-[72px]">
+  <div class="mx-auto flex max-w-[1180px] flex-col items-start gap-8 px-5 py-14 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-10 md:px-10 md:py-[72px]">
 
     <!-- Left: text -->
     <div>
       <p class="mb-2.5 text-[11px] uppercase tracking-[0.36em] text-brass">Free Initial Consultation</p>
-      <h2 class="mb-2 font-serif text-[44px] font-medium leading-[1.05] text-navy">{heading}</h2>
+      <h2 class="mb-2 font-serif text-[30px] font-medium leading-[1.1] text-navy md:text-[44px] md:leading-[1.05]">{heading}</h2>
       <p class="text-[15px] font-light leading-[1.75] text-ink">{sub}</p>
     </div>
 
     <!-- Right: CTAs -->
-    <div class="flex flex-wrap items-center gap-4">
+    <div class="flex w-full flex-col items-stretch gap-4 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
       <!-- Phone — primary -->
       <a
         href="tel:6572184947"
-        class="lift rounded-[7px] bg-brass px-[30px] py-4 text-sm font-semibold tracking-[0.04em] text-navy"
+        class="lift rounded-[7px] bg-brass px-[30px] py-4 text-center text-sm font-semibold tracking-[0.04em] text-navy"
       >Call (657) 218-4947</a>
 
       <!-- Message — secondary -->
       <a
         href="/contact"
-        class="lift rounded-[7px] border border-navy/40 px-[30px] py-4 text-sm font-medium tracking-[0.04em] text-navy transition-colors hover:border-navy/70"
+        class="lift rounded-[7px] border border-navy/40 px-[30px] py-4 text-center text-sm font-medium tracking-[0.04em] text-navy transition-colors hover:border-navy/70"
       >
         Send a message
       </a>
