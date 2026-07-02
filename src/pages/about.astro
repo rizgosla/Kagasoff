@@ -21,12 +21,12 @@ const credentials = [
 <BaseLayout title="About — Kagasoff Law Firm, A.P.C.">
   <!-- HERO -->
   <section class="bg-navy text-paper">
-    <div class="mx-auto max-w-[1180px] px-10 pb-[104px] pt-24">
+    <div class="mx-auto max-w-[1180px] px-5 pb-16 pt-16 md:px-10 md:pb-[104px] md:pt-24">
       <p class="mb-7 text-xs uppercase tracking-[0.32em] text-brasslight">About the Firm</p>
-      <h1 class="mb-9 max-w-[900px] font-serif text-[64px] font-medium leading-[1.05] tracking-[-0.01em]">A small firm, by design.</h1>
-      <div class="flex max-w-[720px] items-start gap-7">
-        <span aria-hidden="true" class="mt-4 h-px w-14 shrink-0 bg-brass"></span>
-        <p class="text-[18px] font-light leading-[1.75] text-mist">
+      <h1 class="mb-9 max-w-[900px] font-serif text-[40px] font-medium leading-[1.1] tracking-[-0.01em] md:text-[64px] md:leading-[1.05]">A small firm, by design.</h1>
+      <div class="flex max-w-[720px] items-start gap-5 md:gap-7">
+        <span aria-hidden="true" class="mt-4 h-px w-10 shrink-0 bg-brass md:w-14"></span>
+        <p class="text-[16px] font-light leading-[1.75] text-mist md:text-[18px]">
           One attorney, a deliberately limited caseload, and the time to give every matter the
           preparation it deserves — so your case never gets lost.
         </p>
@@ -35,10 +35,10 @@ const credentials = [
   </section>
 
   <!-- VISION -->
-  <section class="mx-auto grid max-w-[1180px] grid-cols-2 items-start gap-16 px-10 py-[78px]">
+  <section class="mx-auto grid max-w-[1180px] grid-cols-1 items-start gap-10 px-5 py-14 md:grid-cols-2 md:gap-16 md:px-10 md:py-[78px]">
     <div>
       <p class="mb-[18px] text-xs uppercase tracking-[0.32em] text-brass">Our Vision</p>
-      <p class="mb-6 font-serif text-[27px] leading-[1.4] text-navy">
+      <p class="mb-6 font-serif text-[23px] leading-[1.4] text-navy md:text-[27px]">
         To provide exceptional legal counsel and representation that exceeds our clients' expectations.
       </p>
       <p class="mb-[18px] text-[15.5px] font-light leading-[1.8] text-ink">
@@ -54,16 +54,16 @@ const credentials = [
     </div>
     <div class="relative">
       <div aria-hidden="true" class="pointer-events-none absolute rounded-[4px] border border-line" style="inset:-18px 18px 18px -18px"></div>
-      <Placeholder label="Firm / office photograph" class="relative min-h-[460px] rounded-[4px]" />
+      <Placeholder label="Firm / office photograph" class="relative min-h-[280px] rounded-[4px] md:min-h-[460px]" />
     </div>
   </section>
 
   <!-- VALUES -->
   <section class="bg-cream">
-    <div class="mx-auto max-w-[1180px] px-10 py-[74px]">
+    <div class="mx-auto max-w-[1180px] px-5 py-14 md:px-10 md:py-[74px]">
       <p class="mb-4 text-center text-xs uppercase tracking-[0.32em] text-brass">Our Commitment</p>
-      <h2 class="mb-[52px] text-center font-serif text-[40px] font-medium text-navy">What you can expect</h2>
-      <div class="grid grid-cols-3 gap-12">
+      <h2 class="mb-10 text-center font-serif text-[30px] font-medium text-navy md:mb-[52px] md:text-[40px]">What you can expect</h2>
+      <div class="grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-12">
         {
           values.map((v) => (
             <div class="border-t border-line pt-[22px]">
@@ -79,15 +79,15 @@ const credentials = [
 
   <!-- ATTORNEY -->
   <section class="bg-navydark text-paper">
-    <div class="mx-auto grid max-w-[1180px] grid-cols-[0.82fr_1.18fr] items-center gap-[92px] px-10 py-[100px]">
+    <div class="mx-auto grid max-w-[1180px] grid-cols-1 items-center gap-10 px-5 py-14 md:grid-cols-[0.82fr_1.18fr] md:gap-[92px] md:px-10 md:py-[100px]">
       <div class="relative">
         <div aria-hidden="true" class="pointer-events-none absolute rounded-[4px] border border-[rgba(201,190,159,0.45)]" style="inset:20px -20px -20px 20px"></div>
-        <Placeholder label="Ashley Kagasoff portrait" dark class="relative min-h-[500px] rounded-[4px]" />
+        <Placeholder label="Ashley Kagasoff portrait" dark class="relative min-h-[280px] rounded-[4px] md:min-h-[500px]" />
       </div>
 
       <div>
         <p class="mb-[22px] text-xs uppercase tracking-[0.32em] text-brasslight">The Attorney</p>
-        <h2 class="mb-1.5 font-serif text-[42px] font-medium leading-[1.05]">Ashley Kagasoff</h2>
+        <h2 class="mb-1.5 font-serif text-[32px] font-medium leading-[1.1] md:text-[42px] md:leading-[1.05]">Ashley Kagasoff</h2>
         <div class="mb-[30px] text-[12.5px] uppercase tracking-[0.16em] text-brasslight">Attorney at Law · Founder</div>
         <p class="mb-4 max-w-[620px] text-[15.5px] font-light leading-[1.8] text-mist">
           Ashley has dedicated over 17 years to results-driven advocacy and personalized service.
@@ -99,7 +99,7 @@ const credentials = [
           Attorney's and Public Defender's offices, then fifteen years in private defense — she
           brings a rare perspective to every matter she takes on.
         </p>
-        <div class="grid max-w-[600px] grid-cols-3 gap-7">
+        <div class="grid max-w-[600px] grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-7">
           {
             credentials.map((c) => (
               <div class="border-t border-[rgba(201,190,159,0.35)] pt-4">

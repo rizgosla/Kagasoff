@@ -23,16 +23,16 @@ const { area } = Astro.props;
 <BaseLayout title={`${area.name} — Kagasoff Law Firm, A.P.C.`} description={area.blurb}>
   <!-- HERO -->
   <section class="bg-navy text-paper">
-    <div class="mx-auto max-w-[1180px] px-10 pb-[70px] pt-16">
-      <h1 class="mb-[18px] font-serif text-[58px] font-medium leading-[1.05]">{area.name}</h1>
-      <p class="max-w-[600px] text-[17px] font-light leading-[1.7] text-mist" set:html={area.blurb} />
+    <div class="mx-auto max-w-[1180px] px-5 pb-12 pt-14 md:px-10 md:pb-[70px] md:pt-16">
+      <h1 class="mb-[18px] font-serif text-[36px] font-medium leading-[1.1] md:text-[58px] md:leading-[1.05]">{area.name}</h1>
+      <p class="max-w-[600px] text-[16px] font-light leading-[1.7] text-mist md:text-[17px]" set:html={area.blurb} />
     </div>
   </section>
 
   <!-- BODY -->
-  <section class="mx-auto grid max-w-[1180px] grid-cols-[260px_1fr] items-start gap-16 px-10 py-[72px]">
+  <section class="mx-auto grid max-w-[1180px] grid-cols-1 items-start gap-12 px-5 py-14 md:grid-cols-[260px_1fr] md:gap-16 md:px-10 md:py-[72px]">
     <!-- SIDEBAR -->
-    <aside class="sticky top-6">
+    <aside class="md:sticky md:top-6">
       <p class="mb-[18px] text-[11px] uppercase tracking-[0.22em] text-brass">Practice Areas</p>
       <div class="flex flex-col">
         {
@@ -67,11 +67,11 @@ const { area } = Astro.props;
 
     <!-- CONTENT -->
     <div>
-      <h2 class="mb-[18px] font-serif text-[34px] font-medium text-navy">How we can help</h2>
+      <h2 class="mb-[18px] font-serif text-[26px] font-medium text-navy md:text-[34px]">How we can help</h2>
       {area.overview.map((p) => <p class="mb-[18px] text-[15.5px] font-light leading-[1.8] text-ink" set:html={p} />)}
 
-      <h3 class="mb-5 mt-9 font-serif text-[24px] font-semibold text-navy" set:html={area.casesHeading} />
-      <div class="mb-11 grid grid-cols-2 gap-x-8 gap-y-3">
+      <h3 class="mb-5 mt-9 font-serif text-[22px] font-semibold text-navy md:text-[24px]" set:html={area.casesHeading} />
+      <div class="mb-11 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
         {
           area.cases.map((c) => (
             <div class="flex items-baseline gap-3 text-[15px] text-navy">
@@ -101,12 +101,12 @@ const { area } = Astro.props;
 
   <!-- CTA -->
   <section class="bg-navy text-paper">
-    <div class="mx-auto max-w-[1180px] px-10 py-[70px] text-center">
-      <h2 class="mb-3.5 font-serif text-[40px] font-medium">Have a {area.name.toLowerCase()} matter?</h2>
+    <div class="mx-auto max-w-[1180px] px-5 py-14 text-center md:px-10 md:py-[70px]">
+      <h2 class="mb-3.5 font-serif text-[28px] font-medium md:text-[40px]">Have a {area.name.toLowerCase()} matter?</h2>
       <p class="mb-[30px] text-[16px] font-light text-mist">Let's talk today. Your first consultation is free and confidential.</p>
-      <div class="flex flex-wrap justify-center gap-4">
-        <a href="tel:6572184947" class="lift inline-block rounded-[7px] bg-brass px-9 py-[18px] text-[15px] font-semibold tracking-[0.04em] text-navy">Call (657) 218-4947</a>
-        <a href="/contact" class="lift inline-block rounded-[7px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-[15px] font-semibold tracking-[0.04em] text-paper">Send a message</a>
+      <div class="flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center">
+        <a href="tel:6572184947" class="lift inline-block w-full rounded-[7px] bg-brass px-9 py-[18px] text-center text-[15px] font-semibold tracking-[0.04em] text-navy sm:w-auto">Call (657) 218-4947</a>
+        <a href="/contact" class="lift inline-block w-full rounded-[7px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[15px] font-semibold tracking-[0.04em] text-paper sm:w-auto">Send a message</a>
       </div>
     </div>
   </section>
