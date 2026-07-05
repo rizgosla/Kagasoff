@@ -65,21 +65,28 @@ a {
   background: rgba(20, 30, 48, 0.55);
 }
 
-/* ===== Practice-area index rows (home page) ===== */
-.prow {
-  transition: background 0.16s, padding-left 0.16s;
+/* ===== Practice-area cards (home page) ===== */
+.pcard {
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  will-change: transform;
 }
-.prow:hover {
-  background: var(--color-cream);
-  padding-left: 22px;
+.pcard:hover {
+  transform: translateY(-6px);
+  border-color: var(--color-brasslight);
+  box-shadow: 0 18px 40px -20px rgba(22, 36, 61, 0.35);
 }
-.prow .parrow {
-  transition: transform 0.16s, opacity 0.16s;
-  opacity: 0.55;
+.pcard .parrow {
+  display: inline-block;
+  transition: transform 0.22s ease;
 }
-.prow:hover .parrow {
-  transform: translateX(6px);
-  opacity: 1;
+.pcard:hover .parrow {
+  transform: translateX(5px);
+}
+.pcard .pcard-more {
+  transition: color 0.22s ease;
+}
+.pcard:hover .pcard-more {
+  color: var(--color-navy);
 }
 
 /* ===== Practice-area sidebar links ===== */

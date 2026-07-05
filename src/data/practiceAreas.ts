@@ -41,7 +41,7 @@ export const practiceAreas: PracticeArea[] = [
   {
     slug: 'personal-injury',
     name: 'Personal Injury',
-    short: 'Accidents, premises liability, and dog bites.',
+    short: 'Auto-accidents, workers&rsquo; compensation.',
     blurb:
       "When someone else's negligence turns your life upside down, we pursue the full recovery you're owed — and handle the insurers so you can focus on healing.",
     overview: [
