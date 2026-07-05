@@ -65,28 +65,205 @@ a {
   background: rgba(20, 30, 48, 0.55);
 }
 
-/* ===== Practice-area cards (home page) ===== */
-.pcard {
-  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-  will-change: transform;
+/* ===== Practice-area moving-card deck (home page) ===== */
+.deck-layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 64px;
+  align-items: center;
 }
-.pcard:hover {
-  transform: translateY(-6px);
+.deck-copy .deck-bar {
+  margin-top: 34px;
+}
+
+.deck-stage {
+  position: relative;
+  height: 316px;
+}
+.kcard {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  padding: 34px 36px 30px;
+  transition: transform 0.52s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s,
+    box-shadow 0.4s, border-color 0.3s;
+  will-change: transform, opacity;
+}
+.kcard[data-pos="0"] {
+  transform: translateY(0) scale(1);
+  z-index: 10;
+  opacity: 1;
+  pointer-events: auto;
+  box-shadow: 0 22px 48px -24px rgba(22, 36, 61, 0.4);
+}
+.kcard[data-pos="1"] {
+  transform: translateY(12px) scale(0.965);
+  z-index: 9;
+  opacity: 0.7;
+  pointer-events: none;
+}
+.kcard[data-pos="2"] {
+  transform: translateY(24px) scale(0.93);
+  z-index: 8;
+  opacity: 0.4;
+  pointer-events: none;
+}
+.kcard[data-pos="3"] {
+  transform: translateY(30px) scale(0.9);
+  z-index: 7;
+  opacity: 0;
+  pointer-events: none;
+}
+.kcard:not([data-pos="0"]) > * {
+  opacity: 0;
+}
+.kcard[data-pos="0"] > * {
+  opacity: 1;
+  transition: opacity 0.24s ease-in 0.1s;
+}
+.kcard[data-pos="0"]:hover {
   border-color: var(--color-brasslight);
-  box-shadow: 0 18px 40px -20px rgba(22, 36, 61, 0.35);
 }
-.pcard .parrow {
+.kcard-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 20px;
+}
+.kcard-num {
+  font-family: var(--font-serif);
+  font-size: 30px;
+  line-height: 1;
+  color: var(--color-brass);
+}
+.kcard-count {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: #a39a83;
+}
+.kcard-body {
+  flex: 1;
+}
+.kcard-body h3 {
+  font-family: var(--font-serif);
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.12;
+  color: var(--color-navy);
+  margin: 0;
+}
+.kcard-body p {
+  color: var(--color-ink);
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.6;
+  margin-top: 12px;
+}
+.kcard-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-brass);
+}
+.kcard-cta .parrow {
   display: inline-block;
-  transition: transform 0.22s ease;
+  transition: transform 0.2s ease;
 }
-.pcard:hover .parrow {
+.kcard[data-pos="0"]:hover .parrow {
   transform: translateX(5px);
 }
-.pcard .pcard-more {
-  transition: color 0.22s ease;
+
+.deck-bar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
 }
-.pcard:hover .pcard-more {
+.deck-arrow {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-line);
+  background: var(--color-paper);
   color: var(--color-navy);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: border-color 0.18s, color 0.18s;
+}
+.deck-arrow:hover {
+  border-color: var(--color-brass);
+  color: var(--color-brass);
+}
+.deck-arrow svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.deck-dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.deck-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: var(--color-line);
+  cursor: pointer;
+  transition: background 0.22s, transform 0.22s;
+}
+.deck-dot.on {
+  background: var(--color-brass);
+  transform: scale(1.4);
+}
+
+@media (max-width: 900px) {
+  .deck-layout {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .deck-copy {
+    display: contents;
+  }
+  .deck-stage {
+    order: 1;
+  }
+  .deck-copy .deck-heading {
+    order: 0;
+  }
+  .deck-copy .deck-bar {
+    order: 2;
+    margin-top: 4px;
+    justify-content: center;
+  }
+}
+@media (max-width: 680px) {
+  .deck-stage {
+    height: 300px;
+  }
+  .kcard {
+    padding: 30px 26px 26px;
+  }
+  .kcard-body h3 {
+    font-size: 26px;
+  }
 }
 
 /* ===== Practice-area sidebar links ===== */
