@@ -275,6 +275,14 @@ a {
   border-color: var(--color-brass);
 }
 
+/* ===== Solid brass button label =====
+   Force the light label color regardless of the surrounding section. The base
+   `a { color: inherit }` reset is unlayered and would otherwise override the
+   text-color utilities, leaving the label to inherit dark ink on cream bands. */
+.btn-brass {
+  color: var(--color-paper);
+}
+
 /* ===== Subtle lift on buttons / nav ===== */
 .lift {
   transition: transform 0.12s;
