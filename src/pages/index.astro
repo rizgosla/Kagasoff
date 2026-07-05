@@ -31,29 +31,135 @@ import { practiceAreas } from '../data/practiceAreas';
 
   <!-- PRACTICE AREAS -->
   <section class="mx-auto max-w-[1180px] px-5 py-14 md:px-10 md:py-[84px]">
-    <div class="mx-auto mb-10 max-w-[640px] text-center md:mb-[52px]">
-      <p class="mb-[14px] text-xs uppercase tracking-[0.32em] text-brass">Our Practice</p>
-      <h2 class="font-serif text-[26px] font-medium leading-[1.2] text-navy md:text-[34px]">Seven areas. One standard of care.</h2>
-      <p class="mx-auto mt-[18px] max-w-[560px] text-[15px] font-light leading-[1.75] text-ink">
-        Whatever life brings, the firm provides the same direct, attorney-led counsel across every matter.
-      </p>
-    </div>
+    <div class="deck-layout">
+      <!-- left: copy + deck controls -->
+      <div class="deck-copy">
+        <div class="deck-heading">
+          <p class="mb-[14px] text-xs uppercase tracking-[0.32em] text-brass">Our Practice</p>
+          <h2 class="font-serif text-[26px] font-medium leading-[1.2] text-navy md:text-[34px]">Seven areas. One standard of care.</h2>
+          <p class="mt-[18px] max-w-[440px] text-[15px] font-light leading-[1.75] text-ink">
+            Whatever life brings, the firm provides the same direct, attorney-led counsel across every matter.
+          </p>
+        </div>
+        <div class="deck-bar">
+          <button class="deck-arrow" id="deckPrev" type="button" aria-label="Previous practice area">
+            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" /></svg>
+          </button>
+          <div class="deck-dots" id="deckDots"></div>
+          <button class="deck-arrow" id="deckNext" type="button" aria-label="Next practice area">
+            <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" /></svg>
+          </button>
+        </div>
+      </div>
 
-    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        practiceAreas.map((a, i) => (
-          <a href={`/practice/${a.slug}`} class="pcard group flex flex-col rounded-[8px] border border-line bg-paper px-6 py-7 md:px-7 md:py-8">
-            <span class="font-serif text-[20px] text-brass md:text-[22px]">{String(i + 1).padStart(2, '0')}</span>
-            <span class="mt-3 font-serif text-[23px] font-semibold leading-[1.15] text-navy md:text-[26px]">{a.name}</span>
-            <span class="mt-2 text-[14px] font-light leading-[1.55] text-ink md:text-[14.5px]" set:html={a.short} />
-            <span class="pcard-more mt-6 inline-flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.12em] text-brass">
-              Learn more <span class="parrow">&rarr;</span>
-            </span>
-          </a>
-        ))
-      }
+      <!-- right: moving card deck -->
+      <div class="deck-stage" id="practiceDeck">
+        {
+          practiceAreas.map((a, i) => (
+            <a href={`/practice/${a.slug}`} class="kcard" data-pos={String(Math.min(i, 3))}>
+              <div class="kcard-top">
+                <span class="kcard-num">{String(i + 1).padStart(2, '0')}</span>
+                <span class="kcard-count">
+                  {String(i + 1).padStart(2, '0')} / {String(practiceAreas.length).padStart(2, '0')}
+                </span>
+              </div>
+              <div class="kcard-body">
+                <h3>{a.name}</h3>
+                <p set:html={a.short} />
+              </div>
+              <span class="kcard-cta">
+                Learn more <span class="parrow">&rarr;</span>
+              </span>
+            </a>
+          ))
+        }
+      </div>
     </div>
   </section>
+
+  <script>
+    (function () {
+      const stage = document.getElementById('practiceDeck');
+      if (!stage) return;
+      const cards = [...stage.querySelectorAll<HTMLElement>('.kcard')];
+      const dotsEl = document.getElementById('deckDots');
+      const nextBtn = document.getElementById('deckNext');
+      const prevBtn = document.getElementById('deckPrev');
+      if (!dotsEl || !nextBtn || !prevBtn) return;
+      const N = cards.length;
+      let cur = 0;
+      let busy = false;
+
+      for (let i = 0; i < N; i++) {
+        const d = document.createElement('button');
+        d.className = 'deck-dot';
+        d.type = 'button';
+        d.setAttribute('aria-label', 'Practice area ' + (i + 1));
+        d.addEventListener('click', () => go(i));
+        dotsEl.appendChild(d);
+      }
+
+      function setDots() {
+        [...dotsEl!.children].forEach((d, i) => d.classList.toggle('on', i === cur));
+      }
+
+      function go(next: number) {
+        if (busy || next === cur) return;
+        busy = true;
+        const exitIdx = cur;
+        const top = cards[exitIdx];
+
+        const mobile = window.innerWidth <= 680;
+        if (mobile) {
+          // On mobile: fade + scale so no horizontal overflow triggers page zoom
+          top.style.transition = 'transform .35s cubic-bezier(.4,0,.6,1), opacity .32s ease-in';
+          top.style.transform = 'scale(0.88)';
+        } else {
+          // Desktop: slide the top card off to the right
+          top.style.transition = 'transform .42s cubic-bezier(.4,0,.6,1), opacity .38s ease-in';
+          top.style.transform = 'translateX(115%)';
+        }
+        top.style.opacity = '0';
+        top.style.zIndex = '20';
+        top.style.pointerEvents = 'none';
+
+        // Advance immediately so the cards below animate to their new depth
+        cur = ((next % N) + N) % N;
+        cards.forEach((c, i) => {
+          if (i === exitIdx) return;
+          c.dataset.pos = String(Math.min((i - cur + N) % N, 3));
+        });
+        setDots();
+
+        setTimeout(() => {
+          // Snap the exited card to the back of the pile with no transition
+          top.style.transition = 'none';
+          top.style.transform = 'translateY(30px) scale(0.9)';
+          top.style.opacity = '0';
+          top.style.zIndex = '';
+          top.style.pointerEvents = '';
+          top.dataset.pos = String(Math.min((exitIdx - cur + N) % N, 3));
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => {
+              top.style.cssText = '';
+              busy = false;
+            }),
+          );
+        }, 450);
+      }
+
+      nextBtn.addEventListener('click', () => go((cur + 1) % N));
+      prevBtn.addEventListener('click', () => go((cur - 1 + N) % N));
+
+      let timer = setInterval(() => go((cur + 1) % N), 9000);
+      stage.addEventListener('mouseenter', () => clearInterval(timer));
+      stage.addEventListener('mouseleave', () => {
+        timer = setInterval(() => go((cur + 1) % N), 9000);
+      });
+
+      setDots();
+    })();
+  </script>
 
   <!-- ATTORNEY BAND -->
   <section class="bg-navydark text-paper">
