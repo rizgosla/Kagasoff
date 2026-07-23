@@ -275,6 +275,16 @@ a {
   border-color: var(--color-brass);
 }
 
+/* ===== Related-practice cards (service pages) ===== */
+.related-card {
+  transition: border-color 0.18s, box-shadow 0.25s, transform 0.25s;
+}
+.related-card:hover {
+  border-color: var(--color-brasslight);
+  box-shadow: 0 20px 44px -26px rgba(22, 36, 61, 0.45);
+  transform: translateY(-3px);
+}
+
 /* ===== Solid brass button label =====
    Force the light label color regardless of the surrounding section. The base
    `a { color: inherit }` reset is unlayered and would otherwise override the

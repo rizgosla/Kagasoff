@@ -1,12 +1,19 @@
 ---
-/** Home — navy hero over the marble-columns image, the practice-area cards,
-    the navy attorney band, and the closing cream CTA. */
+/** Home — Style A split hero, practice marquee, stats/why-us band, the
+    practice-area card deck, attorney band, "what to expect" process, and a
+    large starfield closing CTA. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Photo from '../components/Photo.astro';
-import PracticeCTA from '../components/PracticeCTA.astro';
 import PracticeMarquee from '../components/PracticeMarquee.astro';
 import ReviewsBadge from '../components/ReviewsBadge.astro';
-import { practiceAreas } from '../data/practiceAreas';
+import { practiceAreas, process } from '../data/practiceAreas';
+
+const stats = [
+  { n: '17+', l: 'Years of experience' },
+  { n: '5.0', l: 'Google rating' },
+  { n: '291', l: 'Client reviews' },
+  { n: '7', l: 'Practice areas' },
+];
 ---
 
 <BaseLayout>
@@ -53,6 +60,35 @@ import { practiceAreas } from '../data/practiceAreas';
 
   <!-- PRACTICE-AREAS MARQUEE -->
   <PracticeMarquee theme="navy" />
+
+  <!-- STATS / WHY US -->
+  <section class="bg-cream">
+    <div class="mx-auto max-w-[1180px] px-5 py-14 md:px-10 md:py-[70px]">
+      <div class="grid grid-cols-1 items-center gap-10 md:grid-cols-[0.9fr_1.1fr] md:gap-16">
+        <div data-reveal="left">
+          <p class="mb-[14px] text-xs uppercase tracking-[0.32em] text-brass">Why Kagasoff</p>
+          <h2 class="font-serif text-[26px] font-medium leading-[1.2] text-navy md:text-[34px]">
+            A boutique firm with a courtroom record.
+          </h2>
+          <p class="mt-[18px] max-w-[440px] text-[15px] font-light leading-[1.75] text-ink">
+            Direct access to your attorney, honest counsel, and preparation that holds up at trial —
+            trusted by hundreds of Orange County clients.
+          </p>
+          <a href="/about" class="lift mt-6 inline-block border-b border-brass pb-1.5 text-sm font-semibold tracking-[0.05em] text-brass">Read our story →</a>
+        </div>
+        <div class="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4 md:gap-x-4">
+          {
+            stats.map((s, i) => (
+              <div class="border-t border-brass/30 pt-4" data-reveal style={`--reveal-delay:${i * 100}ms`}>
+                <div class="font-serif text-[40px] font-medium leading-none text-brass md:text-[50px]">{s.n}</div>
+                <div class="mt-2.5 text-[12px] uppercase tracking-[0.12em] text-ink">{s.l}</div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- PRACTICE AREAS -->
   <section class="mx-auto max-w-[1180px] px-5 py-14 md:px-10 md:py-[84px]">
@@ -208,5 +244,67 @@ import { practiceAreas } from '../data/practiceAreas';
     </div>
   </section>
 
-  <PracticeCTA />
+  <!-- WHAT TO EXPECT / PROCESS -->
+  <section class="bg-paper">
+    <div class="mx-auto max-w-[1180px] px-5 py-14 md:px-10 md:py-[88px]">
+      <div class="mb-11 max-w-[560px] md:mb-14" data-reveal>
+        <p class="mb-[14px] text-xs uppercase tracking-[0.32em] text-brass">How It Works</p>
+        <h2 class="font-serif text-[26px] font-medium leading-[1.2] text-navy md:text-[34px]">
+          What working with us looks like.
+        </h2>
+        <p class="mt-[18px] text-[15px] font-light leading-[1.75] text-ink">
+          A clear, four-step path from your first call to resolution — the same disciplined approach
+          across every practice area.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 gap-x-8 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          process.map((step, i) => (
+            <div class="border-t border-line pt-5" data-reveal style={`--reveal-delay:${i * 110}ms`}>
+              <div class="mb-3 font-serif text-[28px] leading-none text-brass">{String(i + 1).padStart(2, '0')}</div>
+              <h3 class="mb-2 font-serif text-[21px] font-semibold leading-[1.2] text-navy" set:html={step.title} />
+              <p class="text-[14px] font-light leading-[1.65] text-ink" set:html={step.body} />
+            </div>
+          ))
+        }
+      </div>
+      <div class="mt-11 md:mt-14" data-reveal>
+        <a href="/contact" class="lift inline-block rounded-[7px] bg-navy px-[30px] py-4 text-center text-sm font-semibold tracking-[0.04em] text-paper">Start with a free consultation →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING CTA -->
+  <section class="starfield overflow-hidden text-paper">
+    <div class="mx-auto max-w-[1180px] px-5 py-16 md:px-10 md:py-[104px]">
+      <div class="grid grid-cols-1 items-center gap-10 md:grid-cols-[1.15fr_0.85fr] md:gap-16">
+        <div data-reveal="left">
+          <p class="mb-[18px] text-xs uppercase tracking-[0.32em] text-brasslight">Free Initial Consultation</p>
+          <h2 class="font-serif text-[34px] font-medium leading-[1.06] md:text-[54px]">
+            Tell us <span class="text-gold">what happened.</span>
+          </h2>
+          <p class="mt-6 max-w-[520px] text-[16px] font-light leading-[1.75] text-mist md:text-[17px]">
+            Every consultation is free and confidential. We'll listen, tell you honestly where you
+            stand, and lay out how we can help — with no obligation.
+          </p>
+          <div class="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+            <a href="tel:6572184947" class="lift inline-block rounded-[7px] bg-brass px-9 py-[18px] text-center text-[15px] font-semibold tracking-[0.04em] text-navy">Call (657) 218-4947</a>
+            <a href="/contact" class="lift inline-block rounded-[7px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[15px] font-semibold tracking-[0.04em] text-paper">Send a message</a>
+          </div>
+        </div>
+
+        <div class="md:justify-self-end" data-reveal="right" style="--reveal-delay:120ms">
+          <div class="rounded-[10px] border border-white/10 bg-[rgba(16,27,48,0.55)] px-7 py-8 backdrop-blur md:px-8">
+            <ReviewsBadge count="291" people={[1, 2, 3, 4, 5]} />
+            <div class="my-7 h-px bg-white/10"></div>
+            <p class="mb-1 text-[11px] uppercase tracking-[0.22em] text-brasslight">Westminster Office</p>
+            <p class="font-serif text-[19px] leading-[1.4] text-paper">14541 Brookhurst St, Suite D4<br />Westminster, CA 92683</p>
+            <a href="tel:6572184947" class="mt-4 inline-flex items-center gap-2 text-[14px] text-gold">
+              <span class="inline-block h-px w-4 bg-gold/50"></span>(657) 218-4947
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
