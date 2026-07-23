@@ -291,6 +291,198 @@ a {
   transform: translateY(-1px);
 }
 
+/* ===== Reveal-on-scroll (Traut-style fade/slide-up) =====
+   Elements marked [data-reveal] start hidden and animate in when they enter
+   the viewport. A small stagger can be set per-element with
+   style="--reveal-delay: 120ms". The IntersectionObserver lives in BaseLayout.
+   Fully disabled under prefers-reduced-motion. */
+/* Hidden state only applies once the head script confirms JS is running
+   (adds .js-reveal to <html>), so a no-JS visitor still sees all content. */
+.js-reveal [data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.js-reveal [data-reveal="left"] {
+  transform: translateX(-34px);
+}
+.js-reveal [data-reveal="right"] {
+  transform: translateX(34px);
+}
+.js-reveal [data-reveal="zoom"] {
+  transform: scale(0.94);
+}
+.js-reveal [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ===== Practice-areas marquee (moving bar) ===== */
+.marquee {
+  position: relative;
+  overflow: hidden;
+  --marquee-gap: 3.5rem;
+  --marquee-duration: 40s;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: var(--marquee-gap);
+  animation: marquee-scroll var(--marquee-duration) linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+.marquee-copy {
+  display: flex;
+  align-items: center;
+  gap: var(--marquee-gap);
+}
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--font-serif);
+  white-space: nowrap;
+}
+.marquee-dot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  transform: rotate(45deg);
+  background: var(--color-brass);
+}
+@keyframes marquee-scroll {
+  to {
+    transform: translateX(calc(-50% - var(--marquee-gap) / 2));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* ===== Reviews badge — overlapping staff avatars + 5.0 stars ===== */
+.avstack {
+  display: flex;
+  align-items: center;
+}
+.avstack .av {
+  width: var(--av-size, 48px);
+  height: var(--av-size, 48px);
+  border-radius: 9999px;
+  background-image: var(--av-img, url("/team.jpg"));
+  background-repeat: no-repeat;
+  background-size: 480% auto;
+  background-position: var(--px, 50%) var(--py, 30%);
+  box-shadow: 0 0 0 2px var(--av-ring, #16243d),
+    0 6px 14px -6px rgba(0, 0, 0, 0.55);
+  flex-shrink: 0;
+}
+.avstack .av + .av {
+  margin-left: calc(var(--av-size, 48px) * -0.34);
+}
+/* Per-person crops from the 5-up staff photo (left → right). Tuned visually. */
+.av-p1 {
+  --px: 11%;
+  --py: 8%;
+}
+.av-p2 {
+  --px: 22%;
+  --py: 30%;
+}
+.av-p3 {
+  --px: 45%;
+  --py: 33%;
+}
+.av-p4 {
+  --px: 66%;
+  --py: 35%;
+}
+.av-p5 {
+  --px: 91%;
+  --py: 30%;
+}
+.stars {
+  display: inline-flex;
+  gap: 2px;
+  color: var(--color-brasslight);
+}
+.stars svg {
+  width: 17px;
+  height: 17px;
+  fill: currentColor;
+}
+
+/* ===== Navy starfield backdrop (themvp-style twinkle on deep navy) ===== */
+.starfield {
+  position: relative;
+  background-color: var(--color-navy);
+  background-image: radial-gradient(
+      1.5px 1.5px at 12% 22%,
+      rgba(227, 201, 147, 0.5),
+      transparent
+    ),
+    radial-gradient(1.5px 1.5px at 78% 14%, rgba(255, 255, 255, 0.35), transparent),
+    radial-gradient(1px 1px at 33% 68%, rgba(227, 201, 147, 0.4), transparent),
+    radial-gradient(1.5px 1.5px at 64% 82%, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 88% 56%, rgba(227, 201, 147, 0.35), transparent),
+    radial-gradient(1px 1px at 48% 34%, rgba(255, 255, 255, 0.28), transparent),
+    radial-gradient(1.5px 1.5px at 22% 88%, rgba(227, 201, 147, 0.3), transparent);
+  background-repeat: no-repeat;
+}
+
+/* ===== Mockup gallery chrome (design-preview pages only) ===== */
+.mock-badge {
+  position: fixed;
+  z-index: 60;
+  right: 16px;
+  bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 9999px;
+  background: rgba(16, 27, 48, 0.92);
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+}
+.mock-badge a {
+  color: var(--color-gold);
+  border-bottom: 1px solid rgba(227, 201, 147, 0.4);
+  padding-bottom: 1px;
+}
+
 /* ===== Form fields ===== */
 .fld {
   width: 100%;

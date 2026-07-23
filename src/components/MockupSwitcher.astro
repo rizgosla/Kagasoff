@@ -1,0 +1,36 @@
+---
+/** Fixed corner pill shown only on /mockups/* preview pages so the client can
+    jump between hero concepts and back to the gallery. Not used on the live site. */
+interface Props {
+  current: 'A' | 'B' | 'C';
+}
+const { current } = Astro.props;
+const options = [
+  { id: 'A', href: '/mockups/split' },
+  { id: 'B', href: '/mockups/spotlight' },
+  { id: 'C', href: '/mockups/classic' },
+];
+---
+
+<div class="mock-badge">
+  <span class="text-mist">Design preview</span>
+  <span class="flex items-center gap-1.5">
+    {
+      options.map((o) => (
+        <a
+          href={o.href}
+          class:list={[
+            'grid h-6 w-6 place-items-center rounded-full border text-[11px] font-semibold',
+            o.id === current
+              ? 'border-gold bg-gold text-navy'
+              : 'border-white/25 text-paper/80 hover:border-gold hover:text-gold',
+          ]}
+          aria-current={o.id === current ? 'page' : undefined}
+        >
+          {o.id}
+        </a>
+      ))
+    }
+  </span>
+  <a href="/mockups">All ↗</a>
+</div>
