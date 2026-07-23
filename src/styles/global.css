@@ -458,31 +458,6 @@ a {
   background-repeat: no-repeat;
 }
 
-/* ===== Mockup gallery chrome (design-preview pages only) ===== */
-.mock-badge {
-  position: fixed;
-  z-index: 60;
-  right: 16px;
-  bottom: 16px;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 9999px;
-  background: rgba(16, 27, 48, 0.92);
-  color: var(--color-paper);
-  font-family: var(--font-sans);
-  font-size: 12.5px;
-  letter-spacing: 0.02em;
-  box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(6px);
-}
-.mock-badge a {
-  color: var(--color-gold);
-  border-bottom: 1px solid rgba(227, 201, 147, 0.4);
-  padding-bottom: 1px;
-}
-
 /* ===== Form fields ===== */
 .fld {
   width: 100%;
