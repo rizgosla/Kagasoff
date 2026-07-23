@@ -4,6 +4,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Photo from '../components/Photo.astro';
 import PracticeCTA from '../components/PracticeCTA.astro';
+import PracticeMarquee from '../components/PracticeMarquee.astro';
+import ReviewsBadge from '../components/ReviewsBadge.astro';
 import { practiceAreas } from '../data/practiceAreas';
 ---
 
@@ -26,14 +28,21 @@ import { practiceAreas } from '../data/practiceAreas';
         <a href="tel:6572184947" class="lift inline-block w-full rounded-[7px] bg-brass px-9 py-[18px] text-center text-[15px] font-semibold tracking-[0.04em] text-navy sm:w-auto">Call (657) 218-4947</a>
         <a href="/contact" class="lift inline-block w-full rounded-[7px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[15px] font-semibold tracking-[0.04em] text-paper sm:w-auto">Request a free consultation</a>
       </div>
+
+      <div class="mt-11 flex justify-center">
+        <ReviewsBadge count="291" people={[2, 3, 4]} />
+      </div>
     </div>
   </section>
+
+  <!-- PRACTICE-AREAS MARQUEE -->
+  <PracticeMarquee theme="navy" />
 
   <!-- PRACTICE AREAS -->
   <section class="mx-auto max-w-[1180px] px-5 py-14 md:px-10 md:py-[84px]">
     <div class="deck-layout">
       <!-- left: copy + deck controls -->
-      <div class="deck-copy">
+      <div class="deck-copy" data-reveal="left">
         <div class="deck-heading">
           <p class="mb-[14px] text-xs uppercase tracking-[0.32em] text-brass">Our Practice</p>
           <h2 class="font-serif text-[26px] font-medium leading-[1.2] text-navy md:text-[34px]">Seven areas. One standard of care.</h2>
@@ -164,12 +173,12 @@ import { practiceAreas } from '../data/practiceAreas';
   <!-- ATTORNEY BAND -->
   <section class="bg-navydark text-paper">
     <div class="mx-auto grid max-w-[1180px] grid-cols-1 items-center gap-10 px-5 py-14 md:grid-cols-[0.82fr_1.18fr] md:gap-[92px] md:px-10 md:py-[100px]">
-      <div class="relative">
+      <div class="relative" data-reveal="left">
         <div aria-hidden="true" class="pointer-events-none absolute rounded-[4px] border border-[rgba(201,190,159,0.45)]" style="inset:20px -20px -20px 20px"></div>
         <Photo src="/ashley-portrait.jpg" alt="Ashley Kagasoff" dark position="50% 25%" class="relative min-h-[320px] rounded-[4px] md:min-h-[480px]" />
       </div>
 
-      <div>
+      <div data-reveal="right" style="--reveal-delay:120ms">
         <p class="mb-[26px] text-xs uppercase tracking-[0.32em] text-brasslight">A Lawyer Who Fights For You</p>
         <h2 class="mb-2 font-serif text-[36px] font-medium leading-[1.05] text-paper md:text-[52px] md:leading-[1.02]">Ashley Kagasoff</h2>
         <div class="mb-[38px] text-[12.5px] uppercase tracking-[0.16em] text-brasslight">Attorney</div>
