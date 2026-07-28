@@ -1,43 +1,63 @@
 ---
-/** Cream call-to-action band used at the foot of content pages. */
+/** Sand call-to-action band used at the foot of content pages: a short,
+    plainspoken prompt plus the call / message actions.
+
+    Pass `n` to render the signature ruled-margin index (§ NN) above the
+    heading — used on the practice template, where it takes its place among
+    the page's numbered sections. Omit `n` for a page that isn't using the
+    index (e.g. a page with its own numbering), and a plain eyebrow renders
+    instead so existing callers keep working unchanged. */
+import SectionIndex from './SectionIndex.astro';
+
 interface Props {
   heading?: string;
   sub?: string;
+  eyebrow?: string;
+  n?: number;
 }
 const {
   heading = 'Tell us what happened.',
   sub = 'Consultations are free and confidential.',
+  eyebrow = 'Free initial consultation',
+  n,
 } = Astro.props;
 ---
 
-<section class="relative overflow-hidden bg-cream">
-  <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brass/60 to-transparent"></div>
+<section class="relative overflow-hidden border-t border-line bg-sand">
+  <div class="mx-auto max-w-page px-lg py-2xl md:px-2xl md:py-3xl">
+    {
+      n ? (
+        <SectionIndex n={n} label={eyebrow} />
+      ) : (
+        <p class="mb-xs text-eyebrow font-sans font-semibold uppercase text-clay" data-reveal>
+          {eyebrow}
+        </p>
+      )
+    }
 
-  <div class="mx-auto flex max-w-[1180px] flex-col items-start gap-8 px-5 py-14 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-10 md:px-10 md:py-[72px]">
+    <div class="flex flex-col items-start gap-xl sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+      <!-- Left: text -->
+      <div data-reveal>
+        <h2 class="text-h2 font-serif font-medium leading-tight text-ink">{heading}</h2>
+        <p class="mt-xs max-w-measure text-body font-light text-stone">{sub}</p>
+      </div>
 
-    <!-- Left: text -->
-    <div>
-      <p class="mb-2.5 text-[11px] uppercase tracking-[0.36em] text-brass">Free Initial Consultation</p>
-      <h2 class="mb-2 font-serif text-[30px] font-medium leading-[1.1] text-navy md:text-[44px] md:leading-[1.05]">{heading}</h2>
-      <p class="text-[15px] font-light leading-[1.75] text-ink">{sub}</p>
+      <!-- Right: CTAs -->
+      <div class="flex w-full flex-col items-stretch gap-md sm:w-auto sm:flex-row sm:flex-wrap sm:items-center" data-reveal style="--reveal-delay:100ms">
+        <!-- Phone — primary -->
+        <a
+          href="tel:+16572184947"
+          class="btn-clay lift inline-flex items-center justify-center rounded-md bg-clay px-lg py-sm text-center text-body font-semibold tracking-wide"
+        >Call (657) 218-4947</a>
+
+        <!-- Message — secondary -->
+        <a
+          href="/contact/"
+          class="lift inline-flex items-center justify-center rounded-md border border-ink px-lg py-sm text-center text-body font-medium tracking-wide text-ink transition-colors hover:bg-ink hover:text-paper"
+        >
+          Send a message
+        </a>
+      </div>
     </div>
-
-    <!-- Right: CTAs -->
-    <div class="flex w-full flex-col items-stretch gap-4 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
-      <!-- Phone — primary -->
-      <a
-        href="tel:6572184947"
-        class="btn-brass lift rounded-[7px] bg-brass px-[30px] py-4 text-center text-sm font-semibold tracking-[0.04em]"
-      >Call (657) 218-4947</a>
-
-      <!-- Message — secondary -->
-      <a
-        href="/contact"
-        class="lift rounded-[7px] border border-navy/40 px-[30px] py-4 text-center text-sm font-medium tracking-[0.04em] text-navy transition-colors hover:border-navy/70"
-      >
-        Send a message
-      </a>
-    </div>
-
   </div>
 </section>

@@ -1,0 +1,32 @@
+---
+/** SIGNATURE ELEMENT — the ruled margin index.
+    The § hangs in the left margin, the label stays flush with body copy, and
+    the hairline rule runs off toward the viewport edge: the furniture of a
+    legal document, carrying plain English.
+    See design-system/kagasoff-law-firm/MASTER.md.
+
+    Accessibility: the § mark and the rule are decorative and aria-hidden, so
+    screen readers do not announce "section 01" before every heading. The label
+    text stays readable to AT. Neither is ever the sole cue for anything.
+
+    Props:
+      n      — section number, rendered as "§ 01" (zero-padded automatically)
+      label  — the eyebrow text, e.g. "What we handle"
+      dark   — true on ink/inkdeep grounds; switches to the lighter accent */
+interface Props {
+  n: number;
+  label?: string;
+  dark?: boolean;
+  class?: string;
+}
+const { n, label, dark = false, class: cls = '' } = Astro.props;
+const mark = `§ ${String(n).padStart(2, '0')}`;
+---
+
+<div class:list={['sindex', dark && 'sindex-dark', cls]}>
+  <span class="sindex-mark">
+    <span class="sindex-num" aria-hidden="true">{mark}</span>
+    {label && <span class="sindex-label">{label}</span>}
+  </span>
+  <span class="sindex-rule" aria-hidden="true"></span>
+</div>
