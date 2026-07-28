@@ -1,308 +1,244 @@
 ---
-/** Home — Style A split hero, practice marquee, stats/why-us band, the
-    practice-area card deck, attorney band, "what to expect" process, and a
-    large starfield closing CTA. */
+/** Home — five numbered sections, in the shape of a legal document.
+    § 01 hero · § 02 what we handle · § 03 who you'd be working with ·
+    § 04 what happens when you call · § 05 consultation.
+    See design-system/kagasoff-law-firm/MASTER.md. Every business fact here
+    comes from BRIEF.md or src/data/practiceAreas.ts — nothing is invented. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Photo from '../components/Photo.astro';
-import PracticeMarquee from '../components/PracticeMarquee.astro';
-import ReviewsBadge from '../components/ReviewsBadge.astro';
+import SectionIndex from '../components/SectionIndex.astro';
 import { practiceAreas, process } from '../data/practiceAreas';
 
-const stats = [
-  { n: '17+', l: 'Years of experience' },
-  { n: '5.0', l: 'Google rating' },
-  { n: '291', l: 'Client reviews' },
-  { n: '7', l: 'Practice areas' },
+/* The hero's list of practice areas is generated, never typed out, so adding
+   an area to practiceAreas.ts updates the sentence too. */
+const names = practiceAreas.map((a) => a.name);
+const areaSentence = `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+
+/* The licensing boards are already structured data — reuse them rather than
+   restating them. This is the most specific thing on the page. */
+const licenseArea = practiceAreas.find((a) => a.slug === 'professional-license-defense');
+
+/* Ashley Kagasoff's record. Each line is verbatim fact from BRIEF.md. */
+const record: [string, string][] = [
+  ['In practice', '17+ years'],
+  [
+    'Before private practice',
+    'Law clerk, Orange County District Attorney&rsquo;s Office and Orange County Public Defender&rsquo;s Office',
+  ],
+  ['Private defense', '15 years'],
+  [
+    'Education',
+    'B.A., University of California, Los Angeles, 2003. J.D., Chapman University School of Law, 2007.',
+  ],
+  [
+    'Admitted',
+    'California. U.S. District Courts for the Eastern, Central and Southern Districts of California.',
+  ],
 ];
 ---
 
 <BaseLayout>
-  <!-- HERO — Style A split: staff photo + review proof over a navy starfield -->
-  <section class="starfield overflow-hidden text-paper">
-    <div class="mx-auto grid max-w-[1180px] grid-cols-1 items-center gap-12 px-5 pb-16 pt-14 md:grid-cols-[1.05fr_0.95fr] md:gap-16 md:px-10 md:pb-24 md:pt-20">
-      <!-- Left: copy -->
-      <div data-reveal="left">
-        <p class="mb-6 text-xs uppercase tracking-[0.32em] text-brasslight">Westminster &middot; Serving California</p>
-        <h1 class="font-serif text-[44px] font-medium leading-[1.04] tracking-[0.005em] md:text-[68px]">
-          Orange County<br />
-          <span class="text-gold">injury &amp; defense</span><br />
-          attorneys.
-        </h1>
-        <p class="mt-7 max-w-[480px] text-[16px] font-light leading-[1.75] text-mist md:text-[17px]">
-          From the courtroom to the negotiating table, the Kagasoff Law Firm brings disciplined,
-          personal advocacy to every client &mdash; across seven practice areas.
-        </p>
-        <div class="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
-          <a href="tel:6572184947" class="lift inline-block rounded-[7px] bg-brass px-9 py-[18px] text-center text-[15px] font-semibold tracking-[0.04em] text-navy">Call (657) 218-4947</a>
-          <a href="/contact" class="lift inline-block rounded-[7px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[15px] font-semibold tracking-[0.04em] text-paper">Free consultation</a>
-        </div>
-        <div class="mt-10">
-          <ReviewsBadge count="291" people={[1, 2, 3, 4, 5]} />
-        </div>
+  <!-- § 01 — HERO ------------------------------------------------------ -->
+  <section class="bg-paper">
+    <div class="mx-auto max-w-page pb-section pt-xl md:pt-2xl">
+      <div class="pl-md md:pl-xl">
+        <SectionIndex n={1} label="Westminster, California" />
       </div>
 
-      <!-- Right: staff photo panel -->
-      <div class="relative" data-reveal="right" style="--reveal-delay:140ms">
-        <div aria-hidden="true" class="pointer-events-none absolute -inset-3 rounded-[14px] border border-[rgba(201,190,159,0.4)] md:-inset-4"></div>
-        <div class="relative overflow-hidden rounded-[10px] bg-navydark shadow-[0_40px_80px_-40px_rgba(0,0,0,0.7)]">
-          <img src="/team.jpg" alt="The Kagasoff Law Firm team" class="h-full w-full object-cover" style="aspect-ratio:4/5;object-position:50% 35%" />
-          <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[rgba(16,27,48,0.85)] to-transparent"></div>
-          <div class="absolute bottom-5 left-5 right-5">
-            <div class="inline-flex items-center gap-2 rounded-full bg-[rgba(16,27,48,0.72)] px-4 py-2 text-[12px] tracking-[0.04em] text-paper backdrop-blur">
-              <span class="h-1.5 w-1.5 rounded-full bg-gold"></span>
-              A team that fights for you
-            </div>
+      <div class="grid gap-xl px-md md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-2xl md:px-xl">
+        <div>
+          <h1 class="text-balance font-serif text-h1 font-medium text-ink">
+            A Westminster attorney for the problem you&rsquo;re dealing with now.
+          </h1>
+          <p class="mt-lg max-w-prose text-pretty text-lead text-stone">
+            {areaSentence} &mdash; handled by the same lawyer from the first call to the last.
+          </p>
+          <div class="mt-xl flex flex-col gap-sm sm:flex-row sm:items-center sm:gap-md">
+            <a
+              href="/contact/"
+              class="btn-clay lift inline-flex items-center justify-center rounded-md bg-clay px-lg py-md text-meta font-semibold"
+            >
+              Request a consultation
+            </a>
+            <a
+              href="tel:+16572184947"
+              class="lift inline-flex items-center justify-center rounded-md border border-ink px-lg py-md text-meta font-semibold text-ink"
+            >
+              Call (657) 218-4947
+            </a>
           </div>
         </div>
+
+        <figure>
+          <Photo
+            src="/ashley-portrait.jpg"
+            alt="Ashley Kagasoff, attorney at Kagasoff Law Firm, A.P.C."
+            priority
+            position="50% 25%"
+            class="aspect-[4/3] rounded-md shadow-card md:aspect-[4/5]"
+          />
+          <figcaption class="mt-sm text-meta text-stone">
+            Ashley Kagasoff, Attorney at Law
+          </figcaption>
+        </figure>
       </div>
     </div>
   </section>
 
-  <!-- PRACTICE-AREAS MARQUEE -->
-  <PracticeMarquee theme="navy" />
+  <!-- § 02 — WHAT WE HANDLE --------------------------------------------- -->
+  <section class="bg-sand">
+    <div class="mx-auto max-w-page py-section">
+      <div class="pl-md md:pl-xl">
+        <SectionIndex n={2} label="Practice areas" />
+      </div>
 
-  <!-- STATS / WHY US -->
-  <section class="bg-cream">
-    <div class="mx-auto max-w-[1180px] px-5 py-14 md:px-10 md:py-[70px]">
-      <div class="grid grid-cols-1 items-center gap-10 md:grid-cols-[0.9fr_1.1fr] md:gap-16">
-        <div data-reveal="left">
-          <p class="mb-[14px] text-xs uppercase tracking-[0.32em] text-brass">Why Kagasoff</p>
-          <h2 class="font-serif text-[26px] font-medium leading-[1.2] text-navy md:text-[34px]">
-            A boutique firm with a courtroom record.
-          </h2>
-          <p class="mt-[18px] max-w-[440px] text-[15px] font-light leading-[1.75] text-ink">
-            Direct access to your attorney, honest counsel, and preparation that holds up at trial —
-            trusted by hundreds of Orange County clients.
-          </p>
-          <a href="/about" class="lift mt-6 inline-block border-b border-brass pb-1.5 text-sm font-semibold tracking-[0.05em] text-brass">Read our story →</a>
-        </div>
-        <div class="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4 md:gap-x-4">
+      <div class="px-md md:px-xl" data-reveal>
+        <h2 class="font-serif text-h2 font-medium text-ink">What we handle</h2>
+        <p class="mt-md max-w-prose text-pretty text-body text-stone">
+          Seven areas of law. Each page lists the specific charges, claims or boards involved.
+        </p>
+
+        <ul class="mt-xl grid grid-cols-1 gap-md sm:grid-cols-2 lg:grid-cols-4">
           {
-            stats.map((s, i) => (
-              <div class="border-t border-brass/30 pt-4" data-reveal style={`--reveal-delay:${i * 100}ms`}>
-                <div class="font-serif text-[40px] font-medium leading-none text-brass md:text-[50px]">{s.n}</div>
-                <div class="mt-2.5 text-[12px] uppercase tracking-[0.12em] text-ink">{s.l}</div>
+            practiceAreas.map((a, i) => (
+              <li>
+                <a
+                  href={`/practice/${a.slug}/`}
+                  class="related-card flex h-full flex-col rounded-md border border-line bg-paper p-lg"
+                >
+                  <span class="text-eyebrow font-semibold uppercase text-clay" aria-hidden="true">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <h3 class="mt-sm font-serif text-lead font-medium text-ink">{a.name}</h3>
+                  <p class="mt-xs text-meta text-stone" set:html={a.short} />
+                  <span class="mt-auto pt-md text-clay" aria-hidden="true">&rarr;</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- § 03 — THE ATTORNEY ----------------------------------------------- -->
+  <section class="bg-paper">
+    <div class="mx-auto max-w-page py-section">
+      <div class="pl-md md:pl-xl">
+        <SectionIndex n={3} label="The attorney" />
+      </div>
+
+      <div
+        class="grid gap-xl px-md md:grid-cols-[0.8fr_1.2fr] md:gap-2xl md:px-xl"
+        data-reveal
+      >
+        <div>
+          <h2 class="font-serif text-h2 font-medium text-ink">Who you&rsquo;d be working with</h2>
+          <h3 class="mt-lg font-serif text-h3 font-medium text-ink">Ashley Kagasoff</h3>
+          <p class="mt-2xs text-eyebrow font-semibold uppercase text-stone">Attorney at Law</p>
+          <a
+            href="/about/"
+            class="lift mt-lg inline-flex items-center gap-xs border-b border-clay py-sm text-meta font-semibold text-clay"
+          >
+            Read Ashley Kagasoff&rsquo;s full biography
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+
+        <dl class="border-t border-line">
+          {
+            record.map(([term, detail]) => (
+              <div class="grid gap-2xs border-b border-line py-md sm:grid-cols-[minmax(0,11rem)_1fr] sm:gap-md">
+                <dt class="text-eyebrow font-semibold uppercase text-stone">{term}</dt>
+                <dd class="text-body text-ink" set:html={detail} />
               </div>
             ))
           }
-        </div>
+          {
+            licenseArea && (
+              <div class="grid gap-2xs border-b border-line py-md sm:grid-cols-[minmax(0,11rem)_1fr] sm:gap-md">
+                <dt class="text-eyebrow font-semibold uppercase text-stone">
+                  {licenseArea.casesHeading}
+                </dt>
+                <dd>
+                  <ul class="grid gap-2xs sm:grid-cols-2 sm:gap-x-md">
+                    {licenseArea.cases.map((board) => (
+                      <li class="text-body text-ink">{board}</li>
+                    ))}
+                  </ul>
+                </dd>
+              </div>
+            )
+          }
+        </dl>
       </div>
     </div>
   </section>
 
-  <!-- PRACTICE AREAS -->
-  <section class="mx-auto max-w-[1180px] px-5 py-14 md:px-10 md:py-[84px]">
-    <div class="deck-layout">
-      <!-- left: copy + deck controls -->
-      <div class="deck-copy" data-reveal="left">
-        <div class="deck-heading">
-          <p class="mb-[14px] text-xs uppercase tracking-[0.32em] text-brass">Our Practice</p>
-          <h2 class="font-serif text-[26px] font-medium leading-[1.2] text-navy md:text-[34px]">Seven areas. One standard of care.</h2>
-          <p class="mt-[18px] max-w-[440px] text-[15px] font-light leading-[1.75] text-ink">
-            Whatever life brings, the firm provides the same direct, attorney-led counsel across every matter.
-          </p>
-        </div>
-        <div class="deck-bar">
-          <button class="deck-arrow" id="deckPrev" type="button" aria-label="Previous practice area">
-            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" /></svg>
-          </button>
-          <div class="deck-dots" id="deckDots"></div>
-          <button class="deck-arrow" id="deckNext" type="button" aria-label="Next practice area">
-            <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" /></svg>
-          </button>
-        </div>
+  <!-- § 04 — PROCESS ----------------------------------------------------- -->
+  <section class="bg-sand">
+    <div class="mx-auto max-w-page py-section">
+      <div class="pl-md md:pl-xl">
+        <SectionIndex n={4} label="Process" />
       </div>
 
-      <!-- right: moving card deck -->
-      <div class="deck-stage" id="practiceDeck">
-        {
-          practiceAreas.map((a, i) => (
-            <a href={`/practice/${a.slug}`} class="kcard" data-pos={String(Math.min(i, 3))}>
-              <div class="kcard-top">
-                <span class="kcard-num">{String(i + 1).padStart(2, '0')}</span>
-                <span class="kcard-count">
-                  {String(i + 1).padStart(2, '0')} / {String(practiceAreas.length).padStart(2, '0')}
+      <div class="px-md md:px-xl">
+        <div data-reveal>
+          <h2 class="font-serif text-h2 font-medium text-ink">What happens when you call</h2>
+          <p class="mt-md max-w-prose text-pretty text-body text-stone">
+            Four steps. They are the same in every practice area.
+          </p>
+        </div>
+
+        <ol class="mt-xl grid grid-cols-1 gap-lg sm:grid-cols-2 lg:grid-cols-4">
+          {
+            process.map((step, i) => (
+              <li
+                class="border-t border-ink/20 pt-md"
+                data-reveal
+                style={`--reveal-delay:${i * 90}ms`}
+              >
+                <span class="font-serif text-h3 text-clay" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
                 </span>
-              </div>
-              <div class="kcard-body">
-                <h3>{a.name}</h3>
-                <p set:html={a.short} />
-              </div>
-              <span class="kcard-cta">
-                Learn more <span class="parrow">&rarr;</span>
-              </span>
-            </a>
-          ))
-        }
+                <h3 class="mt-2xs font-serif text-lead font-semibold text-ink" set:html={step.title} />
+                <p class="mt-xs text-meta text-stone" set:html={step.body} />
+              </li>
+            ))
+          }
+        </ol>
       </div>
     </div>
   </section>
 
-  <script>
-    (function () {
-      const stage = document.getElementById('practiceDeck');
-      if (!stage) return;
-      const cards = [...stage.querySelectorAll<HTMLElement>('.kcard')];
-      const dotsEl = document.getElementById('deckDots');
-      const nextBtn = document.getElementById('deckNext');
-      const prevBtn = document.getElementById('deckPrev');
-      if (!dotsEl || !nextBtn || !prevBtn) return;
-      const N = cards.length;
-      let cur = 0;
-      let busy = false;
-
-      for (let i = 0; i < N; i++) {
-        const d = document.createElement('button');
-        d.className = 'deck-dot';
-        d.type = 'button';
-        d.setAttribute('aria-label', 'Practice area ' + (i + 1));
-        d.addEventListener('click', () => go(i));
-        dotsEl.appendChild(d);
-      }
-
-      function setDots() {
-        [...dotsEl!.children].forEach((d, i) => d.classList.toggle('on', i === cur));
-      }
-
-      function go(next: number) {
-        if (busy || next === cur) return;
-        busy = true;
-        const exitIdx = cur;
-        const top = cards[exitIdx];
-
-        const mobile = window.innerWidth <= 680;
-        if (mobile) {
-          // On mobile: fade + scale so no horizontal overflow triggers page zoom
-          top.style.transition = 'transform .35s cubic-bezier(.4,0,.6,1), opacity .32s ease-in';
-          top.style.transform = 'scale(0.88)';
-        } else {
-          // Desktop: slide the top card off to the right
-          top.style.transition = 'transform .42s cubic-bezier(.4,0,.6,1), opacity .38s ease-in';
-          top.style.transform = 'translateX(115%)';
-        }
-        top.style.opacity = '0';
-        top.style.zIndex = '20';
-        top.style.pointerEvents = 'none';
-
-        // Advance immediately so the cards below animate to their new depth
-        cur = ((next % N) + N) % N;
-        cards.forEach((c, i) => {
-          if (i === exitIdx) return;
-          c.dataset.pos = String(Math.min((i - cur + N) % N, 3));
-        });
-        setDots();
-
-        setTimeout(() => {
-          // Snap the exited card to the back of the pile with no transition
-          top.style.transition = 'none';
-          top.style.transform = 'translateY(30px) scale(0.9)';
-          top.style.opacity = '0';
-          top.style.zIndex = '';
-          top.style.pointerEvents = '';
-          top.dataset.pos = String(Math.min((exitIdx - cur + N) % N, 3));
-          requestAnimationFrame(() =>
-            requestAnimationFrame(() => {
-              top.style.cssText = '';
-              busy = false;
-            }),
-          );
-        }, 450);
-      }
-
-      nextBtn.addEventListener('click', () => go((cur + 1) % N));
-      prevBtn.addEventListener('click', () => go((cur - 1 + N) % N));
-
-      let timer = setInterval(() => go((cur + 1) % N), 9000);
-      stage.addEventListener('mouseenter', () => clearInterval(timer));
-      stage.addEventListener('mouseleave', () => {
-        timer = setInterval(() => go((cur + 1) % N), 9000);
-      });
-
-      setDots();
-    })();
-  </script>
-
-  <!-- ATTORNEY BAND -->
-  <section class="bg-navydark text-paper">
-    <div class="mx-auto grid max-w-[1180px] grid-cols-1 items-center gap-10 px-5 py-14 md:grid-cols-[0.82fr_1.18fr] md:gap-[92px] md:px-10 md:py-[100px]">
-      <div class="relative" data-reveal="left">
-        <div aria-hidden="true" class="pointer-events-none absolute rounded-[4px] border border-[rgba(201,190,159,0.45)]" style="inset:20px -20px -20px 20px"></div>
-        <Photo src="/ashley-portrait.jpg" alt="Ashley Kagasoff" dark position="50% 25%" class="relative min-h-[320px] rounded-[4px] md:min-h-[480px]" />
+  <!-- § 05 — CONSULTATION ------------------------------------------------ -->
+  <section class="bg-ink">
+    <div class="mx-auto max-w-page py-section">
+      <div class="pl-md md:pl-xl">
+        <SectionIndex n={5} label="Consultation" dark />
       </div>
 
-      <div data-reveal="right" style="--reveal-delay:120ms">
-        <p class="mb-[26px] text-xs uppercase tracking-[0.32em] text-brasslight">A Lawyer Who Fights For You</p>
-        <h2 class="mb-2 font-serif text-[36px] font-medium leading-[1.05] text-paper md:text-[52px] md:leading-[1.02]">Ashley Kagasoff</h2>
-        <div class="mb-[38px] text-[12.5px] uppercase tracking-[0.16em] text-brasslight">Attorney</div>
-        <p class="mb-10 max-w-[580px] text-[15.5px] font-light leading-[1.8] text-mist">
-          Every matter is handled directly by an attorney who knows your name and your goals. We
-          prepare each case as if it will be tried — because that preparation is what earns the
-          strongest outcomes.
-        </p>
-        <a href="/about" class="lift inline-block border-b border-brass pb-1.5 text-sm font-semibold tracking-[0.05em] text-gold">More about the firm →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- WHAT TO EXPECT / PROCESS -->
-  <section class="bg-paper">
-    <div class="mx-auto max-w-[1180px] px-5 py-14 md:px-10 md:py-[88px]">
-      <div class="mb-11 max-w-[560px] md:mb-14" data-reveal>
-        <p class="mb-[14px] text-xs uppercase tracking-[0.32em] text-brass">How It Works</p>
-        <h2 class="font-serif text-[26px] font-medium leading-[1.2] text-navy md:text-[34px]">
-          What working with us looks like.
+      <div class="px-md md:px-xl" data-reveal>
+        <h2 class="text-balance font-serif text-h2 font-medium text-paper">
+          Talk to a lawyer, not an intake form.
         </h2>
-        <p class="mt-[18px] text-[15px] font-light leading-[1.75] text-ink">
-          A clear, four-step path from your first call to resolution — the same disciplined approach
-          across every practice area.
+        <p class="mt-md max-w-prose text-pretty text-body text-mist">
+          The first consultation is free. Tell us what happened and we&rsquo;ll tell you honestly
+          where you stand.
         </p>
-      </div>
-      <div class="grid grid-cols-1 gap-x-8 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
-        {
-          process.map((step, i) => (
-            <div class="border-t border-line pt-5" data-reveal style={`--reveal-delay:${i * 110}ms`}>
-              <div class="mb-3 font-serif text-[28px] leading-none text-brass">{String(i + 1).padStart(2, '0')}</div>
-              <h3 class="mb-2 font-serif text-[21px] font-semibold leading-[1.2] text-navy" set:html={step.title} />
-              <p class="text-[14px] font-light leading-[1.65] text-ink" set:html={step.body} />
-            </div>
-          ))
-        }
-      </div>
-      <div class="mt-11 md:mt-14" data-reveal>
-        <a href="/contact" class="lift inline-block rounded-[7px] bg-navy px-[30px] py-4 text-center text-sm font-semibold tracking-[0.04em] text-paper">Start with a free consultation →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- CLOSING CTA -->
-  <section class="starfield overflow-hidden text-paper">
-    <div class="mx-auto max-w-[1180px] px-5 py-16 md:px-10 md:py-[104px]">
-      <div class="grid grid-cols-1 items-center gap-10 md:grid-cols-[1.15fr_0.85fr] md:gap-16">
-        <div data-reveal="left">
-          <p class="mb-[18px] text-xs uppercase tracking-[0.32em] text-brasslight">Free Initial Consultation</p>
-          <h2 class="font-serif text-[34px] font-medium leading-[1.06] md:text-[54px]">
-            Tell us <span class="text-gold">what happened.</span>
-          </h2>
-          <p class="mt-6 max-w-[520px] text-[16px] font-light leading-[1.75] text-mist md:text-[17px]">
-            Every consultation is free and confidential. We'll listen, tell you honestly where you
-            stand, and lay out how we can help — with no obligation.
-          </p>
-          <div class="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
-            <a href="tel:6572184947" class="lift inline-block rounded-[7px] bg-brass px-9 py-[18px] text-center text-[15px] font-semibold tracking-[0.04em] text-navy">Call (657) 218-4947</a>
-            <a href="/contact" class="lift inline-block rounded-[7px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[15px] font-semibold tracking-[0.04em] text-paper">Send a message</a>
-          </div>
-        </div>
-
-        <div class="md:justify-self-end" data-reveal="right" style="--reveal-delay:120ms">
-          <div class="rounded-[10px] border border-white/10 bg-[rgba(16,27,48,0.55)] px-7 py-8 backdrop-blur md:px-8">
-            <ReviewsBadge count="291" people={[1, 2, 3, 4, 5]} />
-            <div class="my-7 h-px bg-white/10"></div>
-            <p class="mb-1 text-[11px] uppercase tracking-[0.22em] text-brasslight">Westminster Office</p>
-            <p class="font-serif text-[19px] leading-[1.4] text-paper">14541 Brookhurst St, Suite D4<br />Westminster, CA 92683</p>
-            <a href="tel:6572184947" class="mt-4 inline-flex items-center gap-2 text-[14px] text-gold">
-              <span class="inline-block h-px w-4 bg-gold/50"></span>(657) 218-4947
-            </a>
-          </div>
+        <div class="mt-xl flex flex-col gap-sm sm:flex-row sm:items-center sm:gap-md">
+          <a
+            href="/contact/"
+            class="btn-clay lift inline-flex items-center justify-center rounded-md border border-claylight bg-clay px-lg py-md text-meta font-semibold"
+          >
+            Request a consultation
+          </a>
+          <a
+            href="tel:+16572184947"
+            class="lift inline-flex items-center justify-center rounded-md border border-mist px-lg py-md text-meta font-semibold text-paper"
+          >
+            Call (657) 218-4947
+          </a>
         </div>
       </div>
     </div>

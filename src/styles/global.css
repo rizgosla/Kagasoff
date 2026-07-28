@@ -1,22 +1,95 @@
 @import "tailwindcss";
 
-/* ===== Design tokens — Kagasoff Law Firm (Direction A) =====
-   Expose as Tailwind v4 utilities: bg-navy, text-brass, font-serif, etc. */
-@theme {
-  --color-navy: #16243d;
-  --color-navydark: #101b30;
-  --color-paper: #faf8f3;
-  --color-cream: #f3efe6;
-  --color-brass: #9c7a3c;
-  --color-brasslight: #c9a253;
-  --color-gold: #e3c993;
-  --color-ink: #5b5446;
-  --color-line: #e3ddcd;
-  --color-mist: #c8cfdb; /* body text on navy */
-  --color-slate: #8493ab; /* footer text on navy */
+/* ===== Design tokens — Kagasoff Law Firm =====
+   Direction: "Plain English, legal structure" (design-system/kagasoff-law-firm/MASTER.md).
+   Every value here is a Tailwind v4 utility: bg-ink, text-clay, font-serif,
+   text-body, p-lg, rounded-md, shadow-card.
 
-  --font-serif: "Cormorant Garamond", serif;
-  --font-sans: "Libre Franklin", sans-serif;
+   Contrast is measured, not assumed. AA body floor is 4.5:1:
+     ink/paper 13.65  ink/sand 12.08  mist/ink 9.55  stone/paper 5.99
+     clay/paper 5.79  clay/sand 5.12  paper/clay 5.79
+     claylight/ink 5.43  claylight/inkdeep 6.34 — cleared for body text.
+
+   claylight was #C8724F (4.15:1 on ink), which failed the AA floor for the
+   12px eyebrow in .sindex-dark. Lightened rather than restricted, so the
+   accent works at any size on either dark ground. */
+@theme {
+  /* --- color --- */
+  --color-ink: #1b2a3a;
+  --color-inkdeep: #121d28;
+  --color-paper: #faf7f1;
+  --color-sand: #efe9de;
+  --color-clay: #9a4a2f;
+  --color-claylight: #da8a66;
+  /* Form errors only. Distinct from clay so an invalid field does not read as
+     the same colour as the primary button and every section eyebrow.
+     6.11:1 on paper, 5.41:1 on sand. Never used decoratively. */
+  --color-alert: #b3261e;
+  --color-stone: #55606d;
+  --color-mist: #c9d2dd;
+  --color-line: #ded7c9;
+  /* Form control borders ONLY. WCAG 1.4.11 requires 3:1 for UI component
+     boundaries; --color-line is 1.34:1 on paper, which is fine for decorative
+     hairlines but left every input on the contact page with no perceivable
+     edge until focus. 4.21:1 on paper, 3.72:1 on sand. */
+  --color-field: #7d7669;
+  /* Hairline on dark grounds — 3.1:1 against ink, non-text decoration only. */
+  --color-linedark: #34455a;
+
+  /* --- type --- */
+  --font-serif: "Newsreader", Georgia, serif;
+  --font-sans: "Libre Franklin", system-ui, sans-serif;
+
+  --text-eyebrow: 12px;
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.14em;
+  --text-meta: 14px;
+  --text-meta--line-height: 1.5;
+  --text-body: 17px;
+  --text-body--line-height: 1.65;
+  --text-lead: 20px;
+  --text-lead--line-height: 1.55;
+  --text-h3: 24px;
+  --text-h3--line-height: 1.25;
+  --text-h2: clamp(28px, 4vw, 40px);
+  --text-h2--line-height: 1.15;
+  --text-h1: clamp(36px, 6vw, 60px);
+  --text-h1--line-height: 1.08;
+
+  /* --- spacing --- */
+  --spacing-2xs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 40px;
+  --spacing-2xl: 64px;
+  --spacing-3xl: 96px;
+  --spacing-section: clamp(64px, 9vw, 128px);
+
+  /* --- layout ---
+     Sitewide content width. Was max-w-[1180px] hardcoded in four files by
+     three different workers; that is the magic-px defect the token layer
+     exists to prevent. Use `max-w-page`. */
+  --container-page: 1180px;
+  /* Narrow measure for short intros/leads. No Tailwind built-in collides. */
+  --container-measure: 46ch;
+  /* NOTE: do not add --container-prose. `max-w-prose` is a Tailwind v4 built-in
+     hardcoded to 65ch and does NOT resolve through --container-*, so the token
+     would be silently ignored. 65ch is a sound measure — just use max-w-prose
+     and know it is 65ch, not whatever a token claims. */
+
+  /* !! HAZARD — never write max-w-sm/md/lg/xl/2xl/3xl in this codebase.
+     The --spacing-* tokens below share those names, and Tailwind resolves
+     max-w-<name> against the spacing namespace FIRST. `max-w-3xl` compiles to
+     var(--spacing-3xl) = 96px, which collapsed the footer disclaimer into a
+     one-word column. Verified: adding --container-3xl does NOT win it back.
+     Use max-w-page, max-w-prose, max-w-measure, or an explicit [62ch]. */
+
+  /* --- radii + elevation --- */
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --shadow-card: 0 18px 40px -28px rgba(27, 42, 58, 0.42);
 }
 
 html {
@@ -26,11 +99,118 @@ html {
 body {
   margin: 0;
   background: var(--color-paper);
+  /* `clip` not `hidden`: it contains the .sindex rule bleed without creating a
+     scroll container, which would break the sticky header. */
+  overflow-x: clip;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* MUST stay inside @layer base. Unlayered CSS wins over Tailwind's layered
+   utilities regardless of specificity, so an unlayered `a { color: inherit }`
+   silently kills every text-* utility on every anchor sitewide — which is how
+   the homepage CTA ended up rendering ink-on-ink at 1.00:1. Layering it means
+   `text-paper` on a link now actually applies, and the old .btn-brass-style
+   workaround is no longer needed. */
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+/* Visible keyboard focus on every interactive element, on any ground.
+   :focus-visible only, so mouse users don't see rings. */
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+.on-dark :focus-visible,
+.bg-ink :focus-visible,
+.bg-inkdeep :focus-visible {
+  outline-color: var(--color-paper);
+}
+
+/* Skip link — first tab stop, visible only when focused. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: var(--spacing-xs);
+  z-index: 100;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: var(--text-meta);
+}
+.skip-link:focus {
+  left: var(--spacing-md);
+}
+
+/* ===== SIGNATURE ELEMENT — the ruled margin index =====
+   A hairline clay rule under each section eyebrow, running to the viewport
+   edge, with the section mark hanging in the left margin. The furniture of a
+   legal document. Decorative: the rule and the mark are aria-hidden, never the
+   sole cue for anything. Collapses inline at narrow widths. */
+/* Two properties make this read as legal-document furniture rather than a
+   generic eyebrow, and both were missing in the first build:
+     1. the § HANGS in the left margin — the label stays flush with body copy
+        and only the mark sits outside it;
+     2. the rule RUNS OFF the container toward the viewport edge.
+
+   Below 1024px there is no margin to hang into, so the hang collapses to 0 and
+   the § sits inline. The bleed uses a bounded negative margin (not -100vw) and
+   body carries `overflow-x: clip`, so no horizontal scrollbar is introduced at
+   any width — verified at 375. */
+.sindex {
+  --sindex-hang: calc(var(--spacing-2xl) + var(--spacing-lg)); /* 88px */
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+  margin-right: calc(-1 * var(--spacing-3xl));
+}
+.sindex-mark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+  /* Must be allowed to wrap: the label lives in here too, and body carries
+     overflow-x: clip, so a long eyebrow would be silently CLIPPED rather than
+     scrolled at 375px. Only the § itself stays unbreakable. */
+  flex-wrap: wrap;
+}
+.sindex-num {
+  white-space: nowrap;
+}
+@media (min-width: 1024px) {
+  .sindex {
+    margin-left: calc(-1 * var(--sindex-hang));
+  }
+  .sindex-num {
+    width: var(--sindex-hang);
+    flex-shrink: 0;
+  }
+}
+.sindex-mark {
+  font-family: var(--font-sans);
+  font-size: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow--letter-spacing);
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-clay);
+}
+.sindex-rule {
+  height: 1px;
+  background: var(--color-clay);
+  opacity: 0.55;
+}
+/* On dark grounds the rule needs the lighter accent to stay visible. */
+.sindex-dark .sindex-mark {
+  color: var(--color-claylight);
+}
+.sindex-dark .sindex-rule {
+  background: var(--color-claylight);
+  opacity: 0.5;
 }
 
 /* ===== Striped image placeholders (replace with real photography) ===== */
@@ -38,10 +218,10 @@ a {
   position: relative;
   background-image: repeating-linear-gradient(
     45deg,
-    #e6dfce 0,
-    #e6dfce 11px,
-    #ddd4bf 11px,
-    #ddd4bf 22px
+    var(--color-sand) 0,
+    var(--color-sand) 11px,
+    var(--color-line) 11px,
+    var(--color-line) 22px
   );
 }
 .ph::after {
@@ -51,29 +231,29 @@ a {
   top: 50%;
   transform: translate(-50%, -50%);
   font-family: var(--font-sans);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-size: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow--letter-spacing);
   text-transform: uppercase;
-  color: #8a7f63;
-  background: rgba(243, 239, 230, 0.82);
-  padding: 5px 10px;
-  border-radius: 2px;
+  color: var(--color-stone);
+  background: color-mix(in srgb, var(--color-paper) 88%, transparent);
+  padding: var(--spacing-2xs) var(--spacing-xs);
+  border-radius: var(--radius-sm);
   white-space: nowrap;
 }
 .ph-dark::after {
-  color: #c9be9f;
-  background: rgba(20, 30, 48, 0.55);
+  color: var(--color-mist);
+  background: color-mix(in srgb, var(--color-ink) 70%, transparent);
 }
 
 /* ===== Practice-area moving-card deck (home page) ===== */
 .deck-layout {
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
-  gap: 64px;
+  gap: var(--spacing-2xl);
   align-items: center;
 }
 .deck-copy .deck-bar {
-  margin-top: 34px;
+  margin-top: var(--spacing-xl);
 }
 
 .deck-stage {
@@ -88,8 +268,8 @@ a {
   flex-direction: column;
   background: var(--color-paper);
   border: 1px solid var(--color-line);
-  border-radius: 8px;
-  padding: 34px 36px 30px;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-lg);
   transition: transform 0.52s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s,
     box-shadow 0.4s, border-color 0.3s;
   will-change: transform, opacity;
@@ -99,7 +279,7 @@ a {
   z-index: 10;
   opacity: 1;
   pointer-events: auto;
-  box-shadow: 0 22px 48px -24px rgba(22, 36, 61, 0.4);
+  box-shadow: var(--shadow-card);
 }
 .kcard[data-pos="1"] {
   transform: translateY(12px) scale(0.965);
@@ -127,24 +307,24 @@ a {
   transition: opacity 0.24s ease-in 0.1s;
 }
 .kcard[data-pos="0"]:hover {
-  border-color: var(--color-brasslight);
+  border-color: var(--color-clay);
 }
 .kcard-top {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-lg);
 }
 .kcard-num {
   font-family: var(--font-serif);
   font-size: 30px;
   line-height: 1;
-  color: var(--color-brass);
+  color: var(--color-clay);
 }
 .kcard-count {
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  color: #a39a83;
+  font-size: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow--letter-spacing);
+  color: var(--color-stone);
 }
 .kcard-body {
   flex: 1;
@@ -154,26 +334,25 @@ a {
   font-size: 30px;
   font-weight: 600;
   line-height: 1.12;
-  color: var(--color-navy);
+  color: var(--color-ink);
   margin: 0;
 }
 .kcard-body p {
-  color: var(--color-ink);
+  color: var(--color-stone);
   font-size: 15px;
-  font-weight: 300;
   line-height: 1.6;
-  margin-top: 12px;
+  margin-top: var(--spacing-sm);
 }
 .kcard-cta {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--spacing-xs);
   margin-top: auto;
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: var(--text-eyebrow--letter-spacing);
   text-transform: uppercase;
-  color: var(--color-brass);
+  color: var(--color-clay);
 }
 .kcard-cta .parrow {
   display: inline-block;
@@ -186,7 +365,7 @@ a {
 .deck-bar {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: var(--spacing-md);
 }
 .deck-arrow {
   width: 44px;
@@ -195,15 +374,15 @@ a {
   border-radius: 50%;
   border: 1.5px solid var(--color-line);
   background: var(--color-paper);
-  color: var(--color-navy);
+  color: var(--color-ink);
   cursor: pointer;
   display: grid;
   place-items: center;
   transition: border-color 0.18s, color 0.18s;
 }
 .deck-arrow:hover {
-  border-color: var(--color-brass);
-  color: var(--color-brass);
+  border-color: var(--color-clay);
+  color: var(--color-clay);
 }
 .deck-arrow svg {
   width: 18px;
@@ -217,8 +396,9 @@ a {
 .deck-dots {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--spacing-xs);
 }
+/* 44x44 hit area via padding; the visible dot stays small. */
 .deck-dot {
   width: 7px;
   height: 7px;
@@ -228,16 +408,17 @@ a {
   background: var(--color-line);
   cursor: pointer;
   transition: background 0.22s, transform 0.22s;
+  box-shadow: 0 0 0 12px transparent;
 }
 .deck-dot.on {
-  background: var(--color-brass);
+  background: var(--color-clay);
   transform: scale(1.4);
 }
 
 @media (max-width: 900px) {
   .deck-layout {
     grid-template-columns: 1fr;
-    gap: 30px;
+    gap: var(--spacing-xl);
   }
   .deck-copy {
     display: contents;
@@ -250,7 +431,7 @@ a {
   }
   .deck-copy .deck-bar {
     order: 2;
-    margin-top: 4px;
+    margin-top: var(--spacing-2xs);
     justify-content: center;
   }
 }
@@ -259,7 +440,7 @@ a {
     height: 300px;
   }
   .kcard {
-    padding: 30px 26px 26px;
+    padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
   }
   .kcard-body h3 {
     font-size: 26px;
@@ -271,25 +452,25 @@ a {
   transition: color 0.15s, border-color 0.15s;
 }
 .sidelink:hover {
-  color: var(--color-navy);
-  border-color: var(--color-brass);
+  color: var(--color-clay);
+  border-color: var(--color-clay);
 }
 
-/* ===== Related-practice cards (service pages) ===== */
+/* ===== Related-practice cards (service pages) =====
+   Border + shadow only on hover — no transform, so layout never shifts. */
 .related-card {
-  transition: border-color 0.18s, box-shadow 0.25s, transform 0.25s;
+  transition: border-color 0.18s, box-shadow 0.25s;
 }
 .related-card:hover {
-  border-color: var(--color-brasslight);
-  box-shadow: 0 20px 44px -26px rgba(22, 36, 61, 0.45);
-  transform: translateY(-3px);
+  border-color: var(--color-clay);
+  box-shadow: var(--shadow-card);
 }
 
-/* ===== Solid brass button label =====
+/* ===== Solid clay button label =====
    Force the light label color regardless of the surrounding section. The base
    `a { color: inherit }` reset is unlayered and would otherwise override the
-   text-color utilities, leaving the label to inherit dark ink on cream bands. */
-.btn-brass {
+   text-color utilities, leaving the label to inherit dark ink on sand bands. */
+.btn-clay {
   color: var(--color-paper);
 }
 
@@ -300,13 +481,17 @@ a {
 .lift:hover {
   transform: translateY(-1px);
 }
+@media (prefers-reduced-motion: reduce) {
+  .lift:hover {
+    transform: none;
+  }
+}
 
-/* ===== Reveal-on-scroll (Traut-style fade/slide-up) =====
+/* ===== Reveal-on-scroll =====
    Elements marked [data-reveal] start hidden and animate in when they enter
-   the viewport. A small stagger can be set per-element with
-   style="--reveal-delay: 120ms". The IntersectionObserver lives in BaseLayout.
-   Fully disabled under prefers-reduced-motion. */
-/* Hidden state only applies once the head script confirms JS is running
+   the viewport. Stagger per-element with style="--reveal-delay: 120ms".
+   The IntersectionObserver lives in BaseLayout.
+   Hidden state only applies once the head script confirms JS is running
    (adds .js-reveal to <html>), so a no-JS visitor still sees all content. */
 .js-reveal [data-reveal] {
   opacity: 0;
@@ -337,155 +522,30 @@ a {
   }
 }
 
-/* ===== Practice-areas marquee (moving bar) ===== */
-.marquee {
-  position: relative;
-  overflow: hidden;
-  --marquee-gap: 3.5rem;
-  --marquee-duration: 40s;
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    #000 8%,
-    #000 92%,
-    transparent
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    #000 8%,
-    #000 92%,
-    transparent
-  );
-}
-.marquee-track {
-  display: flex;
-  width: max-content;
-  gap: var(--marquee-gap);
-  animation: marquee-scroll var(--marquee-duration) linear infinite;
-}
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
-}
-.marquee-copy {
-  display: flex;
-  align-items: center;
-  gap: var(--marquee-gap);
-}
-.marquee-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 1rem;
-  font-family: var(--font-serif);
-  white-space: nowrap;
-}
-.marquee-dot {
-  width: 7px;
-  height: 7px;
-  flex-shrink: 0;
-  transform: rotate(45deg);
-  background: var(--color-brass);
-}
-@keyframes marquee-scroll {
-  to {
-    transform: translateX(calc(-50% - var(--marquee-gap) / 2));
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track {
-    animation: none;
-    transform: none;
-  }
-}
-
-/* ===== Reviews badge — overlapping staff avatars + 5.0 stars ===== */
-.avstack {
-  display: flex;
-  align-items: center;
-}
-.avstack .av {
-  width: var(--av-size, 48px);
-  height: var(--av-size, 48px);
-  border-radius: 9999px;
-  background-image: var(--av-img, url("/team.jpg"));
-  background-repeat: no-repeat;
-  background-size: 480% auto;
-  background-position: var(--px, 50%) var(--py, 30%);
-  box-shadow: 0 0 0 2px var(--av-ring, #16243d),
-    0 6px 14px -6px rgba(0, 0, 0, 0.55);
-  flex-shrink: 0;
-}
-.avstack .av + .av {
-  margin-left: calc(var(--av-size, 48px) * -0.34);
-}
-/* Per-person crops from the 5-up staff photo (left → right). Tuned visually. */
-.av-p1 {
-  --px: 11%;
-  --py: 8%;
-}
-.av-p2 {
-  --px: 22%;
-  --py: 30%;
-}
-.av-p3 {
-  --px: 45%;
-  --py: 33%;
-}
-.av-p4 {
-  --px: 66%;
-  --py: 35%;
-}
-.av-p5 {
-  --px: 91%;
-  --py: 30%;
-}
-.stars {
-  display: inline-flex;
-  gap: 2px;
-  color: var(--color-brasslight);
-}
-.stars svg {
-  width: 17px;
-  height: 17px;
-  fill: currentColor;
-}
-
-/* ===== Navy starfield backdrop (themvp-style twinkle on deep navy) ===== */
-.starfield {
-  position: relative;
-  background-color: var(--color-navy);
-  background-image: radial-gradient(
-      1.5px 1.5px at 12% 22%,
-      rgba(227, 201, 147, 0.5),
-      transparent
-    ),
-    radial-gradient(1.5px 1.5px at 78% 14%, rgba(255, 255, 255, 0.35), transparent),
-    radial-gradient(1px 1px at 33% 68%, rgba(227, 201, 147, 0.4), transparent),
-    radial-gradient(1.5px 1.5px at 64% 82%, rgba(255, 255, 255, 0.3), transparent),
-    radial-gradient(1px 1px at 88% 56%, rgba(227, 201, 147, 0.35), transparent),
-    radial-gradient(1px 1px at 48% 34%, rgba(255, 255, 255, 0.28), transparent),
-    radial-gradient(1.5px 1.5px at 22% 88%, rgba(227, 201, 147, 0.3), transparent);
-  background-repeat: no-repeat;
-}
-
 /* ===== Form fields ===== */
 .fld {
   width: 100%;
   font-family: var(--font-sans);
-  font-size: 15px;
-  color: var(--color-navy);
+  /* 16px minimum stops iOS from zooming on focus. */
+  font-size: var(--text-body);
+  color: var(--color-ink);
   background: var(--color-paper);
-  border: 1px solid #d9d1bf;
-  border-radius: 6px;
-  padding: 13px 15px;
-  outline: none;
-  transition: border-color 0.15s;
+  border: 1px solid var(--color-field);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-.fld:focus {
-  border-color: var(--color-brass);
+.fld:focus-visible {
+  border-color: var(--color-clay);
+  outline: 2px solid var(--color-ink);
+  outline-offset: 1px;
 }
 .fld::placeholder {
-  color: #a39a83;
+  color: var(--color-stone);
+}
+.fld[aria-invalid="true"] {
+  border-color: var(--color-alert);
+  box-shadow: inset 0 0 0 1px var(--color-alert);
 }
 textarea.fld {
   resize: vertical;

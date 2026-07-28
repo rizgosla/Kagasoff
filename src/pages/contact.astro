@@ -1,143 +1,298 @@
 ---
-/** Contact — navy hero, the consultation form (client-side validated, with a
-    confirmation state), and the office info column with a map placeholder. */
+/** Contact — "Plain English, legal structure." Hero (with a real-facts
+    quick-contact panel, no stock imagery), an accessible client-side-
+    validated consultation form that discloses non-delivery BEFORE the
+    visitor types anything (not just after), and the office info column
+    with a map placeholder.
+    See design-system/kagasoff-law-firm/MASTER.md. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Placeholder from '../components/Placeholder.astro';
+import SectionIndex from '../components/SectionIndex.astro';
 import { practiceAreas } from '../data/practiceAreas';
 
-const matterOptions = [...practiceAreas.map((a) => a.name), 'Not sure / Other'];
-
-const labelCls = 'mb-2 block text-xs uppercase tracking-[0.08em] text-ink';
+const matterOptions = [...practiceAreas.map((a) => a.name), 'Not sure / other'];
+const labelCls = 'mb-2xs block text-meta uppercase tracking-[0.08em] text-ink';
+const errCls = 'mt-2xs hidden text-meta text-alert';
 ---
 
-<BaseLayout title="Contact — Kagasoff Law Firm, A.P.C.">
+<BaseLayout
+  title="Contact — Westminster, CA Attorney | Kagasoff Law Firm, A.P.C."
+  description="Reach Westminster attorney Ashley Kagasoff at (657) 218-4947, or send the details of your case. Serving Orange County, California."
+>
   <!-- HERO -->
-  <section class="starfield overflow-hidden text-paper">
-    <div class="mx-auto max-w-[1180px] px-5 pb-12 pt-14 md:px-10 md:pb-[68px] md:pt-16">
-      <p class="mb-5 text-xs uppercase tracking-[0.32em] text-brasslight" data-reveal>Contact</p>
-      <h1 class="mb-4 max-w-[720px] font-serif text-[36px] font-medium leading-[1.08] md:text-[56px] md:leading-[1.05]" data-reveal style="--reveal-delay:80ms">
-        Tell us <span class="text-gold">what happened.</span>
-      </h1>
-      <p class="max-w-[560px] text-[16px] font-light leading-[1.7] text-mist md:text-[17px]" data-reveal style="--reveal-delay:150ms">
-        Reach out for a free, confidential consultation. We'll review your situation and tell you
-        honestly how we can help.
-      </p>
+  <section class="bg-paper">
+    <div class="mx-auto grid max-w-page grid-cols-1 items-start gap-2xl px-lg py-section md:grid-cols-[1.3fr_1fr] md:px-2xl">
+      <div data-reveal="left">
+        <SectionIndex n={1} label="Contact" />
+        <h1 class="max-w-measure font-serif text-h1 font-medium text-ink" data-reveal>
+          Tell us what happened.
+        </h1>
+        <p class="mt-lg max-w-prose text-lead text-stone" data-reveal style="--reveal-delay:100ms">
+          Call (657) 218-4947 to reach the Westminster, CA office directly, or send the details below.
+          If your matter is urgent, calling is fastest.
+        </p>
+      </div>
+
+      <div
+        class="rounded-md border border-line bg-sand px-lg py-lg shadow-card"
+        data-reveal="right"
+        style="--reveal-delay:120ms"
+      >
+        <p class="text-eyebrow uppercase text-clay">Reach us directly</p>
+        <dl class="mt-lg flex flex-col gap-md">
+          <div>
+            <dt class="text-meta text-stone">Phone</dt>
+            <dd>
+              <a href="tel:+16572184947" class="font-serif text-h3 font-semibold text-clay underline">
+                (657) 218-4947
+              </a>
+            </dd>
+          </div>
+          <div class="border-t border-line pt-md">
+            <dt class="text-meta text-stone">Office</dt>
+            <dd class="font-serif text-h3 font-semibold text-ink">Westminster, CA</dd>
+          </div>
+        </dl>
+      </div>
     </div>
   </section>
 
-  <!-- BODY -->
-  <section class="mx-auto grid max-w-[1180px] grid-cols-1 items-start gap-12 px-5 py-14 md:grid-cols-[1.4fr_1fr] md:gap-16 md:px-10 md:py-[72px]">
-    <!-- FORM / CONFIRM -->
-    <div data-reveal="left">
-      <form id="consult-form" novalidate>
-        <h2 class="mb-1.5 font-serif text-[26px] font-medium text-navy md:text-[30px]">Request a free consultation</h2>
-        <p class="mb-[30px] text-[14px] font-light text-ink">
-          Fields marked <span class="text-brass">*</span> are required.
-        </p>
+  <!-- FORM + INFO -->
+  <section class="bg-sand">
+    <div class="mx-auto grid max-w-page grid-cols-1 items-start gap-2xl px-lg py-section md:grid-cols-[1.4fr_1fr] md:px-2xl">
+      <!-- FORM -->
+      <div data-reveal="left">
+        <SectionIndex n={2} label="Request a consultation" />
 
-        <div class="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <div>
-            <label class={labelCls} for="name">Name <span class="text-brass">*</span></label>
-            <input class="fld" id="name" name="name" type="text" placeholder="Your full name" />
+        <form id="consult-form" novalidate>
+          <h2 class="font-serif text-h2 font-medium text-ink">Send us the details</h2>
+          <p class="mt-sm text-meta text-stone">
+            Fields marked <span aria-hidden="true" class="text-clay">*</span><span class="sr-only"> (required)</span> are required.
+          </p>
+
+          <!-- Surfaced BEFORE the fields, not just after a failed or valid
+               submit: a stressed visitor should learn this before typing out
+               their situation, not after. Wording matches the post-submit
+               panel below. -->
+          <div class="mt-lg rounded-md border border-clay bg-paper px-md py-sm text-body text-ink">
+            This form can&rsquo;t send messages yet — nothing you type below will be sent. Call
+            <a href="tel:+16572184947" class="text-clay underline">(657) 218-4947</a> to reach us directly;
+            a real person will pick up.
           </div>
-          <div>
-            <label class={labelCls} for="phone">Phone <span class="text-brass">*</span></label>
-            <input class="fld" id="phone" name="phone" type="tel" placeholder="(657) 000-0000" />
+
+          <div
+            id="form-summary"
+            aria-live="polite"
+            class="mt-lg hidden rounded-md border border-alert bg-paper px-md py-sm text-meta text-ink"
+          >
+            Please fix the highlighted fields below before sending.
           </div>
-        </div>
 
-        <div class="mb-5">
-          <label class={labelCls} for="email">Email</label>
-          <input class="fld" id="email" name="email" type="email" placeholder="you@email.com" />
-        </div>
+          <div class="mt-lg grid grid-cols-1 gap-lg sm:grid-cols-2">
+            <div>
+              <label class={labelCls} for="name">Name <span aria-hidden="true" class="text-clay">*</span></label>
+              <input
+                class="fld"
+                id="name"
+                name="name"
+                type="text"
+                autocomplete="name"
+                required
+                aria-required="true"
+                aria-describedby="name-error"
+              />
+              <p id="name-error" class={errCls}>Enter your full name.</p>
+            </div>
+            <div>
+              <label class={labelCls} for="phone">Phone <span aria-hidden="true" class="text-clay">*</span></label>
+              <input
+                class="fld"
+                id="phone"
+                name="phone"
+                type="tel"
+                autocomplete="tel"
+                required
+                aria-required="true"
+                aria-describedby="phone-error"
+              />
+              <p id="phone-error" class={errCls}>Enter a phone number we can reach you at.</p>
+            </div>
+          </div>
 
-        <div class="mb-5">
-          <label class={labelCls} for="area">Matter type</label>
-          <select class="fld" id="area" name="area">
-            {matterOptions.map((o) => <option value={o}>{o}</option>)}
-          </select>
-        </div>
+          <div class="mt-lg">
+            <label class={labelCls} for="email">Email</label>
+            <input
+              class="fld"
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              aria-describedby="email-error"
+            />
+            <p id="email-error" class={errCls}>Enter a valid email address, or leave this blank.</p>
+          </div>
 
-        <div class="mb-6">
-          <label class={labelCls} for="message">How can we help? <span class="text-brass">*</span></label>
-          <textarea class="fld" id="message" name="message" placeholder="Briefly describe your situation. Do not include confidential details you wouldn't want sent by email."></textarea>
-        </div>
+          <div class="mt-lg">
+            <label class={labelCls} for="area">Matter type</label>
+            <select class="fld" id="area" name="area">
+              <option value="">Select a matter type</option>
+              {matterOptions.map((o) => <option value={o}>{o}</option>)}
+            </select>
+          </div>
 
-        <div id="form-error" class="mb-5 hidden rounded-md border border-[#d8b4b4] bg-[#f7ecec] px-4 py-3 text-[13.5px] text-[#8a3838]">
-          Please enter your name, a phone number, and a short message.
-        </div>
+          <div class="mt-lg">
+            <label class={labelCls} for="message">How can we help? <span aria-hidden="true" class="text-clay">*</span></label>
+            <textarea
+              class="fld"
+              id="message"
+              name="message"
+              required
+              aria-required="true"
+              aria-describedby="message-error"
+            ></textarea>
+            <p id="message-error" class={errCls}>Briefly describe your situation.</p>
+          </div>
 
-        <button type="submit" class="lift inline-block rounded-[7px] bg-navy px-[30px] py-4 text-sm font-semibold tracking-[0.04em] text-paper">Submit request</button>
-        <p class="mt-5 max-w-[460px] text-[12px] font-light leading-[1.6] text-ink/70">
-          Submitting this form does not create an attorney–client relationship. Information sent
-          through this form is not confidential until an engagement is established.
-        </p>
-      </form>
+          <button
+            type="submit"
+            class="btn-clay lift mt-xl inline-flex items-center justify-center rounded-md bg-clay px-lg py-md text-body font-semibold"
+          >
+            Send message
+          </button>
 
-      <!-- Confirmation (hidden until submit) -->
-      <div id="confirm-panel" class="hidden rounded-lg bg-navy px-6 py-9 text-paper md:px-11 md:py-12">
-        <div class="mb-3.5 font-serif text-[26px] md:text-[34px]">Thank you, <span id="confirm-name">there</span>.</div>
-        <p class="mb-2 text-[16px] font-light leading-[1.7] text-mist">
-          Your message has been received. An attorney will be in touch shortly — typically within
-          one business day.
-        </p>
-        <p class="mb-7 text-[16px] font-light leading-[1.7] text-mist">
-          If your matter is urgent, please call us directly.
-        </p>
-        <div class="flex flex-col gap-3.5 sm:flex-row sm:flex-wrap">
-          <a href="tel:6572184947" class="lift inline-block rounded-[7px] bg-brass px-[30px] py-4 text-center text-sm font-semibold tracking-[0.04em] text-navy">Call (657) 218-4947</a>
-          <button type="button" id="reset-form" class="lift inline-block rounded-[7px] border border-[rgba(250,248,243,0.4)] px-[30px] py-4 text-sm font-semibold tracking-[0.04em] text-paper">Send another message</button>
+          <p class="mt-lg max-w-measure text-meta text-stone">
+            Submitting this form does not create an attorney&ndash;client relationship, and information
+            sent through it is not confidential until an engagement is established. Prefer to talk now?
+            Call <a href="tel:+16572184947" class="text-clay underline">(657) 218-4947</a>.
+          </p>
+        </form>
+
+        <!-- Honest no-delivery state: shown after a valid submit. Never claims the
+             message was sent — this form has no backend yet. -->
+        <div id="no-delivery" class="hidden rounded-md border border-clay bg-paper px-lg py-xl" aria-live="polite">
+          <h2 id="no-delivery-heading" tabindex="-1" class="font-serif text-h3 font-semibold text-ink">
+            This form can&rsquo;t send messages yet.
+          </h2>
+          <p class="mt-sm max-w-measure text-body text-stone">
+            Your information was not sent — this contact form is not yet connected to a delivery
+            service.
+            <!-- NEEDS-CLIENT: form delivery method (Netlify Forms, Formspree, or an Astro API route) -->
+            Please call us directly instead; a real person will pick up.
+          </p>
+          <div class="mt-lg flex flex-col gap-md sm:flex-row sm:flex-wrap">
+            <a
+              href="tel:+16572184947"
+              class="btn-clay lift inline-flex items-center justify-center rounded-md bg-clay px-lg py-md text-body font-semibold"
+            >
+              Call (657) 218-4947
+            </a>
+            <button
+              type="button"
+              id="reset-form"
+              class="lift inline-flex items-center justify-center rounded-md border border-ink px-lg py-md text-body font-semibold text-ink"
+            >
+              Back to the form
+            </button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- INFO -->
-    <div data-reveal="right" style="--reveal-delay:120ms">
-      <div class="mb-6 rounded-lg bg-cream px-6 py-6 md:px-[30px] md:py-8">
-        <p class="mb-[18px] text-[11px] uppercase tracking-[0.22em] text-brass">Office</p>
-        <div class="mb-4 font-serif text-[21px] leading-[1.4] text-navy">
-          14541 Brookhurst St,<br />Suite D4<br />Westminster, CA 92683
+      <!-- INFO -->
+      <div data-reveal="right" style="--reveal-delay:120ms">
+        <SectionIndex n={3} label="Office" />
+        <h2 class="sr-only">Office</h2>
+        <div class="rounded-md border border-line bg-paper px-lg py-lg shadow-card">
+          <div class="font-serif text-h3 font-semibold text-ink">
+            <!-- NEEDS-CLIENT: confirm suite number — the live site's Contact page shows
+                 "Suite B7" while every other reference (repo, GBP name/phone source)
+                 shows "Suite D4". Confirm against the Google Business Profile. -->
+            14541 Brookhurst St, Suite D4<br />Westminster, CA 92683
+          </div>
+          <div class="mt-lg text-body text-stone">
+            <p>Phone: <a href="tel:+16572184947" class="text-clay underline">(657) 218-4947</a></p>
+            <p class="mt-2xs">Fax: 657-900-2884</p>
+            <p class="mt-2xs">
+              Hours: not yet published — call to confirm availability.
+              <!-- NEEDS-CLIENT: business hours -->
+            </p>
+          </div>
         </div>
-        <div class="text-[14px] leading-[1.9] text-ink">
-          <div>Phone: <a href="tel:6572184947" class="border-b border-[#c9bfa6] text-navy">(657) 218-4947</a></div>
-          <div>Hours: By appointment, Mon–Fri</div>
-        </div>
+
+        <!-- NEEDS-CLIENT: office map embed -->
+        <Placeholder label="Map — Westminster office" class="mt-lg aspect-[4/3] rounded-md" />
+        <p class="sr-only">Office map placeholder — a live map is not yet available.</p>
       </div>
-      <Placeholder label="Map — Westminster office" class="min-h-[200px] rounded-lg md:min-h-[240px]" />
     </div>
   </section>
 
   <script>
-    // Client-side validation + confirmation state.
-    // NOTE: this only SHOWS a confirmation — it does NOT deliver the message.
-    // Wire delivery here: add data-netlify="true" to the <form> (Netlify Forms),
-    // POST to Formspree, or handle it in an Astro API route under src/pages/api/.
+    // Accessible client-side validation. This form has no delivery backend
+    // (see NEEDS-CLIENT above), so a passed validation shows an honest
+    // no-delivery notice rather than a fake "message sent" confirmation.
     const form = document.getElementById('consult-form') as HTMLFormElement | null;
-    const errorBox = document.getElementById('form-error');
-    const confirmPanel = document.getElementById('confirm-panel');
-    const nameOut = document.getElementById('confirm-name');
+    const summary = document.getElementById('form-summary');
+    const noDelivery = document.getElementById('no-delivery');
+    const noDeliveryHeading = document.getElementById('no-delivery-heading');
+    const resetBtn = document.getElementById('reset-form');
+
+    interface Rule {
+      id: string;
+      errId: string;
+      test: (value: string) => boolean;
+    }
+
+    const rules: Rule[] = [
+      { id: 'name', errId: 'name-error', test: (v) => v.trim().length > 0 },
+      { id: 'phone', errId: 'phone-error', test: (v) => (v.match(/\d/g) || []).length >= 10 },
+      {
+        id: 'email',
+        errId: 'email-error',
+        test: (v) => v.trim() === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
+      },
+      { id: 'message', errId: 'message-error', test: (v) => v.trim().length > 0 },
+    ];
+
+    function validate(rule: Rule): boolean {
+      const el = document.getElementById(rule.id) as HTMLInputElement | HTMLTextAreaElement | null;
+      const err = document.getElementById(rule.errId);
+      if (!el) return true;
+      const ok = rule.test(el.value);
+      el.setAttribute('aria-invalid', ok ? 'false' : 'true');
+      err?.classList.toggle('hidden', ok);
+      return ok;
+    }
+
+    rules.forEach((rule) => {
+      document.getElementById(rule.id)?.addEventListener('blur', () => validate(rule));
+    });
 
     form?.addEventListener('submit', (e) => {
       e.preventDefault();
-      const data = new FormData(form);
-      const name = (data.get('name') || '').toString().trim();
-      const phone = (data.get('phone') || '').toString().trim();
-      const message = (data.get('message') || '').toString().trim();
+      const outcomes = rules.map((rule) => ({ rule, ok: validate(rule) }));
+      const firstInvalid = outcomes.find((o) => !o.ok);
 
-      if (name && phone && message) {
-        errorBox?.classList.add('hidden');
-        if (nameOut) nameOut.textContent = name.split(/\s+/)[0];
-        form.style.display = 'none';
-        confirmPanel?.classList.remove('hidden');
-      } else {
-        errorBox?.classList.remove('hidden');
+      if (firstInvalid) {
+        summary?.classList.remove('hidden');
+        (document.getElementById(firstInvalid.rule.id) as HTMLElement | null)?.focus();
+        return;
       }
+
+      summary?.classList.add('hidden');
+      form.classList.add('hidden');
+      noDelivery?.classList.remove('hidden');
+      noDeliveryHeading?.focus();
     });
 
-    document.getElementById('reset-form')?.addEventListener('click', () => {
+    resetBtn?.addEventListener('click', () => {
+      noDelivery?.classList.add('hidden');
+      form?.classList.remove('hidden');
       form?.reset();
-      confirmPanel?.classList.add('hidden');
-      if (form) form.style.display = 'block';
+      rules.forEach((rule) => {
+        document.getElementById(rule.id)?.setAttribute('aria-invalid', 'false');
+        document.getElementById(rule.errId)?.classList.add('hidden');
+      });
+      summary?.classList.add('hidden');
+      document.getElementById('name')?.focus();
     });
   </script>
 </BaseLayout>

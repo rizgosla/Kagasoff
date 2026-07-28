@@ -1,170 +1,239 @@
 ---
-/** Full-width navy top nav: serif wordmark lockup, primary nav, the Services
-    hover dropdown (all 7 practice areas), and the brass-outlined phone CTA. */
+/** Sticky ink-on-paper header — "Plain English, legal structure."
+    Serif wordmark, plain nav words (Practice areas / Attorney / Contact), a
+    keyboard-accessible Practice-areas disclosure sourced from
+    practiceAreas.ts, the tel: phone link, and the clay "Request a
+    consultation" CTA. Mobile menu is a real button with aria-expanded. */
 import { practiceAreas } from '../data/practiceAreas';
 
 const nav = [
-  { label: 'Home', href: '/' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Attorney', href: '/about/' },
+  { label: 'Contact', href: '/contact/' },
 ];
 
 const path = Astro.url.pathname;
-const isActive = (href: string) =>
-  href === '/' ? path === '/' : path.startsWith(href);
-const servicesActive = path.startsWith('/practice');
+const isActive = (href: string) => path.startsWith(href);
+const practiceActive = path.startsWith('/practice');
 ---
 
-<header class="bg-navy text-paper">
-  <div class="mx-auto flex max-w-[1180px] items-center justify-between px-5 py-3.5 md:px-10 md:py-[18px]">
-    <!-- Wordmark lockup -->
-    <a href="/" class="flex items-center gap-2.5 md:gap-3.5">
-      <span class="h-8 w-0.5 shrink-0 bg-brass md:h-[38px]"></span>
-      <span class="flex flex-col gap-[3px]">
-        <span class="font-serif text-lg font-semibold leading-none tracking-[0.02em] text-paper md:text-2xl">Kagasoff Law Firm</span>
-        <span class="text-[8px] uppercase tracking-[0.24em] text-brass md:text-[9.5px] md:tracking-[0.34em]">A Professional Corporation</span>
-      </span>
+<header class="sticky top-0 z-40 border-b border-line bg-paper">
+  <div class="mx-auto flex max-w-page items-center justify-between gap-sm px-md py-sm md:gap-md md:px-xl md:py-md">
+    <!-- Wordmark -->
+    <a href="/" class="flex min-h-11 items-center font-serif text-lead font-medium leading-tight text-ink md:text-h3">
+      Kagasoff Law Firm, A.P.C.
     </a>
 
     <!-- Primary nav (desktop) -->
-    <nav class="hidden items-center gap-8 font-sans text-[13.5px] md:flex">
-      {
-        nav.map((item) => (
-          <a
-            href={item.href}
-            class:list={[
-              'border-b pb-[3px] tracking-[0.03em] transition-opacity',
-              isActive(item.href)
-                ? 'border-brass opacity-100'
-                : 'border-transparent opacity-80 hover:opacity-100',
-            ]}
-          >
-            {item.label}
-          </a>
-        ))
-      }
-
-      <!-- Services dropdown -->
-      <div class="group relative">
-        <button
-          type="button"
+    <nav aria-label="Primary" class="hidden items-center gap-md font-sans text-meta md:flex">
+      <!-- Practice areas — keyboard-accessible disclosure, not hover-only -->
+      <details class="group relative">
+        <summary
           class:list={[
-            'flex items-center gap-1.5 border-b pb-[3px]',
-            servicesActive
-              ? 'border-brass opacity-100'
-              : 'border-transparent opacity-80 group-hover:opacity-100',
+            'flex min-h-11 cursor-pointer list-none items-center gap-2xs border-b pb-2xs marker:content-none [&::-webkit-details-marker]:hidden',
+            practiceActive ? 'border-clay text-clay' : 'border-transparent text-ink hover:text-clay',
           ]}
         >
-          Services
-          <svg width="9" height="9" viewBox="0 0 20 20" fill="none" aria-hidden="true" class="mt-px">
+          Practice areas
+          <svg width="10" height="10" viewBox="0 0 20 20" fill="none" aria-hidden="true" class="shrink-0 transition-transform group-open:rotate-180">
             <path d="M5.293 7.293a1 1 0 0 1 1.414 0L10 10.586l3.293-3.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414Z" fill="currentColor" />
           </svg>
-        </button>
-        <!-- pt-3 bridges the visual gap so the menu stays hoverable -->
-        <div class="invisible absolute left-1/2 top-full z-50 -translate-x-1/2 pt-3 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-          <div class="min-w-[220px] rounded-lg border border-white/10 bg-[#0f1c2e] py-2 shadow-[0_14px_34px_rgba(16,27,48,0.18)]">
-            {
-              practiceAreas.map((a) => (
-                <a
-                  href={`/practice/${a.slug}`}
-                  class="block px-5 py-2.5 text-[13px] text-paper/70 transition-colors hover:text-paper"
-                >
-                  {a.name}
-                </a>
-              ))
-            }
-          </div>
-        </div>
-      </div>
-
-      <!-- Phone CTA -->
-      <a
-        href="tel:6572184947"
-        class="lift inline-flex items-center gap-2 rounded-[7px] border border-brass px-4 py-[9px] tracking-[0.05em] text-gold"
-      >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0">
-          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
-        </svg>
-        657&middot;218&middot;4947
-      </a>
-    </nav>
-
-    <!-- Mobile menu toggle -->
-    <button
-      type="button"
-      id="mobile-menu-toggle"
-      aria-label="Toggle menu"
-      aria-expanded="false"
-      aria-controls="mobile-menu"
-      class="flex h-9 w-9 shrink-0 items-center justify-center text-paper md:hidden"
-    >
-      <svg id="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-        <line x1="3" y1="6" x2="21" y2="6"></line>
-        <line x1="3" y1="12" x2="21" y2="12"></line>
-        <line x1="3" y1="18" x2="21" y2="18"></line>
-      </svg>
-      <svg id="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" class="hidden">
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-      </svg>
-    </button>
-  </div>
-
-  <!-- Mobile menu panel -->
-  <div id="mobile-menu" class="hidden border-t border-white/10 md:hidden">
-    <nav class="flex flex-col gap-1 px-5 py-4 font-sans text-[14.5px]">
-      {
-        nav.map((item) => (
-          <a
-            href={item.href}
-            class:list={[
-              'rounded-md px-2 py-2.5 tracking-[0.02em]',
-              isActive(item.href) ? 'text-brasslight' : 'text-paper/85',
-            ]}
-          >
-            {item.label}
-          </a>
-        ))
-      }
-
-      <div class="mt-2 border-t border-white/10 pt-3">
-        <div class="mb-1.5 px-2 text-[10.5px] uppercase tracking-[0.22em] text-brass/80">Services</div>
-        <div class="flex flex-col">
+        </summary>
+        <div class="absolute left-0 top-full z-50 mt-xs min-w-64 rounded-md border border-line bg-paper py-xs shadow-card">
           {
             practiceAreas.map((a) => (
-              <a href={`/practice/${a.slug}`} class="rounded-md px-2 py-2 text-[13.5px] text-paper/70">
+              <a
+                href={`/practice/${a.slug}/`}
+                class="flex min-h-11 items-center px-md py-sm text-meta text-ink hover:bg-sand hover:text-clay"
+              >
                 {a.name}
               </a>
             ))
           }
         </div>
-      </div>
+      </details>
 
-      <!-- Phone CTA -->
-      <a
-        href="tel:6572184947"
-        class="mt-4 inline-flex items-center justify-center gap-2 rounded-[7px] border border-brass px-4 py-3 tracking-[0.05em] text-gold"
-      >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+            class:list={[
+              'flex min-h-11 items-center border-b pb-2xs',
+              isActive(item.href) ? 'border-clay text-clay' : 'border-transparent text-ink hover:text-clay',
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+
+      <!-- Phone -->
+      <a href="tel:+16572184947" class="flex min-h-11 items-center gap-2xs text-ink hover:text-clay">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0">
           <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
         </svg>
-        657&middot;218&middot;4947
+        (657) 218-4947
+      </a>
+
+      <!-- CTA -->
+      <a
+        href="/contact/"
+        class="lift btn-clay flex min-h-11 items-center rounded-md bg-clay px-md font-medium"
+      >
+        Request a consultation
+      </a>
+    </nav>
+
+    <!-- Mobile actions: persistent tap-to-call + menu toggle -->
+    <div class="flex items-center gap-sm md:hidden">
+      <a
+        href="tel:+16572184947"
+        aria-label="Call (657) 218-4947"
+        class="flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-ink hover:text-clay"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
+        </svg>
+      </a>
+
+      <!-- Mobile menu toggle -->
+      <button
+        type="button"
+        id="mobile-menu-toggle"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        class="flex h-11 w-11 shrink-0 items-center justify-center text-ink"
+      >
+        <svg id="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+        <svg id="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true" class="hidden">
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu panel -->
+  <div id="mobile-menu" hidden class="border-t border-line bg-paper md:hidden">
+    <nav aria-label="Primary" class="flex flex-col gap-2xs px-lg py-md font-sans text-meta">
+      <div class="mb-2xs mt-sm px-2xs text-eyebrow uppercase text-stone">Practice areas</div>
+      {
+        practiceAreas.map((a) => (
+          <a href={`/practice/${a.slug}/`} class="flex min-h-11 items-center rounded-md px-2xs text-ink hover:text-clay">
+            {a.name}
+          </a>
+        ))
+      }
+
+      <div class="mt-sm border-t border-line pt-sm">
+        {
+          nav.map((item) => (
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={['flex min-h-11 items-center rounded-md px-2xs', isActive(item.href) ? 'text-clay' : 'text-ink hover:text-clay']}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+        <a href="tel:+16572184947" class="flex min-h-11 items-center gap-2xs rounded-md px-2xs text-ink hover:text-clay">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
+          </svg>
+          (657) 218-4947
+        </a>
+      </div>
+
+      <a
+        href="/contact/"
+        class="btn-clay mt-sm flex min-h-11 items-center justify-center rounded-md bg-clay px-md font-medium"
+      >
+        Request a consultation
       </a>
     </nav>
   </div>
 </header>
 
+<style is:global>
+  /* Keeps the sticky header from covering the skip-link / in-page jump
+     target. #main lives in BaseLayout; scoped styles can't reach it, so
+     this rule is intentionally global. */
+  #main {
+    scroll-margin-top: var(--spacing-3xl);
+  }
+</style>
+
 <script>
-  const toggle = document.getElementById('mobile-menu-toggle');
-  const menu = document.getElementById('mobile-menu');
+  const mobileToggle = document.getElementById('mobile-menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
   const iconOpen = document.getElementById('menu-icon-open');
   const iconClose = document.getElementById('menu-icon-close');
 
-  toggle?.addEventListener('click', () => {
-    const isOpen = !menu?.classList.contains('hidden');
-    menu?.classList.toggle('hidden');
-    iconOpen?.classList.toggle('hidden');
-    iconClose?.classList.toggle('hidden');
-    toggle.setAttribute('aria-expanded', String(!isOpen));
+  const openMobileMenu = () => {
+    if (!mobileMenu || !mobileToggle) return;
+    mobileMenu.hidden = false;
+    mobileToggle.setAttribute('aria-expanded', 'true');
+    mobileToggle.setAttribute('aria-label', 'Close menu');
+    iconOpen?.classList.add('hidden');
+    iconClose?.classList.remove('hidden');
+    // Lock body scroll while the panel covers the page. overflow-x:clip is
+    // set directly on <body> in global.css (unlayered, so it always wins);
+    // this utility only adds overflow-y, so the sticky header is unaffected.
+    document.body.classList.add('overflow-hidden');
+  };
+
+  const closeMobileMenu = () => {
+    if (!mobileMenu || !mobileToggle) return;
+    mobileMenu.hidden = true;
+    mobileToggle.setAttribute('aria-expanded', 'false');
+    mobileToggle.setAttribute('aria-label', 'Open menu');
+    iconOpen?.classList.remove('hidden');
+    iconClose?.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  };
+
+  mobileToggle?.addEventListener('click', () => {
+    const isOpen = mobileToggle.getAttribute('aria-expanded') === 'true';
+    isOpen ? closeMobileMenu() : openMobileMenu();
+  });
+
+  // Release the scroll lock if the viewport grows past the desktop
+  // breakpoint while the mobile panel is open (it's hidden by CSS there,
+  // but our JS-driven state would otherwise leave scroll locked).
+  window.matchMedia('(min-width: 768px)').addEventListener('change', (event) => {
+    if (event.matches) closeMobileMenu();
+  });
+
+  // Practice-areas disclosure: close on outside click / Escape, matching the
+  // "not hover-only, keyboard accessible" requirement without extra JS to
+  // open it — <details>/<summary> already handles that natively.
+  const detailsEls = document.querySelectorAll('header details');
+
+  document.addEventListener('click', (event) => {
+    detailsEls.forEach((d) => {
+      if (d.open && !d.contains(event.target)) d.removeAttribute('open');
+    });
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    let closedSomething = false;
+    detailsEls.forEach((d) => {
+      if (d.open) {
+        d.removeAttribute('open');
+        d.querySelector('summary')?.focus();
+        closedSomething = true;
+      }
+    });
+    if (!closedSomething && mobileToggle?.getAttribute('aria-expanded') === 'true') {
+      closeMobileMenu();
+      mobileToggle.focus();
+    }
   });
 </script>
