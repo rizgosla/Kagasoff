@@ -6,118 +6,36 @@ import Footer from '../components/Footer.astro';
 interface Props {
   title?: string;
   description?: string;
-  /** Optional extra JSON-LD (e.g. Service schema on a practice page). */
-  schema?: Record<string, unknown>;
 }
 
 const {
-  title = 'Kagasoff Law Firm, A.P.C. — Westminster, CA attorney',
-  // Kept under ~160 chars so Google does not truncate the SERP snippet.
-  description = 'Westminster, CA attorney Ashley Kagasoff: criminal defense, license defense, personal injury, family law and restraining orders. Call (657) 218-4947.',
-  schema,
+  title = 'Kagasoff Law Firm, A.P.C. — Trusted counsel when it matters most',
+  description = 'Boutique Orange County law firm serving Westminster and greater Orange County across seven practice areas. Direct, attorney-led counsel. Free consultation.',
 } = Astro.props;
-
-// Canonical + OG URLs. Astro.site is set in astro.config.mjs.
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
-
-/* Organization schema. Every value below is sourced from BRIEF.md or the repo.
-   Deliberately absent, because no verified value exists:
-     - aggregateRating / review  (see the removed ReviewsBadge — the old
-       "5.0 (291 reviews)" figure was sourced from nothing)
-     - openingHours, priceRange, geo, foundingDate
-   Marking up an unverified rating is a liability, not an SEO win. */
-const orgSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'LegalService',
-  '@id': `${Astro.site}#organization`,
-  name: 'Kagasoff Law Firm, A.P.C.',
-  url: Astro.site?.href,
-  telephone: '+1-657-218-4947',
-  faxNumber: '+1-657-900-2884',
-  address: {
-    '@type': 'PostalAddress',
-    // NEEDS-CLIENT: suite number unconfirmed — the live Wix contact page says
-    // "Suite B7" while every other reference says "D4". Confirm against the
-    // Google Business Profile and match it exactly.
-    streetAddress: '14541 Brookhurst St, Suite D4',
-    addressLocality: 'Westminster',
-    addressRegion: 'CA',
-    postalCode: '92683',
-    addressCountry: 'US',
-  },
-  founder: {
-    '@type': 'Person',
-    name: 'Ashley Kagasoff',
-    jobTitle: 'Attorney at Law',
-    alumniOf: [
-      { '@type': 'CollegeOrUniversity', name: 'University of California, Los Angeles' },
-      { '@type': 'CollegeOrUniversity', name: 'Chapman University School of Law' },
-    ],
-  },
-  areaServed: { '@type': 'AdministrativeArea', name: 'Orange County, California' },
-};
 ---
 
 <!doctype html>
-<html lang="en-US">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-    <!-- The § from the signature margin index. Was 404ing on every route. -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Kagasoff Law Firm, A.P.C." />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content="en_US" />
-    <!-- `summary` not `summary_large_image`: the large-image card renders empty
-         without an og:image, and that asset is still NEEDS-CLIENT. Switch to
-         summary_large_image once a 1200x630 image exists. -->
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <!-- NEEDS-CLIENT: a 1200x630 social share image (og:image). Omitted rather
-         than pointed at an unsuitable existing photo. -->
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Libre+Franklin:wght@300;400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Libre+Franklin:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
-
-    <script
-      type="application/ld+json"
-      is:inline
-      set:html={JSON.stringify(orgSchema)}
-    />
-    {
-      schema && (
-        <script
-          type="application/ld+json"
-          is:inline
-          set:html={JSON.stringify(schema)}
-        />
-      )
-    }
-
     <!-- Flag JS support before first paint so reveal elements start hidden
          only when we can actually animate them back in. -->
     <script is:inline>
       document.documentElement.classList.add('js-reveal');
     </script>
   </head>
-  <body class="bg-paper font-sans text-body text-ink antialiased">
-    <a class="skip-link" href="#main">Skip to main content</a>
+  <body class="bg-paper font-sans text-ink antialiased">
     <Header />
-    <main id="main">
-      <slot />
-    </main>
+    <slot />
     <Footer />
 
     <!-- Reveal-on-scroll: fade/slide elements in as they enter the viewport. -->
