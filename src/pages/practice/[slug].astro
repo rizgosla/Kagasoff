@@ -26,10 +26,10 @@ const related = practiceAreas.filter((a) => a.slug !== area.slug);
   <!-- HERO -->
   <section class="starfield overflow-hidden text-paper">
     <div class="shell pb-12 pt-14 md:pb-[70px] md:pt-16">
-      <p class="mb-5 text-xs uppercase tracking-[0.32em] text-brasslight" data-reveal>Practice Area</p>
+      <p class="mb-5 text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brasslight" data-reveal>Practice Area</p>
       <h1 class="mb-[18px] font-serif text-[clamp(34px,5.1vw,66px)] font-medium leading-[1.06]" data-reveal style="--reveal-delay:80ms">{area.name}</h1>
       <div class="mb-7 h-0.5 w-[54px] bg-brass" data-reveal style="--reveal-delay:130ms"></div>
-      <p class="max-w-[62ch] text-[16px] font-light leading-[1.7] text-mist md:text-[17px]" data-reveal style="--reveal-delay:170ms" set:html={area.blurb} />
+      <p class="max-w-[62ch] text-[clamp(16px,1.05vw,20px)] font-light leading-[1.7] text-mist" data-reveal style="--reveal-delay:170ms" set:html={area.blurb} />
     </div>
   </section>
 
@@ -72,7 +72,7 @@ const related = practiceAreas.filter((a) => a.slug !== area.slug);
     <!-- CONTENT -->
     <div data-reveal style="--reveal-delay:80ms">
       <h2 class="mb-[18px] font-serif text-[clamp(26px,2.6vw,38px)] font-medium text-navy">How we can help</h2>
-      {area.overview.map((p) => <p class="mb-[18px] max-w-[72ch] text-[15.5px] font-light leading-[1.8] text-ink" set:html={p} />)}
+      {area.overview.map((p) => <p class="mb-[18px] max-w-[72ch] text-[clamp(15.5px,0.95vw,19px)] font-light leading-[1.8] text-ink" set:html={p} />)}
 
       <h3 class="mb-5 mt-9 font-serif text-[22px] font-semibold text-navy md:text-[24px]" set:html={area.casesHeading} />
       <div class="mb-11 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -94,7 +94,7 @@ const related = practiceAreas.filter((a) => a.slug !== area.slug);
               <div class="font-serif text-[26px] text-brass">{String(i + 1).padStart(2, '0')}</div>
               <div>
                 <div class="mb-1.5 text-[16px] font-semibold text-navy" set:html={step.title} />
-                <p class="text-[14px] font-light leading-[1.65] text-ink" set:html={step.body} />
+                <p class="text-[clamp(14px,0.85vw,17px)] font-light leading-[1.65] text-ink" set:html={step.body} />
               </div>
             </div>
           ))
@@ -105,17 +105,17 @@ const related = practiceAreas.filter((a) => a.slug !== area.slug);
 
   <!-- ATTORNEY CALLOUT -->
   <section class="bg-navydark text-paper">
-    <div class="grid shell grid-cols-1 items-center gap-9 py-14 md:grid-cols-[0.62fr_1.38fr] md:gap-[72px] md:py-[84px]">
+    <div class="grid shell grid-cols-1 items-center gap-9 py-14 md:grid-cols-[0.75fr_1.25fr] md:gap-[clamp(48px,4.5vw,96px)] md:py-[84px]">
       <div class="relative" data-reveal="left">
         <div aria-hidden="true" class="pointer-events-none absolute rounded-[6px] border border-[rgba(201,190,159,0.45)]" style="inset:16px -16px -16px 16px"></div>
         <Photo src="/ashley-portrait.jpg" alt="Ashley Kagasoff" dark position="50% 22%" class="relative min-h-[clamp(280px,28vw,460px)] rounded-[6px]" />
       </div>
       <div data-reveal="right" style="--reveal-delay:120ms">
-        <p class="mb-[22px] text-xs uppercase tracking-[0.32em] text-brasslight">Handled Personally</p>
+        <p class="mb-[22px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brasslight">Handled Personally</p>
         <h2 class="mb-4 font-serif text-[clamp(29px,3.4vw,46px)] font-medium leading-[1.06]">
           Your case, worked directly by <span class="text-gold">Ashley Kagasoff.</span>
         </h2>
-        <p class="mb-8 max-w-[64ch] text-[15.5px] font-light leading-[1.8] text-mist">
+        <p class="mb-8 max-w-[64ch] text-[clamp(15.5px,0.95vw,19px)] font-light leading-[1.8] text-mist">
           No handoffs to junior associates. With over 17 years of advocacy and a rare view from both
           sides of the courtroom, Ashley prepares every {area.name.toLowerCase()} matter as if it will
           be tried — because that readiness is what earns the strongest outcomes.
@@ -130,7 +130,7 @@ const related = practiceAreas.filter((a) => a.slug !== area.slug);
     <div class="shell py-14 md:py-[84px]">
       <div class="mb-9 flex flex-wrap items-end justify-between gap-4 md:mb-12" data-reveal>
         <div>
-          <p class="mb-[14px] text-xs uppercase tracking-[0.32em] text-brass">Explore More</p>
+          <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">Explore More</p>
           <h2 class="font-serif text-[clamp(26px,2.6vw,40px)] font-medium leading-[1.2] text-navy">Other ways we can help</h2>
         </div>
       </div>
@@ -143,8 +143,8 @@ const related = practiceAreas.filter((a) => a.slug !== area.slug);
               data-reveal
               style={`--reveal-delay:${(i % 3) * 90}ms`}
             >
-              <h3 class="font-serif text-[22px] font-semibold leading-[1.15] text-navy md:text-[24px]">{a.name}</h3>
-              <p class="mt-2.5 flex-1 text-[14px] font-light leading-[1.6] text-ink" set:html={a.short} />
+              <h3 class="font-serif text-[clamp(22px,1.45vw,28px)] font-semibold leading-[1.15] text-navy">{a.name}</h3>
+              <p class="mt-2.5 flex-1 text-[clamp(14px,0.85vw,17px)] font-light leading-[1.6] text-ink" set:html={a.short} />
               <span class="mt-5 inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.12em] text-brass">
                 Learn more
                 <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
@@ -162,8 +162,8 @@ const related = practiceAreas.filter((a) => a.slug !== area.slug);
       <h2 class="mb-3.5 font-serif text-[clamp(28px,3.2vw,44px)] font-medium" data-reveal>Have a {area.name.toLowerCase()} <span class="text-gold">matter?</span></h2>
       <p class="mb-[30px] text-[16px] font-light text-mist" data-reveal style="--reveal-delay:80ms">Let's talk today. Your first consultation is free and confidential.</p>
       <div class="flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center" data-reveal style="--reveal-delay:140ms">
-        <a href="tel:6572184947" class="lift inline-block w-full rounded-[7px] bg-brass px-9 py-[18px] text-center text-[15px] font-semibold tracking-[0.04em] text-navy sm:w-auto">Call (657) 218-4947</a>
-        <a href="/contact" class="lift inline-block w-full rounded-[7px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[15px] font-semibold tracking-[0.04em] text-paper sm:w-auto">Send a message</a>
+        <a href="tel:6572184947" class="lift inline-block w-full rounded-[7px] bg-brass px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] text-navy sm:w-auto">Call (657) 218-4947</a>
+        <a href="/contact" class="lift inline-block w-full rounded-[7px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] text-paper sm:w-auto">Send a message</a>
       </div>
     </div>
   </section>

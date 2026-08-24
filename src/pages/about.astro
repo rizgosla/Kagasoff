@@ -24,7 +24,7 @@ const credentials = [
   <!-- HERO -->
   <section class="starfield overflow-hidden text-paper">
     <div class="shell pb-16 pt-16 md:pb-24 md:pt-24">
-      <p class="mb-7 text-xs uppercase tracking-[0.32em] text-brasslight" data-reveal>About the Firm</p>
+      <p class="mb-7 text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brasslight" data-reveal>About the Firm</p>
       <h1 class="mb-9 max-w-[920px] font-serif text-[clamp(38px,5.8vw,74px)] font-medium leading-[1.06] tracking-[0.005em]" data-reveal style="--reveal-delay:80ms">
         A firm that stands<br /><span class="text-gold">on your side.</span>
       </h1>
@@ -45,11 +45,11 @@ const credentials = [
   <!-- VISION -->
   <section class="grid shell grid-cols-1 items-start gap-10 py-14 md:grid-cols-2 md:gap-16 md:py-[78px]">
     <div data-reveal="left">
-      <p class="mb-[18px] text-xs uppercase tracking-[0.32em] text-brass">Our Vision</p>
-      <p class="mb-6 font-serif text-[23px] leading-[1.4] text-navy md:text-[27px]">
+      <p class="mb-[18px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">Our Vision</p>
+      <p class="mb-6 font-serif text-[clamp(23px,1.75vw,34px)] leading-[1.4] text-navy">
         To provide exceptional legal counsel and representation that exceeds our clients' expectations.
       </p>
-      <p class="text-[15.5px] font-light leading-[1.8] text-ink">
+      <p class="text-[clamp(15.5px,0.95vw,19px)] font-light leading-[1.8] text-ink">
         Based in Westminster and serving clients throughout Orange County and the greater California
         region, the firm handles matters across seven practice areas — from personal injury and
         criminal defense to family law and professional licensing. What unites that range is a single
@@ -66,7 +66,7 @@ const credentials = [
   <!-- VALUES -->
   <section class="bg-cream">
     <div class="shell py-14 md:py-[74px]">
-      <p class="mb-4 text-center text-xs uppercase tracking-[0.32em] text-brass" data-reveal>Our Commitment</p>
+      <p class="mb-4 text-center text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass" data-reveal>Our Commitment</p>
       <h2 class="mb-10 text-center font-serif text-[30px] font-medium text-navy md:mb-[52px] md:text-[40px]" data-reveal style="--reveal-delay:80ms">What you can expect</h2>
       <div class="grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-12">
         {
@@ -74,7 +74,7 @@ const credentials = [
             <div class="border-t border-line pt-[22px]" data-reveal style={`--reveal-delay:${i * 120}ms`}>
               <div class="mb-[14px] font-serif text-[32px] text-brass">{v.numeral}</div>
               <h3 class="mb-3 font-serif text-[23px] font-semibold text-navy">{v.title}</h3>
-              <p class="text-[14.5px] font-light leading-[1.7] text-ink">{v.body}</p>
+              <p class="text-[clamp(14.5px,0.9vw,17.5px)] font-light leading-[1.7] text-ink">{v.body}</p>
             </div>
           ))
         }
@@ -84,22 +84,22 @@ const credentials = [
 
   <!-- ATTORNEY -->
   <section class="bg-navydark text-paper">
-    <div class="grid shell grid-cols-1 items-center gap-10 py-14 md:grid-cols-[0.82fr_1.18fr] md:gap-[92px] md:py-[100px]">
+    <div class="grid shell grid-cols-1 items-center gap-10 py-14 md:grid-cols-[0.9fr_1.1fr] md:gap-[clamp(56px,5vw,110px)] md:py-[100px]">
       <div class="relative" data-reveal="left">
         <div aria-hidden="true" class="pointer-events-none absolute rounded-[6px] border border-[rgba(201,190,159,0.45)]" style="inset:20px -20px -20px 20px"></div>
         <Photo src="/ashley-portrait.jpg" alt="Ashley Kagasoff" dark position="50% 25%" class="relative min-h-[clamp(320px,38vw,640px)] rounded-[6px]" />
       </div>
 
       <div data-reveal="right" style="--reveal-delay:120ms">
-        <p class="mb-[22px] text-xs uppercase tracking-[0.32em] text-brasslight">The Attorney</p>
+        <p class="mb-[22px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brasslight">The Attorney</p>
         <h2 class="mb-1.5 font-serif text-[clamp(30px,3.4vw,46px)] font-medium leading-[1.08]">Ashley Kagasoff</h2>
         <div class="mb-[30px] text-[12.5px] uppercase tracking-[0.16em] text-brasslight">Attorney at Law · Founder</div>
-        <p class="mb-4 max-w-[64ch] text-[15.5px] font-light leading-[1.8] text-mist">
+        <p class="mb-4 max-w-[64ch] text-[clamp(15.5px,0.95vw,19px)] font-light leading-[1.8] text-mist">
           Ashley has dedicated over 17 years to results-driven advocacy and personalized service.
           Her practice spans criminal defense, professional license defense, personal injury,
           employment, and family law — giving clients comprehensive solutions tailored to their needs.
         </p>
-        <p class="mb-[38px] max-w-[64ch] text-[15.5px] font-light leading-[1.8] text-mist">
+        <p class="mb-[38px] max-w-[64ch] text-[clamp(15.5px,0.95vw,19px)] font-light leading-[1.8] text-mist">
           Having worked both sides of the law — as a law clerk for the Orange County District
           Attorney's and Public Defender's offices, then fifteen years in private defense — she
           brings a rare perspective to every matter she takes on.

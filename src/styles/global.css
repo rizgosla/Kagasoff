@@ -25,17 +25,18 @@ html {
 
 
 /* ===== Page shell =====
-   One fluid container used by every section. Gutters scale with the viewport
-   so wide desktops breathe instead of hugging a narrow center column. */
+   One fluid container used by every section. The layout is edge-driven: the
+   content spans the viewport and is inset by a percentage gutter, rather than
+   being pinned to a fixed centre column with large dead margins on desktop.
+   The very high max-width only exists to stop the layout from spreading on
+   extreme ultrawide displays. */
 .shell {
   width: 100%;
   margin-inline: auto;
-  max-width: var(--shell-max, 1440px);
-  padding-inline: clamp(20px, 4.5vw, 80px);
+  max-width: var(--shell-max, 2300px);
+  padding-inline: clamp(20px, 5vw, 130px);
 }
-@media (min-width: 1800px) {
-  .shell { max-width: var(--shell-max, 1600px); }
-}
+/* Long-form pages that genuinely want a tighter centre column. */
 .shell-narrow { --shell-max: 1100px; }
 /* Comfortable reading measure for long-form copy inside a wide shell. */
 .measure { max-width: 68ch; }
@@ -99,12 +100,12 @@ a {
 
 .deck-stage {
   position: relative;
-  height: clamp(300px, 26vw, 380px);
+  height: clamp(300px, 21vw, 400px);
 }
 .kcard {
   position: absolute;
   inset: 0 0 auto 0;
-  height: clamp(292px, 25vw, 364px);
+  height: clamp(292px, 20vw, 384px);
   display: flex;
   flex-direction: column;
   background: var(--color-paper);
