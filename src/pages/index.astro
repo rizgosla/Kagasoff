@@ -19,16 +19,16 @@ const stats = [
 <BaseLayout>
   <!-- HERO — Style A split: staff photo + review proof over a navy starfield -->
   <section class="starfield overflow-hidden text-paper">
-    <div class="mx-auto grid max-w-[1180px] grid-cols-1 items-center gap-12 px-5 pb-16 pt-14 md:grid-cols-[1.05fr_0.95fr] md:gap-16 md:px-10 md:pb-24 md:pt-20">
+    <div class="grid shell grid-cols-1 items-center gap-12 pb-16 pt-14 md:grid-cols-[1.05fr_0.95fr] md:gap-16 md:pb-24 md:pt-20">
       <!-- Left: copy -->
       <div data-reveal="left">
         <p class="mb-6 text-xs uppercase tracking-[0.32em] text-brasslight">Westminster &middot; Serving California</p>
-        <h1 class="font-serif text-[44px] font-medium leading-[1.04] tracking-[0.005em] md:text-[68px]">
+        <h1 class="font-serif text-[clamp(40px,6.2vw,80px)] font-medium leading-[1.04] tracking-[0.005em]">
           Orange County<br />
           <span class="text-gold">injury &amp; defense</span><br />
           attorneys.
         </h1>
-        <p class="mt-7 max-w-[480px] text-[16px] font-light leading-[1.75] text-mist md:text-[17px]">
+        <p class="mt-7 max-w-[48ch] text-[16px] font-light leading-[1.75] text-mist md:text-[17px]">
           From the courtroom to the negotiating table, the Kagasoff Law Firm brings disciplined,
           personal advocacy to every client &mdash; across seven practice areas.
         </p>
@@ -42,7 +42,7 @@ const stats = [
       </div>
 
       <!-- Right: staff photo panel -->
-      <div class="relative" data-reveal="right" style="--reveal-delay:140ms">
+      <div class="relative mx-auto w-full max-w-[560px] md:mx-0 md:max-w-none md:justify-self-end xl:max-w-[620px]" data-reveal="right" style="--reveal-delay:140ms">
         <div aria-hidden="true" class="pointer-events-none absolute -inset-3 rounded-[14px] border border-[rgba(201,190,159,0.4)] md:-inset-4"></div>
         <div class="relative overflow-hidden rounded-[10px] bg-navydark shadow-[0_40px_80px_-40px_rgba(0,0,0,0.7)]">
           <img src="/team.jpg" alt="The Kagasoff Law Firm team" class="h-full w-full object-cover" style="aspect-ratio:4/5;object-position:50% 35%" />
@@ -63,14 +63,14 @@ const stats = [
 
   <!-- STATS / WHY US -->
   <section class="bg-cream">
-    <div class="mx-auto max-w-[1180px] px-5 py-14 md:px-10 md:py-[70px]">
+    <div class="shell py-14 md:py-[70px]">
       <div class="grid grid-cols-1 items-center gap-10 md:grid-cols-[0.9fr_1.1fr] md:gap-16">
         <div data-reveal="left">
           <p class="mb-[14px] text-xs uppercase tracking-[0.32em] text-brass">Why Kagasoff</p>
-          <h2 class="font-serif text-[26px] font-medium leading-[1.2] text-navy md:text-[34px]">
+          <h2 class="font-serif text-[clamp(26px,2.6vw,40px)] font-medium leading-[1.2] text-navy">
             A boutique firm with a courtroom record.
           </h2>
-          <p class="mt-[18px] max-w-[440px] text-[15px] font-light leading-[1.75] text-ink">
+          <p class="mt-[18px] max-w-[46ch] text-[15px] font-light leading-[1.75] text-ink">
             Direct access to your attorney, honest counsel, and preparation that holds up at trial —
             trusted by hundreds of Orange County clients.
           </p>
@@ -80,7 +80,7 @@ const stats = [
           {
             stats.map((s, i) => (
               <div class="border-t border-brass/30 pt-4" data-reveal style={`--reveal-delay:${i * 100}ms`}>
-                <div class="font-serif text-[40px] font-medium leading-none text-brass md:text-[50px]">{s.n}</div>
+                <div class="font-serif text-[clamp(38px,3.6vw,58px)] font-medium leading-none text-brass">{s.n}</div>
                 <div class="mt-2.5 text-[12px] uppercase tracking-[0.12em] text-ink">{s.l}</div>
               </div>
             ))
@@ -91,14 +91,14 @@ const stats = [
   </section>
 
   <!-- PRACTICE AREAS -->
-  <section class="mx-auto max-w-[1180px] px-5 py-14 md:px-10 md:py-[84px]">
+  <section class="shell py-14 md:py-[84px]">
     <div class="deck-layout">
       <!-- left: copy + deck controls -->
       <div class="deck-copy" data-reveal="left">
         <div class="deck-heading">
           <p class="mb-[14px] text-xs uppercase tracking-[0.32em] text-brass">Our Practice</p>
-          <h2 class="font-serif text-[26px] font-medium leading-[1.2] text-navy md:text-[34px]">Seven areas. One standard of care.</h2>
-          <p class="mt-[18px] max-w-[440px] text-[15px] font-light leading-[1.75] text-ink">
+          <h2 class="font-serif text-[clamp(26px,2.6vw,40px)] font-medium leading-[1.2] text-navy">Seven areas. One standard of care.</h2>
+          <p class="mt-[18px] max-w-[46ch] text-[15px] font-light leading-[1.75] text-ink">
             Whatever life brings, the firm provides the same direct, attorney-led counsel across every matter.
           </p>
         </div>
@@ -224,17 +224,17 @@ const stats = [
 
   <!-- ATTORNEY BAND -->
   <section class="bg-navydark text-paper">
-    <div class="mx-auto grid max-w-[1180px] grid-cols-1 items-center gap-10 px-5 py-14 md:grid-cols-[0.82fr_1.18fr] md:gap-[92px] md:px-10 md:py-[100px]">
+    <div class="grid shell grid-cols-1 items-center gap-10 py-14 md:grid-cols-[0.82fr_1.18fr] md:gap-[92px] md:py-[100px]">
       <div class="relative" data-reveal="left">
         <div aria-hidden="true" class="pointer-events-none absolute rounded-[4px] border border-[rgba(201,190,159,0.45)]" style="inset:20px -20px -20px 20px"></div>
-        <Photo src="/ashley-portrait.jpg" alt="Ashley Kagasoff" dark position="50% 25%" class="relative min-h-[320px] rounded-[4px] md:min-h-[480px]" />
+        <Photo src="/ashley-portrait.jpg" alt="Ashley Kagasoff" dark position="50% 25%" class="relative min-h-[clamp(320px,38vw,620px)] rounded-[4px]" />
       </div>
 
       <div data-reveal="right" style="--reveal-delay:120ms">
         <p class="mb-[26px] text-xs uppercase tracking-[0.32em] text-brasslight">A Lawyer Who Fights For You</p>
-        <h2 class="mb-2 font-serif text-[36px] font-medium leading-[1.05] text-paper md:text-[52px] md:leading-[1.02]">Ashley Kagasoff</h2>
+        <h2 class="mb-2 font-serif text-[clamp(34px,4.2vw,56px)] font-medium leading-[1.04] text-paper">Ashley Kagasoff</h2>
         <div class="mb-[38px] text-[12.5px] uppercase tracking-[0.16em] text-brasslight">Attorney</div>
-        <p class="mb-10 max-w-[580px] text-[15.5px] font-light leading-[1.8] text-mist">
+        <p class="mb-10 max-w-[62ch] text-[15.5px] font-light leading-[1.8] text-mist">
           Every matter is handled directly by an attorney who knows your name and your goals. We
           prepare each case as if it will be tried — because that preparation is what earns the
           strongest outcomes.
@@ -246,10 +246,10 @@ const stats = [
 
   <!-- WHAT TO EXPECT / PROCESS -->
   <section class="bg-paper">
-    <div class="mx-auto max-w-[1180px] px-5 py-14 md:px-10 md:py-[88px]">
-      <div class="mb-11 max-w-[560px] md:mb-14" data-reveal>
+    <div class="shell py-14 md:py-[88px]">
+      <div class="mb-11 max-w-[56ch] md:mb-14" data-reveal>
         <p class="mb-[14px] text-xs uppercase tracking-[0.32em] text-brass">How It Works</p>
-        <h2 class="font-serif text-[26px] font-medium leading-[1.2] text-navy md:text-[34px]">
+        <h2 class="font-serif text-[clamp(26px,2.6vw,40px)] font-medium leading-[1.2] text-navy">
           What working with us looks like.
         </h2>
         <p class="mt-[18px] text-[15px] font-light leading-[1.75] text-ink">
@@ -257,7 +257,7 @@ const stats = [
           across every practice area.
         </p>
       </div>
-      <div class="grid grid-cols-1 gap-x-8 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="grid grid-cols-1 gap-x-8 gap-y-9 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-12">
         {
           process.map((step, i) => (
             <div class="border-t border-line pt-5" data-reveal style={`--reveal-delay:${i * 110}ms`}>
@@ -276,14 +276,14 @@ const stats = [
 
   <!-- CLOSING CTA -->
   <section class="starfield overflow-hidden text-paper">
-    <div class="mx-auto max-w-[1180px] px-5 py-16 md:px-10 md:py-[104px]">
+    <div class="shell py-16 md:py-[104px]">
       <div class="grid grid-cols-1 items-center gap-10 md:grid-cols-[1.15fr_0.85fr] md:gap-16">
         <div data-reveal="left">
           <p class="mb-[18px] text-xs uppercase tracking-[0.32em] text-brasslight">Free Initial Consultation</p>
-          <h2 class="font-serif text-[34px] font-medium leading-[1.06] md:text-[54px]">
+          <h2 class="font-serif text-[clamp(32px,4.4vw,58px)] font-medium leading-[1.06]">
             Tell us <span class="text-gold">what happened.</span>
           </h2>
-          <p class="mt-6 max-w-[520px] text-[16px] font-light leading-[1.75] text-mist md:text-[17px]">
+          <p class="mt-6 max-w-[52ch] text-[16px] font-light leading-[1.75] text-mist md:text-[17px]">
             Every consultation is free and confidential. We'll listen, tell you honestly where you
             stand, and lay out how we can help — with no obligation.
           </p>

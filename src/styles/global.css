@@ -23,9 +23,30 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+
+/* ===== Page shell =====
+   One fluid container used by every section. Gutters scale with the viewport
+   so wide desktops breathe instead of hugging a narrow center column. */
+.shell {
+  width: 100%;
+  margin-inline: auto;
+  max-width: var(--shell-max, 1440px);
+  padding-inline: clamp(20px, 4.5vw, 80px);
+}
+@media (min-width: 1800px) {
+  .shell { max-width: var(--shell-max, 1600px); }
+}
+.shell-narrow { --shell-max: 1100px; }
+/* Comfortable reading measure for long-form copy inside a wide shell. */
+.measure { max-width: 68ch; }
+.measure-tight { max-width: 58ch; }
+
 body {
   margin: 0;
   background: var(--color-paper);
+  /* Reveal-on-scroll offsets elements sideways before they animate in; without
+     this the transient width creates a horizontal scrollbar on small screens. */
+  overflow-x: hidden;
 }
 
 a {
@@ -68,8 +89,8 @@ a {
 /* ===== Practice-area moving-card deck (home page) ===== */
 .deck-layout {
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 64px;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(40px, 5vw, 96px);
   align-items: center;
 }
 .deck-copy .deck-bar {
@@ -78,18 +99,18 @@ a {
 
 .deck-stage {
   position: relative;
-  height: 316px;
+  height: clamp(300px, 26vw, 380px);
 }
 .kcard {
   position: absolute;
   inset: 0 0 auto 0;
-  height: 300px;
+  height: clamp(292px, 25vw, 364px);
   display: flex;
   flex-direction: column;
   background: var(--color-paper);
   border: 1px solid var(--color-line);
   border-radius: 8px;
-  padding: 34px 36px 30px;
+  padding: clamp(28px, 2.4vw, 40px) clamp(26px, 2.6vw, 44px);
   transition: transform 0.52s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s,
     box-shadow 0.4s, border-color 0.3s;
   will-change: transform, opacity;
@@ -151,7 +172,7 @@ a {
 }
 .kcard-body h3 {
   font-family: var(--font-serif);
-  font-size: 30px;
+  font-size: clamp(28px, 2.3vw, 38px);
   font-weight: 600;
   line-height: 1.12;
   color: var(--color-navy);
@@ -159,7 +180,7 @@ a {
 }
 .kcard-body p {
   color: var(--color-ink);
-  font-size: 15px;
+  font-size: clamp(15px, 1.05vw, 17px);
   font-weight: 300;
   line-height: 1.6;
   margin-top: 12px;
@@ -256,7 +277,11 @@ a {
 }
 @media (max-width: 680px) {
   .deck-stage {
-    height: 300px;
+    height: 320px;
+    overflow: hidden;
+  }
+  .kcard {
+    height: 312px;
   }
   .kcard {
     padding: 30px 26px 26px;
@@ -328,6 +353,14 @@ a {
 .js-reveal [data-reveal].is-visible {
   opacity: 1;
   transform: none;
+}
+/* Below the two-column breakpoint the side entrances have no layout meaning
+   and only risk overflow, so fall back to the vertical rise. */
+@media (max-width: 767px) {
+  .js-reveal [data-reveal="left"],
+  .js-reveal [data-reveal="right"] {
+    transform: translateY(28px);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .js-reveal [data-reveal] {

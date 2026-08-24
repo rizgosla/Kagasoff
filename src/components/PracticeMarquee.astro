@@ -23,8 +23,8 @@ const border = theme === 'navy' ? 'border-white/10' : 'border-line';
 const word = theme === 'navy' ? 'text-paper/90' : 'text-navy';
 const wordSize =
   size === 'lg'
-    ? 'text-[26px] md:text-[34px]'
-    : 'text-[19px] md:text-[23px]';
+    ? 'text-[clamp(26px,2.4vw,36px)]'
+    : 'text-[clamp(19px,1.6vw,25px)]';
 
 const items = practiceAreas.map((a) => a.name);
 ---
