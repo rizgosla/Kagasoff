@@ -5,17 +5,17 @@ import { practiceAreas } from '../data/practiceAreas';
 
 const nav = [
   { label: 'Home', href: '/' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'About', href: '/#about' },
+  { label: 'Team', href: '/#team' },
+  { label: 'Contact', href: '/#contact' },
 ];
 
 const path = Astro.url.pathname;
-const isActive = (href: string) =>
-  href === '/' ? path === '/' : path.startsWith(href);
-const servicesActive = path.startsWith('/practice');
+const isActive = (href: string) => href === '/' && path === '/';
+const servicesActive = path.startsWith('/services');
 ---
 
-<header class="bg-navy text-paper">
+<header class="sticky top-0 z-50 bg-navy text-paper">
   <div class="flex shell items-center justify-between py-3.5 md:py-[18px]">
     <!-- Wordmark lockup -->
     <a href="/" class="flex items-center gap-2.5 md:gap-3.5">
@@ -46,8 +46,8 @@ const servicesActive = path.startsWith('/practice');
 
       <!-- Services dropdown -->
       <div class="group relative">
-        <button
-          type="button"
+        <a
+          href="/services"
           class:list={[
             'flex items-center gap-1.5 border-b pb-[3px]',
             servicesActive
@@ -59,14 +59,14 @@ const servicesActive = path.startsWith('/practice');
           <svg width="9" height="9" viewBox="0 0 20 20" fill="none" aria-hidden="true" class="mt-px">
             <path d="M5.293 7.293a1 1 0 0 1 1.414 0L10 10.586l3.293-3.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414Z" fill="currentColor" />
           </svg>
-        </button>
+        </a>
         <!-- pt-3 bridges the visual gap so the menu stays hoverable -->
         <div class="invisible absolute left-1/2 top-full z-50 -translate-x-1/2 pt-3 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
           <div class="min-w-[220px] rounded-lg border border-white/10 bg-[#0f1c2e] py-2 shadow-[0_14px_34px_rgba(16,27,48,0.18)]">
             {
               practiceAreas.map((a) => (
                 <a
-                  href={`/practice/${a.slug}`}
+                  href={'/services#' + a.slug}
                   class="block px-5 py-2.5 text-[13px] text-paper/70 transition-colors hover:text-paper"
                 >
                   {a.name}
@@ -128,11 +128,11 @@ const servicesActive = path.startsWith('/practice');
       }
 
       <div class="mt-2 border-t border-white/10 pt-3">
-        <div class="mb-1.5 px-2 text-[10.5px] uppercase tracking-[0.22em] text-brass/80">Services</div>
+        <a href="/services" class="mb-1.5 block px-2 text-[10.5px] uppercase tracking-[0.22em] text-brass/80">Services</a>
         <div class="flex flex-col">
           {
             practiceAreas.map((a) => (
-              <a href={`/practice/${a.slug}`} class="rounded-md px-2 py-2 text-[13.5px] text-paper/70">
+              <a href={'/services#' + a.slug} class="rounded-md px-2 py-2 text-[13.5px] text-paper/70">
                 {a.name}
               </a>
             ))
@@ -166,5 +166,12 @@ const servicesActive = path.startsWith('/practice');
     iconOpen?.classList.toggle('hidden');
     iconClose?.classList.toggle('hidden');
     toggle.setAttribute('aria-expanded', String(!isOpen));
+  });
+
+  menu?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      const isOpen = !menu?.classList.contains('hidden');
+      if (isOpen) toggle?.click();
+    });
   });
 </script>
