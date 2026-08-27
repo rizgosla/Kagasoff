@@ -268,19 +268,19 @@ const stepIcons = [
 
       <div class="grid gap-8 sm:grid-cols-2 max-w-[1100px] mx-auto">
         <!-- Ashley Kagasoff -->
-        <div class="teamcard" data-reveal tabindex="0" role="button" aria-expanded="false" aria-label="Ashley Kagasoff — read bio">
+        <div class="teamcard" data-reveal>
           <img src="/ashley-portrait.jpg" alt="Ashley Kagasoff" class="absolute inset-0 h-full w-full object-cover" style="object-position:50% 25%" />
           <div class="teamcard-base">
             <h3 class="font-serif text-[clamp(24px,2vw,32px)] font-medium leading-[1.1] text-paper">Ashley Kagasoff</h3>
             <p class="mt-1.5 text-[12.5px] uppercase tracking-[0.16em] text-brasslight">Attorney at Law &middot; Founder</p>
-            <span class="teamcard-hint">
+            <button type="button" class="teamcard-hint" aria-expanded="false" aria-controls="teamcard-bio-ashley">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M12 5v14M5 12h14" />
               </svg>
               <span class="hint-hover">Hover to learn more</span><span class="hint-tap">Tap to learn more</span>
-            </span>
+            </button>
           </div>
-          <div class="teamcard-bio">
+          <div class="teamcard-bio" id="teamcard-bio-ashley">
             <h3 class="font-serif text-[clamp(22px,1.8vw,28px)] font-medium leading-[1.1] text-paper">Ashley Kagasoff</h3>
             <div class="mt-1.5 mb-4 text-[12px] uppercase tracking-[0.16em] text-brasslight">Attorney at Law &middot; Founder</div>
             <p class="mb-3 text-[clamp(13.5px,0.85vw,15.5px)] font-light leading-[1.7] text-mist">
@@ -307,19 +307,19 @@ const stepIcons = [
         </div>
 
         <!-- Office manager -->
-        <div class="teamcard" data-reveal style="--reveal-delay:120ms" tabindex="0" role="button" aria-expanded="false" aria-label="Office Manager Name — read bio">
+        <div class="teamcard" data-reveal style="--reveal-delay:120ms">
           <Placeholder label="Office manager portrait — replace" class="absolute inset-0" />
           <div class="teamcard-base">
             <h3 class="font-serif text-[clamp(24px,2vw,32px)] font-medium leading-[1.1] text-paper">Office Manager Name</h3>
             <p class="mt-1.5 text-[12.5px] uppercase tracking-[0.16em] text-brasslight">Office Manager</p>
-            <span class="teamcard-hint">
+            <button type="button" class="teamcard-hint" aria-expanded="false" aria-controls="teamcard-bio-office-manager">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M12 5v14M5 12h14" />
               </svg>
               <span class="hint-hover">Hover to learn more</span><span class="hint-tap">Tap to learn more</span>
-            </span>
+            </button>
           </div>
-          <div class="teamcard-bio">
+          <div class="teamcard-bio" id="teamcard-bio-office-manager">
             <h3 class="font-serif text-[clamp(22px,1.8vw,28px)] font-medium leading-[1.1] text-paper">Office Manager Name</h3>
             <div class="mt-1.5 mb-4 text-[12px] uppercase tracking-[0.16em] text-brasslight">Office Manager</div>
             <p class="text-[clamp(13.5px,0.85vw,15.5px)] font-light leading-[1.7] text-mist">
@@ -340,22 +340,23 @@ const stepIcons = [
       const cards = [...document.querySelectorAll<HTMLElement>('.teamcard')];
       if (!cards.length) return;
 
+      // The hint button is the accessible control (Enter/Space work natively);
+      // clicking anywhere else on the card is a pointer-only convenience.
       function toggle(card: HTMLElement) {
         const open = !card.classList.contains('is-open');
         cards.forEach((c) => {
           const on = c === card && open;
           c.classList.toggle('is-open', on);
-          c.setAttribute('aria-expanded', String(on));
+          c.querySelector('.teamcard-hint')?.setAttribute('aria-expanded', String(on));
         });
       }
 
       cards.forEach((card) => {
-        card.addEventListener('click', () => toggle(card));
-        card.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-            e.preventDefault();
-            toggle(card);
-          }
+        card.querySelector('.teamcard-hint')?.addEventListener('click', () => toggle(card));
+        card.addEventListener('click', (e) => {
+          // The button fires its own handler; don't double-toggle.
+          if ((e.target as Element).closest('.teamcard-hint')) return;
+          toggle(card);
         });
       });
     })();
