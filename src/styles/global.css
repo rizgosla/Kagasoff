@@ -564,3 +564,94 @@ textarea.fld {
   resize: vertical;
   min-height: 130px;
 }
+
+/* ===== Team hover cards ===== */
+.teamcard {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  aspect-ratio: 4/5;
+  cursor: pointer;
+}
+/* The striped placeholder sets position:relative on itself; inside a team card
+   it is the full-bleed image layer. */
+.teamcard .ph {
+  position: absolute;
+  inset: 0;
+}
+.teamcard-base {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 22px;
+  background: linear-gradient(to top, rgba(16, 27, 48, 0.92), transparent);
+}
+.teamcard-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  border: 1px solid rgba(156, 122, 60, 0.5);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-gold);
+}
+.hint-tap {
+  display: none;
+}
+@media (hover: none) {
+  .hint-hover {
+    display: none;
+  }
+  .hint-tap {
+    display: inline;
+  }
+}
+.teamcard-bio {
+  position: absolute;
+  inset: 0;
+  padding: clamp(20px, 2vw, 32px);
+  background: rgba(16, 27, 48, 0.94);
+  overflow-y: auto;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .teamcard:hover .teamcard-bio {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+}
+.teamcard.is-open .teamcard-bio {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.teamcard:focus-within .teamcard-bio {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  .teamcard-bio {
+    transition: none;
+  }
+}
+
+/* ===== Process step icons ===== */
+.step-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: var(--color-cream);
+  border: 1px solid rgba(156, 122, 60, 0.35);
+  display: grid;
+  place-items: center;
+  margin-bottom: 14px;
+  color: var(--color-brass);
+}
