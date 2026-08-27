@@ -95,16 +95,6 @@ a {
 }
 
 /* ===== Practice-area moving-card deck (home page) ===== */
-.deck-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: clamp(40px, 5vw, 96px);
-  align-items: center;
-}
-.deck-copy .deck-bar {
-  margin-top: 34px;
-}
-
 .deck-stage {
   position: relative;
   height: clamp(300px, 21vw, 400px);
@@ -263,26 +253,6 @@ a {
   transform: scale(1.4);
 }
 
-@media (max-width: 900px) {
-  .deck-layout {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-  .deck-copy {
-    display: contents;
-  }
-  .deck-stage {
-    order: 1;
-  }
-  .deck-copy .deck-heading {
-    order: 0;
-  }
-  .deck-copy .deck-bar {
-    order: 2;
-    margin-top: 4px;
-    justify-content: center;
-  }
-}
 @media (max-width: 680px) {
   .deck-stage {
     height: 320px;
@@ -297,25 +267,6 @@ a {
   .kcard-body h3 {
     font-size: 26px;
   }
-}
-
-/* ===== Practice-area sidebar links ===== */
-.sidelink {
-  transition: color 0.15s, border-color 0.15s;
-}
-.sidelink:hover {
-  color: var(--color-navy);
-  border-color: var(--color-brass);
-}
-
-/* ===== Related-practice cards (service pages) ===== */
-.related-card {
-  transition: border-color 0.18s, box-shadow 0.25s, transform 0.25s;
-}
-.related-card:hover {
-  border-color: var(--color-brasslight);
-  box-shadow: 0 20px 44px -26px rgba(22, 36, 61, 0.45);
-  transform: translateY(-3px);
 }
 
 /* ===== Solid brass button label =====
@@ -378,108 +329,7 @@ a {
   }
 }
 
-/* ===== Practice-areas marquee (moving bar) ===== */
-.marquee {
-  position: relative;
-  overflow: hidden;
-  --marquee-gap: 3.5rem;
-  --marquee-duration: 40s;
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    #000 8%,
-    #000 92%,
-    transparent
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    #000 8%,
-    #000 92%,
-    transparent
-  );
-}
-.marquee-track {
-  display: flex;
-  width: max-content;
-  gap: var(--marquee-gap);
-  animation: marquee-scroll var(--marquee-duration) linear infinite;
-}
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
-}
-.marquee-copy {
-  display: flex;
-  align-items: center;
-  gap: var(--marquee-gap);
-}
-.marquee-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 1rem;
-  font-family: var(--font-serif);
-  white-space: nowrap;
-}
-.marquee-dot {
-  width: 7px;
-  height: 7px;
-  flex-shrink: 0;
-  transform: rotate(45deg);
-  background: var(--color-brass);
-}
-@keyframes marquee-scroll {
-  to {
-    transform: translateX(calc(-50% - var(--marquee-gap) / 2));
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track {
-    animation: none;
-    transform: none;
-  }
-}
-
-/* ===== Reviews badge — overlapping staff avatars + 5.0 stars ===== */
-.avstack {
-  display: flex;
-  align-items: center;
-}
-.avstack .av {
-  width: var(--av-size, 48px);
-  height: var(--av-size, 48px);
-  border-radius: 9999px;
-  background-image: var(--av-img, url("/team.jpg"));
-  background-repeat: no-repeat;
-  background-size: 480% auto;
-  background-position: var(--px, 50%) var(--py, 30%);
-  box-shadow: 0 0 0 2px var(--av-ring, #16243d),
-    0 6px 14px -6px rgba(0, 0, 0, 0.55);
-  flex-shrink: 0;
-}
-.avstack .av + .av {
-  margin-left: calc(var(--av-size, 48px) * -0.34);
-}
-/* Per-person crops from the 5-up staff photo (left → right). Tuned visually. */
-.av-p1 {
-  --px: 11%;
-  --py: 8%;
-}
-.av-p2 {
-  --px: 22%;
-  --py: 30%;
-}
-.av-p3 {
-  --px: 45%;
-  --py: 33%;
-}
-.av-p4 {
-  --px: 66%;
-  --py: 35%;
-}
-.av-p5 {
-  --px: 91%;
-  --py: 30%;
-}
+/* ===== Testimonial star rating ===== */
 .stars {
   display: inline-flex;
   gap: 2px;
