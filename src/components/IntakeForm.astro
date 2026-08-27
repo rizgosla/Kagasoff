@@ -1,0 +1,117 @@
+---
+/** Reusable consultation intake form (client-side validated, with a
+    confirmation state). Rendered multiple times on a page — every id/for
+    pair is namespaced by `uid` so labels stay associated without
+    collisions, and the shared script wires each instance via
+    querySelectorAll (Astro dedupes component <script>s across instances). */
+import { practiceAreas } from '../data/practiceAreas';
+
+interface Props {
+  uid: string;
+}
+
+const { uid } = Astro.props;
+
+const matterOptions = [...practiceAreas.map((a) => a.name), 'Not sure / Other'];
+
+const labelCls = 'mb-2 block text-xs uppercase tracking-[0.08em] text-ink';
+---
+
+<div class="consult rounded-lg border border-line bg-paper p-6 md:p-8">
+  <form class="consult-form" novalidate>
+    <h2 class="mb-1.5 font-serif text-[clamp(26px,2.2vw,32px)] font-medium text-navy">Request a free consultation</h2>
+    <p class="mb-[30px] text-[14px] font-light text-ink">
+      Fields marked <span class="text-brass">*</span> are required.
+    </p>
+
+    <div class="mb-5">
+      <label class={labelCls} for={`${uid}-name`}>Name <span class="text-brass">*</span></label>
+      <input class="fld" id={`${uid}-name`} name="name" type="text" placeholder="Your full name" />
+    </div>
+
+    <div class="mb-5">
+      <label class={labelCls} for={`${uid}-phone`}>Phone <span class="text-brass">*</span></label>
+      <input class="fld" id={`${uid}-phone`} name="phone" type="tel" placeholder="(657) 000-0000" />
+    </div>
+
+    <div class="mb-5">
+      <label class={labelCls} for={`${uid}-email`}>Email</label>
+      <input class="fld" id={`${uid}-email`} name="email" type="email" placeholder="you@email.com" />
+    </div>
+
+    <div class="mb-5">
+      <label class={labelCls} for={`${uid}-area`}>Matter type</label>
+      <select class="fld" id={`${uid}-area`} name="area">
+        {matterOptions.map((o) => <option value={o}>{o}</option>)}
+      </select>
+    </div>
+
+    <div class="mb-6">
+      <label class={labelCls} for={`${uid}-message`}>How can we help? <span class="text-brass">*</span></label>
+      <textarea class="fld" id={`${uid}-message`} name="message" placeholder="Briefly describe your situation. Do not include confidential details you wouldn't want sent by email."></textarea>
+    </div>
+
+    <div class="form-error mb-5 hidden rounded-md border border-[#d8b4b4] bg-[#f7ecec] px-4 py-3 text-[13.5px] text-[#8a3838]">
+      Please enter your name, a phone number, and a short message.
+    </div>
+
+    <button type="submit" class="lift inline-block rounded-[7px] bg-navy px-[30px] py-4 text-sm font-semibold tracking-[0.04em] text-paper">Submit request</button>
+    <p class="mt-5 max-w-[48ch] text-[12px] font-light leading-[1.6] text-ink/70">
+      Submitting this form does not create an attorney–client relationship. Information sent
+      through this form is not confidential until an engagement is established.
+    </p>
+  </form>
+
+  <!-- Confirmation (hidden until submit) -->
+  <div class="confirm-panel hidden rounded-lg bg-navy px-6 py-9 text-paper md:px-11 md:py-12">
+    <div class="mb-3.5 font-serif text-[26px] md:text-[34px]">Thank you, <span class="confirm-name">there</span>.</div>
+    <p class="mb-2 text-[16px] font-light leading-[1.7] text-mist">
+      Your message has been received. An attorney will be in touch shortly — typically within
+      one business day.
+    </p>
+    <p class="mb-7 text-[16px] font-light leading-[1.7] text-mist">
+      If your matter is urgent, please call us directly.
+    </p>
+    <div class="flex flex-col gap-3.5 sm:flex-row sm:flex-wrap">
+      <a href="tel:6572184947" class="lift inline-block rounded-[7px] bg-brass px-[30px] py-4 text-center text-sm font-semibold tracking-[0.04em] text-navy">Call (657) 218-4947</a>
+      <button type="button" class="reset-form lift inline-block rounded-[7px] border border-[rgba(250,248,243,0.4)] px-[30px] py-4 text-sm font-semibold tracking-[0.04em] text-paper">Send another message</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Client-side validation + confirmation state.
+  // NOTE: this only SHOWS a confirmation — it does NOT deliver the message.
+  // Wire delivery here: add data-netlify="true" to the <form> (Netlify Forms),
+  // POST to Formspree, or handle it in an Astro API route under src/pages/api/.
+  document.querySelectorAll('.consult').forEach((root) => {
+    const form = root.querySelector('.consult-form') as HTMLFormElement | null;
+    const errorBox = root.querySelector('.form-error');
+    const confirmPanel = root.querySelector('.confirm-panel');
+    const nameOut = root.querySelector('.confirm-name');
+    const resetBtn = root.querySelector('.reset-form');
+
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const name = (data.get('name') || '').toString().trim();
+      const phone = (data.get('phone') || '').toString().trim();
+      const message = (data.get('message') || '').toString().trim();
+
+      if (name && phone && message) {
+        errorBox?.classList.add('hidden');
+        if (nameOut) nameOut.textContent = name.split(/\s+/)[0];
+        form.style.display = 'none';
+        confirmPanel?.classList.remove('hidden');
+      } else {
+        errorBox?.classList.remove('hidden');
+      }
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      form?.reset();
+      confirmPanel?.classList.add('hidden');
+      if (form) form.style.display = 'block';
+    });
+  });
+</script>
