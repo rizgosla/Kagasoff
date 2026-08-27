@@ -1,0 +1,90 @@
+---
+/** Services — all seven practice areas consolidated onto one page.
+    Navy hero with jump-chip nav, one alternating-background section per
+    practice area (reusing the overview + cases markup from the old
+    per-slug template), and a single shared closing CTA band. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { practiceAreas } from '../data/practiceAreas';
+---
+
+<BaseLayout
+  title="Services — Kagasoff Law Firm, A.P.C."
+  description="Seven practice areas, one standard of care — personal injury, criminal defense, professional license defense, family law, restraining orders, employment, and real estate."
+>
+  <!-- HERO -->
+  <section class="starfield overflow-hidden text-paper">
+    <div class="shell pb-12 pt-14 md:pb-[70px] md:pt-16">
+      <p class="mb-5 text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brasslight" data-reveal>Services</p>
+      <h1 class="mb-[18px] font-serif text-[clamp(34px,5.1vw,66px)] font-medium leading-[1.06]" data-reveal style="--reveal-delay:80ms">
+        Seven areas. <span class="text-gold">One standard of care.</span>
+      </h1>
+      <div class="mb-7 h-0.5 w-[54px] bg-brass" data-reveal style="--reveal-delay:130ms"></div>
+      <p class="mb-9 max-w-[62ch] text-[clamp(16px,1.05vw,20px)] font-light leading-[1.7] text-mist" data-reveal style="--reveal-delay:170ms">
+        Whatever life brings, the firm provides the same direct, attorney-led counsel across every matter.
+      </p>
+      <div class="flex flex-wrap gap-2.5" data-reveal style="--reveal-delay:210ms">
+        {
+          practiceAreas.map((a) => (
+            <a
+              href={`#${a.slug}`}
+              class="lift inline-block rounded-full border border-brass/50 px-4 py-2 text-[13px] font-medium tracking-[0.02em] text-gold"
+            >
+              {a.name}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- PRACTICE AREA SECTIONS -->
+  {
+    practiceAreas.map((a, i) => (
+      <section id={a.slug} class={i % 2 === 0 ? 'bg-paper' : 'bg-cream'}>
+        <div class="shell py-14 md:py-[80px]">
+          <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass" data-reveal>
+            {String(i + 1).padStart(2, '0')} &middot; Practice Area
+          </p>
+          <h2 class="mb-[18px] font-serif text-[clamp(29px,3.2vw,46px)] font-medium leading-[1.1] text-navy" data-reveal style="--reveal-delay:60ms">
+            {a.name}
+          </h2>
+          <div class="mb-7 h-0.5 w-[54px] bg-brass" data-reveal style="--reveal-delay:100ms" />
+          <p
+            class="mb-9 max-w-[68ch] text-[clamp(16px,1.05vw,20px)] font-light leading-[1.7] text-ink"
+            data-reveal
+            style="--reveal-delay:130ms"
+            set:html={a.blurb}
+          />
+
+          <div data-reveal style="--reveal-delay:160ms">
+            {a.overview.map((p) => (
+              <p class="mb-[18px] max-w-[72ch] text-[clamp(15.5px,0.95vw,19px)] font-light leading-[1.8] text-ink" set:html={p} />
+            ))}
+
+            <h3 class="mb-5 mt-9 font-serif text-[22px] font-semibold text-navy md:text-[24px]" set:html={a.casesHeading} />
+            <div class="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2 xl:grid-cols-3">
+              {a.cases.map((c) => (
+                <div class="flex items-baseline gap-3 text-[15px] text-navy">
+                  <span class="text-brass">&mdash;</span>
+                  <span set:html={c} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <!-- CTA -->
+  <section class="starfield overflow-hidden text-paper">
+    <div class="shell py-14 text-center md:py-[70px]">
+      <h2 class="mb-3.5 font-serif text-[clamp(28px,3.2vw,44px)] font-medium" data-reveal>Have a <span class="text-gold">matter?</span></h2>
+      <p class="mb-[30px] text-[16px] font-light text-mist" data-reveal style="--reveal-delay:80ms">Let's talk today. Your first consultation is free and confidential.</p>
+      <div class="flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center" data-reveal style="--reveal-delay:140ms">
+        <a href="tel:6572184947" class="lift inline-block w-full rounded-[7px] bg-brass px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] text-navy sm:w-auto">Call (657) 218-4947</a>
+        <a href="/#contact" class="lift inline-block w-full rounded-[7px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] text-paper sm:w-auto">Send a message</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
