@@ -98,15 +98,19 @@ const glyphs = ['i.', 'ii.', 'iii.', 'iv.'];
                       <span class="ps-cal-pill">FREE · CONSULT</span>
                     </div>
                     <div class="ps-cal-dow"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
-                    {/* A full five-week grid. Dropping a week is what the
-                        landscape stage forced in fwd, and it is the thing that
-                        made the calendar stop reading as a calendar. */}
+                    {/* The whole month, not a five-week window. Dropping a week
+                        is what the landscape stage forced in fwd, and it is the
+                        thing that made the calendar stop reading as a calendar
+                        — so August 2026 gets the six rows it actually needs
+                        (Sun Jul 26 through Sat Sep 5), with the 30th and 31st
+                        on the last one rather than cut off the bottom. */}
                     <div class="ps-cal-grid">
                       <span class="off">26</span><span class="off">27</span><span class="off">28</span><span class="off">29</span><span class="off">30</span><span class="off">31</span><span>1</span>
                       <span>2</span><span class="avail">3</span><span class="avail">4</span><span>5</span><span class="avail">6</span><span class="avail">7</span><span>8</span>
                       <span>9</span><span class="avail">10</span><span>11</span><span class="avail">12</span><span class="avail picked">13</span><span class="avail">14</span><span>15</span>
                       <span>16</span><span>17</span><span class="avail">18</span><span class="avail">19</span><span class="avail">20</span><span>21</span><span>22</span>
                       <span>23</span><span class="avail">24</span><span class="avail">25</span><span>26</span><span class="avail">27</span><span class="avail">28</span><span>29</span>
+                      <span>30</span><span class="avail">31</span><span class="off">1</span><span class="off">2</span><span class="off">3</span><span class="off">4</span><span class="off">5</span>
                     </div>
                     <div class="ps-cal-foot">
                       <div class="ps-cal-slot">
@@ -458,7 +462,11 @@ const glyphs = ['i.', 'ii.', 'iii.', 'iv.'];
     text-wrap: balance;
     transition: color 420ms var(--ease-soft);
   }
-  .pc-title em { font-style: italic; color: var(--color-brass); }
+  /* :global(em), because the title is injected with set:html from
+     practiceAreas — Astro's scope attribute lands on elements in this
+     template, never on nodes parsed out of a string, so a scoped `em`
+     would silently miss any emphasis added to that data later. */
+  .pc-title :global(em) { font-style: italic; color: var(--color-brass); }
   /* Inline in the step label and always present, rather than an arrow
      that only exists on hover. The head is a link at every width, so
      its affordance has to be there at every width too. */
@@ -650,7 +658,13 @@ const glyphs = ['i.', 'ii.', 'iii.', 'iv.'];
        absolutely positioned, so the column packs from the top and the
        foot takes the slack via margin-top: auto. */
     justify-content: flex-start;
-    gap: 1.5rem;
+    /* 1.25rem where the other three compositions use 1.5rem: August 2026
+       needs six rows to reach the 31st, and at 1.5rem the grid ran 3px
+       past the 500px design box, which the frame then clipped. Four
+       pixels off each of the three gaps buys that back with room to
+       spare, and at this size the difference is not visible against the
+       other steps. */
+    gap: 1.25rem;
   }
   .ps-cal-head {
     display: flex; justify-content: space-between; align-items: flex-end;
@@ -1071,8 +1085,12 @@ const glyphs = ['i.', 'ii.', 'iii.', 'iv.'];
      one query, gated on width, on a real pointer, AND on the reader
      tolerating motion. Below 1200px, on touch at any width, and under
      reduced motion at any width, the cards fall through to the stacked
-     layout above: head, copy, graphic, no hover state at all. That is
-     why this section needs no separate prefers-reduced-motion block.
+     layout above: head, copy, graphic, no hover state at all.
+
+     That gate covers the *layout* only. The mockups' own loops — the
+     pulsing rings and the blinking carets — are not in this query and
+     have to be stopped separately; see the reduced-motion block at the
+     end of this stylesheet.
 
      The reveal is horizontal, not vertical. The window is a two-column
      row — text panel first, graphic second — and opening a card grows
@@ -1209,8 +1227,8 @@ const glyphs = ['i.', 'ii.', 'iii.', 'iv.'];
     .process-card:focus-within .pc-glyph { color: var(--color-brasslight); }
     .process-card:hover .pc-title,
     .process-card:focus-within .pc-title { color: var(--color-paper); }
-    .process-card:hover .pc-title em,
-    .process-card:focus-within .pc-title em { color: var(--color-brasslight); }
+    .process-card:hover .pc-title :global(em),
+    .process-card:focus-within .pc-title :global(em) { color: var(--color-brasslight); }
     /* border-color, not border-top-color: the frame carries all four
        sides now that it floats. */
     .process-card:hover .ps-visual-frame,
@@ -1321,6 +1339,35 @@ const glyphs = ['i.', 'ii.', 'iii.', 'iv.'];
   @media (max-width: 599px) {
     .process-card,
     .process-card.is-open { flex-basis: 100%; }
+  }
+
+  /* ============================================================
+     REDUCED MOTION — the mockups' own loops.
+
+     The four-up query above is gated on prefers-reduced-motion, so
+     the card layout already stands still. The graphics inside do
+     not: seven infinite animations run independently of it at every
+     width — pcPulseRing on the picked date's ring, the calendar
+     slot dot, the session dot, the case lock and the pulsing
+     milestone check, and pcBlink on the editing caret and the
+     status dot.
+
+     fwd needed no block like this because its global.css carries a
+     universal killswitch (`*, *::before, *::after` forced to a
+     0.01ms animation- and transition-duration). Kagasoff's global
+     stylesheet only guards specific components — the reveal
+     utility, the carousel, the team-card bio — so there is no net
+     under these, and the section has to stop its own.
+
+     `animation`, not `animation-duration`: these loops are purely
+     decorative and there is no final frame worth landing on.
+     ============================================================ */
+  @media (prefers-reduced-motion: reduce) {
+    .process-section *,
+    .process-section *::before,
+    .process-section *::after {
+      animation: none !important;
+    }
   }
 </style>
 
