@@ -4,7 +4,6 @@
     (vision + values), and the closing contact band with a second intake form
     and the office map. */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Photo from '../components/Photo.astro';
 import Placeholder from '../components/Placeholder.astro';
 import IntakeForm from '../components/IntakeForm.astro';
 import TestimonialCarousel from '../components/TestimonialCarousel.astro';
@@ -88,7 +87,7 @@ const stepIcons = [
         <!-- Left: why-us + the practice deck -->
         <div class="flex flex-col gap-14 md:gap-20">
           <!-- Why Kagasoff -->
-          <div>
+          <div class="popout p-6 md:p-10">
             <div data-reveal="left">
               <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">Why Kagasoff</p>
               <h2 class="font-serif text-[clamp(26px,2.6vw,40px)] font-medium leading-[1.2] text-navy">
@@ -113,7 +112,7 @@ const stepIcons = [
           </div>
 
           <!-- Our Practice -->
-          <div id="practice">
+          <div id="practice" class="popout p-6 md:p-10">
             <div data-reveal="left">
               <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">Our Practice</p>
               <h2 class="font-serif text-[clamp(26px,2.6vw,40px)] font-medium leading-[1.2] text-navy">Seven areas. One standard of care.</h2>
@@ -355,7 +354,7 @@ const stepIcons = [
   </script>
 
   <!-- WITH YOU STEP BY STEP -->
-  <section class="bg-paper">
+  <section class="bg-cream">
     <div class="shell py-14 md:py-[88px]">
       <div class="mb-11 max-w-[56ch] md:mb-14" data-reveal>
         <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">With You Step by Step</p>
@@ -389,42 +388,35 @@ const stepIcons = [
     </div>
   </section>
 
-  <!-- ABOUT — vision + what you can expect -->
-  <section id="about">
-    <div class="grid shell grid-cols-1 items-start gap-10 py-14 md:grid-cols-2 md:gap-16 md:py-[78px]">
-      <div data-reveal="left">
-        <p class="mb-[18px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">Our Vision</p>
-        <p class="mb-6 font-serif text-[clamp(23px,1.75vw,34px)] leading-[1.4] text-navy">
+  <!-- ABOUT — vision + what you can expect, merged into one popout -->
+  <section id="about" class="bg-cream">
+    <div class="shell pt-4 pb-14 md:pt-6 md:pb-[84px]">
+      <div class="popout p-6 md:p-12">
+        <p class="mb-[18px] text-center text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass" data-reveal>About the Firm</p>
+        <p class="font-serif text-[clamp(24px,2.2vw,38px)] leading-[1.35] text-navy max-w-[34ch] mx-auto text-center" data-reveal style="--reveal-delay:80ms">
           To provide exceptional legal counsel and representation that exceeds our clients' expectations.
         </p>
-        <p class="text-[clamp(15.5px,0.95vw,19px)] font-light leading-[1.8] text-ink">
+        <p class="mt-6 max-w-[68ch] mx-auto text-center text-[clamp(15.5px,0.95vw,19px)] font-light leading-[1.8] text-ink" data-reveal style="--reveal-delay:140ms">
           Based in Westminster and serving clients throughout Orange County and the greater California
           region, the firm handles matters across seven practice areas — from personal injury and
           criminal defense to family law and professional licensing. What unites that range is a single
           approach: thorough preparation, plain-spoken advice, and direct access to the attorney working
           on your case.
         </p>
-      </div>
-      <div class="relative" data-reveal="right" style="--reveal-delay:120ms">
-        <div aria-hidden="true" class="pointer-events-none absolute rounded-[6px] border border-[rgba(156,122,60,0.5)]" style="inset:-16px 16px 16px -16px"></div>
-        <Photo src="/team.jpg" alt="The Kagasoff Law Firm team" position="50% 30%" class="relative min-h-[clamp(280px,34vw,560px)] rounded-[6px]" />
-      </div>
-    </div>
 
-    <div class="bg-cream">
-      <div class="shell py-14 md:py-[74px]">
-        <p class="mb-4 text-center text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass" data-reveal>Our Commitment</p>
-        <h2 class="mb-10 text-center font-serif text-[30px] font-medium text-navy md:mb-[52px] md:text-[40px]" data-reveal style="--reveal-delay:80ms">What you can expect</h2>
-        <div class="grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-12">
-          {
-            values.map((v, i) => (
-              <div class="border-t border-line pt-[22px]" data-reveal style={`--reveal-delay:${i * 120}ms`}>
-                <div class="mb-[14px] font-serif text-[32px] text-brass">{v.numeral}</div>
-                <h3 class="mb-3 font-serif text-[23px] font-semibold text-navy">{v.title}</h3>
-                <p class="text-[clamp(14.5px,0.9vw,17.5px)] font-light leading-[1.7] text-ink">{v.body}</p>
-              </div>
-            ))
-          }
+        <div class="mt-10 border-t border-line pt-10 md:mt-12 md:pt-12">
+          <p class="mb-10 text-center text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass md:mb-[52px]" data-reveal>What you can expect</p>
+          <div class="grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-12">
+            {
+              values.map((v, i) => (
+                <div class="border-t border-line pt-[22px]" data-reveal style={`--reveal-delay:${i * 120}ms`}>
+                  <div class="mb-[14px] font-serif text-[32px] text-brass">{v.numeral}</div>
+                  <h3 class="mb-3 font-serif text-[23px] font-semibold text-navy">{v.title}</h3>
+                  <p class="text-[clamp(14.5px,0.9vw,17.5px)] font-light leading-[1.7] text-ink">{v.body}</p>
+                </div>
+              ))
+            }
+          </div>
         </div>
       </div>
     </div>
