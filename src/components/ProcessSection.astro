@@ -66,7 +66,7 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
             <div class="pc-stage">
               {/* Step 01 — the free consultation, as a call in progress:
                   who is on the line, and the ground being covered. */}
-              <div class="ps-visual-frame ps-frame-call">
+              <div class="ps-visual-frame">
                 <div class="ps-call">
                   <div class="ps-call-bar">
                     <span class="ps-call-disc">K</span>
@@ -101,8 +101,8 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
           <p class="pc-step">{steps[0]}</p>
           <h3 class="pc-title" set:html={process[0].title} />
           <p class="pc-body" set:html={process[0].body} />
-          <button type="button" class="pc-toggle" aria-expanded="false" aria-controls="pc-more-1">
-            <span>More</span>
+          <button type="button" class="pc-toggle" aria-expanded="false" aria-controls="pc-more-1" aria-label={`More about ${process[0].title}`}>
+            <span aria-hidden="true">More</span>
             <svg class="pc-chev" viewBox="0 0 12 8" width="11" height="7" fill="none" aria-hidden="true">
               <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
@@ -120,7 +120,7 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
             <div class="pc-stage">
               {/* Step 02 — the evidence board: what has been gathered, what
                   is still out, and how far the case theory has come. */}
-              <div class="ps-visual-frame ps-frame-board">
+              <div class="ps-visual-frame">
                 <div class="ps-board">
                   <div class="ps-board-grid">
                     <div class="ps-ev">
@@ -152,8 +152,8 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
           <p class="pc-step">{steps[1]}</p>
           <h3 class="pc-title" set:html={process[1].title} />
           <p class="pc-body" set:html={process[1].body} />
-          <button type="button" class="pc-toggle" aria-expanded="false" aria-controls="pc-more-2">
-            <span>More</span>
+          <button type="button" class="pc-toggle" aria-expanded="false" aria-controls="pc-more-2" aria-label={`More about ${process[1].title}`}>
+            <span aria-hidden="true">More</span>
             <svg class="pc-chev" viewBox="0 0 12 8" width="11" height="7" fill="none" aria-hidden="true">
               <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
@@ -172,7 +172,7 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
               {/* Step 03 — three rounds of offer and counter, drawn as two
                   bars that close on each other round by round. Decorative:
                   the widths are composition, not data. */}
-              <div class="ps-visual-frame ps-frame-conv">
+              <div class="ps-visual-frame">
                 <div class="ps-conv">
                   <div class="ps-conv-rounds">
                     <div class="ps-round">
@@ -221,8 +221,8 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
           <p class="pc-step">{steps[2]}</p>
           <h3 class="pc-title" set:html={process[2].title} />
           <p class="pc-body" set:html={process[2].body} />
-          <button type="button" class="pc-toggle" aria-expanded="false" aria-controls="pc-more-3">
-            <span>More</span>
+          <button type="button" class="pc-toggle" aria-expanded="false" aria-controls="pc-more-3" aria-label={`More about ${process[2].title}`}>
+            <span aria-hidden="true">More</span>
             <svg class="pc-chev" viewBox="0 0 12 8" width="11" height="7" fill="none" aria-hidden="true">
               <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
@@ -241,7 +241,7 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
               {/* Step 04 — the closing page of the matter: the word, the
                   terms that were secured, and the firm's record under a
                   hairline. */}
-              <div class="ps-visual-frame ps-frame-close">
+              <div class="ps-visual-frame">
                 <div class="ps-close">
                   <div class="ps-close-banner">
                     <div class="ps-close-crest">
@@ -269,8 +269,8 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
           <p class="pc-step">{steps[3]}</p>
           <h3 class="pc-title" set:html={process[3].title} />
           <p class="pc-body" set:html={process[3].body} />
-          <button type="button" class="pc-toggle" aria-expanded="false" aria-controls="pc-more-4">
-            <span>More</span>
+          <button type="button" class="pc-toggle" aria-expanded="false" aria-controls="pc-more-4" aria-label={`More about ${process[3].title}`}>
+            <span aria-hidden="true">More</span>
             <svg class="pc-chev" viewBox="0 0 12 8" width="11" height="7" fill="none" aria-hidden="true">
               <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
