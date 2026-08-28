@@ -91,12 +91,20 @@ const values = [
               </p>
               <a href="#about" class="lift mt-6 inline-block border-b border-brass pb-1.5 text-sm font-semibold tracking-[0.05em] text-brass">Read our story →</a>
             </div>
-            <div class="mt-10 grid grid-cols-2 gap-x-6 gap-y-8 md:mt-12">
+            <div class="mt-8 grid grid-cols-2 overflow-hidden rounded-[14px] border border-line bg-cream md:mt-12">
               {
                 stats.map((s, i) => (
-                  <div class="border-t border-brass/30 pt-4" data-reveal style={`--reveal-delay:${i * 100}ms`}>
-                    <div class="font-serif text-[clamp(38px,3.6vw,58px)] font-medium leading-none text-brass">{s.n}</div>
-                    <div class="mt-2.5 text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.12em] text-ink">{s.l}</div>
+                  <div
+                    class:list={[
+                      'p-5 border-line',
+                      i % 2 === 1 && 'border-l',
+                      i >= 2 && 'border-t',
+                    ]}
+                    data-reveal
+                    style={`--reveal-delay:${i * 100}ms`}
+                  >
+                    <div class="text-left font-serif text-[clamp(38px,3.6vw,58px)] font-medium leading-none text-brass">{s.n}</div>
+                    <div class="mt-2.5 text-left text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.12em] text-ink">{s.l}</div>
                   </div>
                 ))
               }
@@ -352,20 +360,22 @@ const values = [
   <section id="about" class="bg-cream">
     <div class="shell pt-4 pb-14 md:pt-6 md:pb-[84px]">
       <div class="popout p-6 md:p-12">
-        <p class="mb-[18px] text-center text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass" data-reveal>About the Firm</p>
-        <h2 class="font-serif text-[clamp(24px,2.2vw,38px)] font-normal leading-[1.35] text-navy max-w-[34ch] mx-auto text-center" data-reveal style="--reveal-delay:80ms">
-          To provide exceptional legal counsel and representation that exceeds our clients' expectations.
-        </h2>
-        <p class="mt-6 max-w-[68ch] mx-auto text-center text-[clamp(15.5px,0.95vw,19px)] font-light leading-[1.8] text-ink" data-reveal style="--reveal-delay:140ms">
-          Based in Westminster and serving clients throughout Orange County and the greater California
-          region, the firm handles matters across seven practice areas — from personal injury and
-          criminal defense to family law and professional licensing. What unites that range is a single
-          approach: thorough preparation, plain-spoken advice, and direct access to the attorney working
-          on your case.
-        </p>
+        <p class="mb-[18px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass" data-reveal>About the Firm</p>
+        <div class="grid md:grid-cols-[1.05fr_0.95fr] gap-8 md:gap-12 items-start">
+          <h2 class="font-serif text-[clamp(24px,2.2vw,38px)] font-normal leading-[1.35] text-navy text-left" data-reveal style="--reveal-delay:80ms">
+            To provide exceptional legal counsel and representation that exceeds our clients' expectations.
+          </h2>
+          <p class="text-left text-[clamp(15.5px,0.95vw,19px)] font-light leading-[1.8] text-ink" data-reveal style="--reveal-delay:140ms">
+            Based in Westminster and serving clients throughout Orange County and the greater California
+            region, the firm handles matters across seven practice areas — from personal injury and
+            criminal defense to family law and professional licensing. What unites that range is a single
+            approach: thorough preparation, plain-spoken advice, and direct access to the attorney working
+            on your case.
+          </p>
+        </div>
 
         <div class="mt-10 border-t border-line pt-10 md:mt-12 md:pt-12">
-          <p class="mb-10 text-center text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass md:mb-[52px]" data-reveal>What you can expect</p>
+          <p class="mb-10 text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass md:mb-[52px]" data-reveal>What you can expect</p>
           <div class="grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-12">
             {
               values.map((v, i) => (
@@ -414,7 +424,7 @@ const values = [
           <div>
             <p class="mb-1 text-[11px] uppercase tracking-[0.22em] text-brasslight">Westminster Office</p>
             <p class="font-serif text-[19px] leading-[1.4] text-paper">14541 Brookhurst St, Suite D4<br />Westminster, CA 92683</p>
-            <a href="tel:6572184947" class="mt-4 inline-flex items-center gap-2 text-[14px] text-gold">
+            <a href="tel:6572184947" class="mt-4 inline-flex items-center gap-2 text-[14px] text-paper">
               <span class="inline-block h-px w-4 bg-gold/50"></span>(657) 218-4947
             </a>
           </div>

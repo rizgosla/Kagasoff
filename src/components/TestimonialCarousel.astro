@@ -15,7 +15,10 @@ import { testimonials } from '../data/testimonials';
           data-active={i === 0 ? 'true' : undefined}
           aria-hidden={i !== 0 ? 'true' : 'false'}
         >
-          <span class="stars" aria-hidden="true">
+          <figcaption class="tcar-name text-[13.5px] font-semibold text-navy">
+            {t.name} · <span class="font-normal text-brass">Google Review</span>
+          </figcaption>
+          <span class="stars mt-2" aria-hidden="true">
             {[0, 1, 2, 3, 4].map(() => (
               <svg viewBox="0 0 20 20">
                 <path d="M10 1.5l2.472 5.008 5.528.803-4 3.898.944 5.506L10 14.115l-4.944 2.6.944-5.506-4-3.898 5.528-.803L10 1.5z" />
@@ -23,14 +26,11 @@ import { testimonials } from '../data/testimonials';
             ))}
           </span>
           <blockquote
-            class="tcar-quote mt-3 font-serif italic text-mist"
+            class="tcar-quote mt-3 font-serif italic text-navy"
             style="font-size: clamp(16px, 1.05vw, 19px);"
           >
             "{t.quote}"
           </blockquote>
-          <figcaption class="tcar-name mt-3 text-[13px] text-paper">
-            {t.name} · <span class="text-brasslight">Google Review</span>
-          </figcaption>
         </figure>
       ))
     }
