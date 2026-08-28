@@ -200,16 +200,8 @@ const stepIcons = [
         const exitIdx = cur;
         const top = cards[exitIdx];
 
-        const mobile = window.innerWidth <= 680;
-        if (mobile) {
-          // On mobile: fade + scale so no horizontal overflow triggers page zoom
-          top.style.transition = 'transform .35s cubic-bezier(.4,0,.6,1), opacity .32s ease-in';
-          top.style.transform = 'scale(0.88)';
-        } else {
-          // Desktop: slide the top card off to the right
-          top.style.transition = 'transform .42s cubic-bezier(.4,0,.6,1), opacity .38s ease-in';
-          top.style.transform = 'translateX(115%)';
-        }
+        top.style.transition = 'transform .38s cubic-bezier(.4,0,.6,1), opacity .34s ease-in';
+        top.style.transform = 'scale(0.94) translateY(6px)';
         top.style.opacity = '0';
         top.style.zIndex = '20';
         top.style.pointerEvents = 'none';
