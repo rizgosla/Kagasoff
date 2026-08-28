@@ -534,16 +534,3 @@ textarea.fld {
     transition: none;
   }
 }
-
-/* ===== Process step icons ===== */
-.step-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 999px;
-  background: var(--color-cream);
-  border: 1px solid rgba(156, 122, 60, 0.35);
-  display: grid;
-  place-items: center;
-  margin-bottom: 14px;
-  color: var(--color-brass);
-}
