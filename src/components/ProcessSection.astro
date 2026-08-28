@@ -1,26 +1,29 @@
 ---
-/** "With You Step by Step" — four cards in one row that trade space.
+/** "With You Step by Step" — four popout cards, one per step.
  *
- * Ported from the fwd-website process section (src/pages/index.astro), which
- * is where every load-bearing number below comes from. The comments that
- * explain those numbers are carried across with them: most of them are the
- * record of a specific failure, not a taste call.
+ * Each card is a fixed-size graphic over its own words: a mockup of what
+ * that stage of a matter actually looks like, then the step kicker, the
+ * title, the one-line summary, and a click disclosure holding the detail.
  *
- * At rest each card IS its step's mockup: numeral, step label, title, then the
- * graphic filling everything below them. Hover or focus brings the words —
- * summary, detail and caption — in from the left on a navy panel. The graphic
- * is the card's identity; the copy is what you get for asking.
+ * There is no hover state anywhere in here. Nothing about a card depends
+ * on a pointer being over it, the text is never hidden behind an
+ * interaction, and the only thing a click changes is the disclosure the
+ * button names in aria-controls.
  *
- * Each card's head is a real link, so the reveal is reachable with Tab
- * (:focus-within, not :hover alone). The copy is *clipped* by the window's
- * overflow, never hidden — no display:none, no visibility:hidden — so a
- * screen reader reads all four cards in full whatever the visual state.
- * Below 1200px, and under reduced motion at any width, the panel is a
- * disclosure that opens on tap.
+ * The four graphics are drawn at a fixed 470 x 360 and *scaled* to
+ * whatever column they land in (see the fitter script at the bottom),
+ * rather than reflowed into it: reflowing keeps the 10-12px mono at full
+ * size inside a quarter-width box and tears the compositions apart. So
+ * every length inside a composition is a plain px — a vw or a cq unit
+ * inside a box that is scaled rather than resized re-proportions the
+ * artwork by browser window while the box itself never changes.
+ *
+ * All four are aria-hidden decorative artwork. Every real number they
+ * quote (17+ / 5.0 / 291) is also set at body size elsewhere on the page.
  */
 import { process } from '../data/practiceAreas';
 
-/** Caption line under each card's copy. Authored here rather than in
+/** Caption line closing each disclosure. Authored here rather than in
     practiceAreas because it belongs to this composition, not to the data. */
 const metas = [
   '— Free & confidential',
@@ -29,13 +32,7 @@ const metas = [
   '— 17+ years of results',
 ];
 
-/** Second paragraph of each reveal — the detail behind the one-line body.
- *
- * Length is a constraint, not a preference: in the four-up regime the panel
- * is ~190px wide inside a card of a definite height, and .pc-window clips
- * whatever overruns it. These are written to the measure that fits at 1200,
- * which is the tightest width the regime covers. Lengthening one truncates
- * its own last line with no warning. */
+/** The detail behind each one-line body, revealed by the card's disclosure. */
 const mores = [
   'No fee to talk. If we are not the right fit, we will say so on the call.',
   'Records, reports and medical evidence, gathered early.',
@@ -43,7 +40,7 @@ const mores = [
   'Straight answers on what a resolution is really worth.',
 ];
 
-const glyphs = ['i.', 'ii.', 'iii.', 'iv.'];
+const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
 ---
 
 <section class="bg-cream process-section">
@@ -59,257 +56,229 @@ const glyphs = ['i.', 'ii.', 'iii.', 'iv.'];
       </p>
     </div>
 
-    {/* Kagasoff's .shell runs to 2300px; fwd's container did not. Past ~1680px
-        the four-up row stops reading as a spec sheet and starts reading as four
-        billboards, so the grid gets its own ceiling inside the shell.
-
-        No data-reveal on the grid itself: the reveal utility sets a transition
-        and a will-change on the element it marks, and both of those smear the
-        flex-grow animation the cards run. The head above and the button below
-        carry the reveal instead. */}
+    {/* Kagasoff's .shell runs to 2300px. Past ~1680px a four-up row of
+        these stops reading as a set of steps and starts reading as four
+        billboards, so the grid keeps its own ceiling inside the shell. */}
     <div class="process-grid-wrap">
-      <ol class="process-grid">
-        <li class="process-card">
-          <a class="pc-head" href="#contact">
-            <span class="pc-glyph" aria-hidden="true">{glyphs[0]}</span>
-            <span class="pc-step">Step 01<span class="pc-cue" aria-hidden="true">→</span></span>
-            <h3 class="pc-title" set:html={process[0].title} />
-            <span class="pc-hint" aria-hidden="true">
-              <span class="pc-hint-open">Tap to learn more</span>
-              <span class="pc-hint-close">Tap to close</span>
-            </span>
-          </a>
-          <div class="pc-window">
-            <div class="pc-reveal">
-              <p class="pc-body" set:html={process[0].body} />
+      <ol class="process-list grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <li class="popout process-card p-5 md:p-6" data-reveal>
+          <div class="pc-visual" aria-hidden="true">
+            <div class="pc-stage">
+              {/* Step 01 — the free consultation, as a call in progress:
+                  who is on the line, and the ground being covered. */}
+              <div class="ps-visual-frame ps-frame-call">
+                <div class="ps-call">
+                  <div class="ps-call-bar">
+                    <span class="ps-call-disc">K</span>
+                    <span class="ps-call-id">
+                      <span class="ps-call-name">Kagasoff Law Firm</span>
+                      <span class="ps-call-sub">FREE CONSULTATION · 00:12</span>
+                    </span>
+                    <span class="ps-call-live"></span>
+                  </div>
+                  <ul class="ps-call-list">
+                    <li class="ps-call-row done">
+                      <span class="ps-call-tick">✓</span>
+                      <span class="ps-call-label">What happened</span>
+                    </li>
+                    <li class="ps-call-row done">
+                      <span class="ps-call-tick">✓</span>
+                      <span class="ps-call-label">Timeline &amp; documents</span>
+                    </li>
+                    <li class="ps-call-row now">
+                      <span class="ps-call-tick"></span>
+                      <span class="ps-call-label">Your options — explained</span>
+                    </li>
+                  </ul>
+                  <div class="ps-call-chips">
+                    <span class="ps-chip">No obligation</span>
+                    <span class="ps-chip">Free &amp; confidential</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="pc-step">{steps[0]}</p>
+          <h3 class="pc-title" set:html={process[0].title} />
+          <p class="pc-body" set:html={process[0].body} />
+          <button type="button" class="pc-toggle" aria-expanded="false" aria-controls="pc-more-1">
+            <span>More</span>
+            <svg class="pc-chev" viewBox="0 0 12 8" width="11" height="7" fill="none" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div id="pc-more-1" class="pc-morewrap">
+            <div class="pc-morein">
               <p class="pc-more">{mores[0]}</p>
               <span class="pc-meta">{metas[0]}</span>
-              <a class="pc-link-out" href="#contact">Start with a free consultation →</a>
             </div>
-            <div class="pc-visual" aria-hidden="true">
-              <div class="pc-stage">
-                <div class="ps-visual-frame ps-frame-cal">
-                  <div class="ps-cal">
-                    <div class="ps-cal-head">
-                      <div class="ps-cal-head-l">
-                        <span class="ps-cal-eyebrow">Pick a time to talk</span>
-                        <h4 class="ps-cal-month">August 2026</h4>
-                      </div>
-                      <span class="ps-cal-pill">FREE · CONSULT</span>
+          </div>
+        </li>
+
+        <li class="popout process-card p-5 md:p-6" data-reveal style="--reveal-delay:100ms">
+          <div class="pc-visual" aria-hidden="true">
+            <div class="pc-stage">
+              {/* Step 02 — the evidence board: what has been gathered, what
+                  is still out, and how far the case theory has come. */}
+              <div class="ps-visual-frame ps-frame-board">
+                <div class="ps-board">
+                  <div class="ps-board-grid">
+                    <div class="ps-ev">
+                      <span class="ps-ev-label">Police report</span>
+                      <span class="ps-ev-chip in">Received ✓</span>
                     </div>
-                    <div class="ps-cal-dow"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
-                    {/* The whole month, not a five-week window. Dropping a week
-                        is what the landscape stage forced in fwd, and it is the
-                        thing that made the calendar stop reading as a calendar
-                        — so August 2026 gets the six rows it actually needs
-                        (Sun Jul 26 through Sat Sep 5), with the 30th and 31st
-                        on the last one rather than cut off the bottom. */}
-                    <div class="ps-cal-grid">
-                      <span class="off">26</span><span class="off">27</span><span class="off">28</span><span class="off">29</span><span class="off">30</span><span class="off">31</span><span>1</span>
-                      <span>2</span><span class="avail">3</span><span class="avail">4</span><span>5</span><span class="avail">6</span><span class="avail">7</span><span>8</span>
-                      <span>9</span><span class="avail">10</span><span>11</span><span class="avail">12</span><span class="avail picked">13</span><span class="avail">14</span><span>15</span>
-                      <span>16</span><span>17</span><span class="avail">18</span><span class="avail">19</span><span class="avail">20</span><span>21</span><span>22</span>
-                      <span>23</span><span class="avail">24</span><span class="avail">25</span><span>26</span><span class="avail">27</span><span class="avail">28</span><span>29</span>
-                      <span>30</span><span class="avail">31</span><span class="off">1</span><span class="off">2</span><span class="off">3</span><span class="off">4</span><span class="off">5</span>
+                    <div class="ps-ev">
+                      <span class="ps-ev-label">Medical records</span>
+                      <span class="ps-ev-chip out"><i class="ps-ev-dot"></i>Requested</span>
                     </div>
-                    <div class="ps-cal-foot">
-                      <div class="ps-cal-slot">
-                        <span class="ps-cal-slot-dot"></span>
-                        <div class="ps-cal-slot-meta">
-                          <span class="ps-cal-slot-day">Thursday, Aug 13</span>
-                          <span class="ps-cal-slot-time">2:00 PM · (657) 218-4947</span>
-                        </div>
-                        <span class="ps-cal-slot-cta">Confirmed →</span>
-                      </div>
+                    <div class="ps-ev">
+                      <span class="ps-ev-label">Witness statements</span>
+                      <span class="ps-ev-chip in">Received ✓</span>
                     </div>
+                    <div class="ps-ev">
+                      <span class="ps-ev-label">Scene photos</span>
+                      <span class="ps-ev-chip in">Received ✓</span>
+                    </div>
+                  </div>
+                  <div class="ps-rail">
+                    <span class="ps-rail-label">Case theory</span>
+                    <span class="ps-rail-track"><span class="ps-rail-fill"></span></span>
+                    <span class="ps-rail-caption">Prepared as if for trial.</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </li>
-
-        <li class="process-card">
-          <a class="pc-head" href="#contact">
-            <span class="pc-glyph" aria-hidden="true">{glyphs[1]}</span>
-            <span class="pc-step">Step 02<span class="pc-cue" aria-hidden="true">→</span></span>
-            <h3 class="pc-title" set:html={process[1].title} />
-            <span class="pc-hint" aria-hidden="true">
-              <span class="pc-hint-open">Tap to learn more</span>
-              <span class="pc-hint-close">Tap to close</span>
-            </span>
-          </a>
-          <div class="pc-window">
-            <div class="pc-reveal">
-              <p class="pc-body" set:html={process[1].body} />
+          <p class="pc-step">{steps[1]}</p>
+          <h3 class="pc-title" set:html={process[1].title} />
+          <p class="pc-body" set:html={process[1].body} />
+          <button type="button" class="pc-toggle" aria-expanded="false" aria-controls="pc-more-2">
+            <span>More</span>
+            <svg class="pc-chev" viewBox="0 0 12 8" width="11" height="7" fill="none" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div id="pc-more-2" class="pc-morewrap">
+            <div class="pc-morein">
               <p class="pc-more">{mores[1]}</p>
               <span class="pc-meta">{metas[1]}</span>
-              <a class="pc-link-out" href="#contact">Start with a free consultation →</a>
             </div>
-            <div class="pc-visual" aria-hidden="true">
-              <div class="pc-stage">
-                <div class="ps-visual-frame ps-frame-rev">
-                  <div class="ps-rev">
-                    <div class="ps-rev-doc">
-                      <div class="ps-rev-doc-head">
-                        <span class="ps-rev-doc-tab">Smith matter</span>
-                        <span class="ps-rev-doc-saved">Updated · 2m</span>
+          </div>
+        </li>
+
+        <li class="popout process-card p-5 md:p-6" data-reveal style="--reveal-delay:200ms">
+          <div class="pc-visual" aria-hidden="true">
+            <div class="pc-stage">
+              {/* Step 03 — three rounds of offer and counter, drawn as two
+                  bars that close on each other round by round. Decorative:
+                  the widths are composition, not data. */}
+              <div class="ps-visual-frame ps-frame-conv">
+                <div class="ps-conv">
+                  <div class="ps-conv-rounds">
+                    <div class="ps-round">
+                      <span class="ps-round-label">Round 1</span>
+                      <div class="ps-bar-row">
+                        <span class="ps-bar-label">Their offer</span>
+                        <span class="ps-bar-track"><span class="ps-bar-fill them" style="width:25%"></span></span>
                       </div>
-                      <div class="ps-rev-doc-body">
-                        <div class="ps-rev-eye"></div>
-                        <div class="ps-rev-h"></div>
-                        <div class="ps-rev-line" style="width:98%"></div>
-                        <div class="ps-rev-line edit" style="width:92%"><span class="ps-rev-caret"></span></div>
-                        <div class="ps-rev-line struck" style="width:82%"></div>
-                        <div class="ps-rev-line added" style="width:95%"></div>
-                        <div class="ps-rev-line" style="width:88%"></div>
-                        <div class="ps-rev-line" style="width:73%"></div>
-                        <div class="ps-rev-h sub" style="width:44%"></div>
-                        <div class="ps-rev-line" style="width:96%"></div>
-                        <div class="ps-rev-line" style="width:99%"></div>
-                        <div class="ps-rev-line" style="width:90%"></div>
-                        <div class="ps-rev-line" style="width:97%"></div>
-                        <div class="ps-rev-line" style="width:64%"></div>
+                      <div class="ps-bar-row">
+                        <span class="ps-bar-label">Our position</span>
+                        <span class="ps-bar-track"><span class="ps-bar-fill us" style="width:85%"></span></span>
                       </div>
                     </div>
-                    <div class="ps-rev-comments">
-                      <div class="ps-rev-comment">
-                        <div class="ps-rev-avatar">AK</div>
-                        <div class="ps-rev-bubble">
-                          <div class="ps-rev-meta"><span class="ps-rev-name">A. Kagasoff</span><span class="ps-rev-time">2d</span></div>
-                          <div class="ps-rev-text">Records requested ✓</div>
-                        </div>
+                    <div class="ps-round">
+                      <span class="ps-round-label">Round 2</span>
+                      <div class="ps-bar-row">
+                        <span class="ps-bar-label">Their offer</span>
+                        <span class="ps-bar-track"><span class="ps-bar-fill them" style="width:45%"></span></span>
                       </div>
-                      <div class="ps-rev-comment offset">
-                        <div class="ps-rev-avatar alt">P</div>
-                        <div class="ps-rev-bubble">
-                          <div class="ps-rev-meta"><span class="ps-rev-name">Paralegal</span><span class="ps-rev-time">4h</span></div>
-                          <div class="ps-rev-text">Motion drafted ✓</div>
-                        </div>
-                      </div>
-                      <div class="ps-rev-comment">
-                        <div class="ps-rev-avatar">AK</div>
-                        <div class="ps-rev-bubble">
-                          <div class="ps-rev-meta"><span class="ps-rev-name">A. Kagasoff</span><span class="ps-rev-time">now</span></div>
-                          <div class="ps-rev-text">Ready for hearing.</div>
-                        </div>
+                      <div class="ps-bar-row">
+                        <span class="ps-bar-label">Our position</span>
+                        <span class="ps-bar-track"><span class="ps-bar-fill us" style="width:80%"></span></span>
                       </div>
                     </div>
+                    <div class="ps-round">
+                      <span class="ps-round-label">Round 3</span>
+                      <div class="ps-bar-row">
+                        <span class="ps-bar-label">Their offer</span>
+                        <span class="ps-bar-track"><span class="ps-bar-fill them" style="width:68%"></span></span>
+                      </div>
+                      <div class="ps-bar-row">
+                        <span class="ps-bar-label">Our position</span>
+                        <span class="ps-bar-track"><span class="ps-bar-fill us" style="width:72%"></span></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ps-conv-strip">
+                    <span class="ps-conv-check">✓</span>
+                    <span class="ps-conv-title">Settlement reached</span>
+                    <span class="ps-conv-note">on our terms</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </li>
-
-        <li class="process-card">
-          <a class="pc-head" href="#contact">
-            <span class="pc-glyph" aria-hidden="true">{glyphs[2]}</span>
-            <span class="pc-step">Step 03<span class="pc-cue" aria-hidden="true">→</span></span>
-            <h3 class="pc-title" set:html={process[2].title} />
-            <span class="pc-hint" aria-hidden="true">
-              <span class="pc-hint-open">Tap to learn more</span>
-              <span class="pc-hint-close">Tap to close</span>
-            </span>
-          </a>
-          <div class="pc-window">
-            <div class="pc-reveal">
-              <p class="pc-body" set:html={process[2].body} />
+          <p class="pc-step">{steps[2]}</p>
+          <h3 class="pc-title" set:html={process[2].title} />
+          <p class="pc-body" set:html={process[2].body} />
+          <button type="button" class="pc-toggle" aria-expanded="false" aria-controls="pc-more-3">
+            <span>More</span>
+            <svg class="pc-chev" viewBox="0 0 12 8" width="11" height="7" fill="none" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div id="pc-more-3" class="pc-morewrap">
+            <div class="pc-morein">
               <p class="pc-more">{mores[2]}</p>
               <span class="pc-meta">{metas[2]}</span>
-              <a class="pc-link-out" href="#contact">Start with a free consultation →</a>
             </div>
-            <div class="pc-visual" aria-hidden="true">
-              <div class="pc-stage">
-                {/* Built entirely from the two vocabularies already on this
-                    page — the bar-top from the milestone log and the comment
-                    bubble from the case file — so there is nothing new to
-                    maintain and the four graphics read as one family. */}
-                <div class="ps-visual-frame ps-frame-neg">
-                  <div class="ps-neg">
-                    <div class="ps-launch-bar-top">
-                      <span class="ps-neg-dot"></span>
-                      <span class="ps-launch-domain">Smith v. Meridian — <strong>settlement conf.</strong></span>
-                      <span class="ps-neg-pill">IN SESSION</span>
+          </div>
+        </li>
+
+        <li class="popout process-card p-5 md:p-6" data-reveal style="--reveal-delay:300ms">
+          <div class="pc-visual" aria-hidden="true">
+            <div class="pc-stage">
+              {/* Step 04 — the closing page of the matter: the word, the
+                  terms that were secured, and the firm's record under a
+                  hairline. */}
+              <div class="ps-visual-frame ps-frame-close">
+                <div class="ps-close">
+                  <div class="ps-close-banner">
+                    <div class="ps-close-crest">
+                      <span class="ps-arc l"></span>
+                      <span class="ps-close-word">Resolved</span>
+                      <span class="ps-arc r"></span>
                     </div>
-                    <div class="ps-neg-thread">
-                      <div class="ps-rev-comment">
-                        <div class="ps-rev-avatar muted">OC</div>
-                        <div class="ps-rev-bubble">
-                          <div class="ps-rev-meta"><span class="ps-rev-name">Opposing counsel</span><span class="ps-rev-time">10:12 AM</span></div>
-                          <div class="ps-rev-text">Opening offer — $50,000</div>
-                        </div>
-                      </div>
-                      <div class="ps-rev-comment offset">
-                        <div class="ps-rev-avatar">AK</div>
-                        <div class="ps-rev-bubble">
-                          <div class="ps-rev-meta"><span class="ps-rev-name">A. Kagasoff</span><span class="ps-rev-time">10:40 AM</span></div>
-                          <div class="ps-rev-text">Counter — full damages + costs</div>
-                        </div>
-                      </div>
-                      <div class="ps-rev-comment">
-                        <div class="ps-rev-avatar muted">OC</div>
-                        <div class="ps-rev-bubble">
-                          <div class="ps-rev-meta"><span class="ps-rev-name">Opposing counsel</span><span class="ps-rev-time">11:05 AM</span></div>
-                          <div class="ps-rev-text">Revised offer</div>
-                        </div>
-                      </div>
-                      <div class="ps-rev-comment offset accepted">
-                        <div class="ps-rev-avatar">AK</div>
-                        <div class="ps-rev-bubble">
-                          <div class="ps-rev-meta"><span class="ps-rev-name">A. Kagasoff</span><span class="ps-rev-time">11:31 AM</span></div>
-                          <div class="ps-rev-text">Accepted ✓ — terms in writing</div>
-                        </div>
-                      </div>
-                    </div>
+                    <span class="ps-close-rule"></span>
+                    <span class="ps-close-chip">Case closed</span>
+                  </div>
+                  <ul class="ps-close-terms">
+                    <li><span class="ps-close-tick">✓</span><span>Compensation secured</span></li>
+                    <li><span class="ps-close-tick">✓</span><span>Costs covered</span></li>
+                    <li><span class="ps-close-tick">✓</span><span>Guidance for what&rsquo;s next</span></li>
+                  </ul>
+                  <div class="ps-close-foot">
+                    <span><b>17+</b> Years</span><em>·</em>
+                    <span><b>5.0</b> Rating</span><em>·</em>
+                    <span><b>291</b> Reviews</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </li>
-
-        <li class="process-card">
-          <a class="pc-head" href="#contact">
-            <span class="pc-glyph" aria-hidden="true">{glyphs[3]}</span>
-            <span class="pc-step">Step 04<span class="pc-cue" aria-hidden="true">→</span></span>
-            <h3 class="pc-title" set:html={process[3].title} />
-            <span class="pc-hint" aria-hidden="true">
-              <span class="pc-hint-open">Tap to learn more</span>
-              <span class="pc-hint-close">Tap to close</span>
-            </span>
-          </a>
-          <div class="pc-window">
-            <div class="pc-reveal">
-              <p class="pc-body" set:html={process[3].body} />
+          <p class="pc-step">{steps[3]}</p>
+          <h3 class="pc-title" set:html={process[3].title} />
+          <p class="pc-body" set:html={process[3].body} />
+          <button type="button" class="pc-toggle" aria-expanded="false" aria-controls="pc-more-4">
+            <span>More</span>
+            <svg class="pc-chev" viewBox="0 0 12 8" width="11" height="7" fill="none" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div id="pc-more-4" class="pc-morewrap">
+            <div class="pc-morein">
               <p class="pc-more">{mores[3]}</p>
               <span class="pc-meta">{metas[3]}</span>
-              <a class="pc-link-out" href="#contact">Start with a free consultation →</a>
-            </div>
-            <div class="pc-visual" aria-hidden="true">
-              <div class="pc-stage">
-                <div class="ps-visual-frame ps-frame-launch">
-                  <div class="ps-launch">
-                    <div class="ps-launch-bar-top">
-                      <span class="ps-launch-lock"></span>
-                      <span class="ps-launch-domain">Smith matter — <strong>Case No. 30-2026-01412</strong></span>
-                      <span class="ps-launch-live"><span class="ps-launch-live-dot"></span>RESOLVED</span>
-                    </div>
-                    <div class="ps-launch-log">
-                      <div class="ps-launch-row done"><span class="ps-launch-check">✓</span><span class="ps-launch-step">Discovery complete</span><span class="ps-launch-time">Mar</span></div>
-                      <div class="ps-launch-row done"><span class="ps-launch-check">✓</span><span class="ps-launch-step">Motions heard</span><span class="ps-launch-time">Apr</span></div>
-                      <div class="ps-launch-row done"><span class="ps-launch-check">✓</span><span class="ps-launch-step">Mediation completed</span><span class="ps-launch-time">Jun</span></div>
-                      <div class="ps-launch-row done"><span class="ps-launch-check">✓</span><span class="ps-launch-step">Settlement negotiated</span><span class="ps-launch-time">Aug</span></div>
-                      <div class="ps-launch-row active"><span class="ps-launch-check pulse"></span><span class="ps-launch-step">Trial ready — if needed</span><span class="ps-launch-time">Held</span></div>
-                    </div>
-                    <div class="ps-launch-foot">
-                      <div class="ps-launch-stat"><span class="ps-launch-stat-n">17+</span><span class="ps-launch-stat-l">Years of experience</span></div>
-                      <div class="ps-launch-stat"><span class="ps-launch-stat-n">5.0</span><span class="ps-launch-stat-l">Google rating</span></div>
-                      <div class="ps-launch-stat"><span class="ps-launch-stat-n">291</span><span class="ps-launch-stat-l">Client reviews</span></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </li>
@@ -323,10 +292,9 @@ const glyphs = ['i.', 'ii.', 'iii.', 'iv.'];
 </section>
 
 <style is:global>
-  /* Registered so that an engine without length-by-length division in
-     calc() falls back to a usable 0.8 rather than dropping the height
-     and the transform outright. @property cannot be scoped, so it sits
-     in its own global block. */
+  /* Registered so that an engine which drops the scale declaration falls
+     back to a usable 0.8 rather than losing the transform outright.
+     @property cannot be scoped, so it sits in its own global block. */
   @property --pc-scale {
     syntax: "<number>";
     inherits: true;
@@ -339,17 +307,13 @@ const glyphs = ['i.', 'ii.', 'iii.', 'iv.'];
     --ease-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
     --pc-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-    /* fwd's type scale, inlined: the ported rules are written against it and
-       Kagasoff has no equivalent token set. */
-    --pc-t--2: clamp(0.72rem, 0.7rem + 0.1vw, 0.78rem);
-    --pc-t--1: clamp(0.82rem, 0.78rem + 0.18vw, 0.9rem);
-    --pc-t-0: clamp(0.95rem, 0.9rem + 0.22vw, 1.05rem);
-    --pc-t-1: clamp(1.1rem, 1.02rem + 0.4vw, 1.28rem);
-    --pc-t-4: clamp(2.4rem, 1.9rem + 2.6vw, 3.85rem);
     /* The paper the mockup frames are drawn on — a touch brighter than
        --color-paper so a frame reads as a sheet laid on the card. */
     --pc-sheet: #fffdf9;
+    /* A muted colour rather than a low-alpha wash: at ~20% alpha the
+       secondary text in these frames composites to about 1.5:1. */
     --pc-muted: #a39a83;
+    --pc-green: #2f9e6a;
   }
 
   @keyframes pcPulseRing {
@@ -360,1004 +324,501 @@ const glyphs = ['i.', 'ii.', 'iii.', 'iv.'];
   @keyframes pcBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 
   .process-grid-wrap { max-width: 1680px; margin-inline: auto; }
-
-  .process-grid {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    /* 1px gaps over a line-coloured backing draw the seams — a spec
-       sheet rather than four detached tiles. Cheaper than borders,
-       which would double up on wrap. */
-    gap: 1px;
-    background: var(--color-line);
-    border: 1px solid var(--color-line);
-    border-radius: 16px;
-    overflow: hidden;
-  }
+  .process-list { list-style: none; margin: 0; padding: 0; }
 
   .process-card {
-    position: relative;
-    flex: 1 1 100%;
+    display: flex;
+    flex-direction: column;
     min-width: 0;
-    display: flex;
-    flex-direction: column;
-    /* Named because the step graphic below bleeds through it and has to
-       add it back to work out how wide the card actually is. */
-    --pc-pad: clamp(1.5rem, 2.2vw, 2.25rem);
-    padding: var(--pc-pad);
-    background: var(--color-paper);
-    transition:
-      background 420ms var(--ease-soft),
-      flex-grow 620ms var(--ease-out-expo);
-  }
-  /* Accent rail across the top of the card. In the stacked layout it
-     just stands there quietly, marking the head of each step; in the
-     four-up regime it draws itself across whichever card is open. */
-  .process-card::before {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 2px;
-    background: var(--color-brasslight);
-    transform: scaleX(1);
-    opacity: 0.35;
-    transform-origin: left;
-    transition: transform 520ms var(--ease-out-expo);
-    z-index: 3;
-  }
-  @media (min-width: 640px) { .process-card { flex-basis: calc(50% - 1px); } }
-
-  .pc-head {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.4rem;
-    text-decoration: none;
-    color: inherit;
-  }
-  /* Brass rather than brasslight: the card only turns navy in the four-up
-     regime, and the lighter accent on the resting paper surface is under
-     the 3:1 WCAG 1.4.11 asks for. Brass clears it on both surfaces. */
-  .pc-head:focus-visible {
-    outline: 2px solid var(--color-brass);
-    outline-offset: 6px;
-    border-radius: 4px;
   }
 
-  /* The numeral leads the card on its own line rather than sitting
-     inline next to "Step 01" — at a quarter of the page width an inline
-     glyph costs the title a whole line of measure. */
-  .pc-glyph {
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-size: var(--pc-t-4);
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--color-brass);
-    transition: color 420ms var(--ease-soft);
-  }
+  /* ----- The words under the graphic ----- */
   .pc-step {
+    margin: 18px 0 0;
     font-family: var(--pc-mono);
-    font-size: var(--pc-t--2);
-    color: var(--color-brass);
-    letter-spacing: 0.1em;
-    font-weight: 500;
+    font-size: clamp(11px, 0.66vw, 12.5px);
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    transition: color 420ms var(--ease-soft);
+    font-weight: 500;
+    color: var(--color-brass);
   }
   .pc-title {
-    margin: 0;
+    margin: 8px 0 0;
     font-family: var(--font-serif);
-    /* Cormorant is a light face; 500 is what reads as this card's title
-       where fwd's variable display font used 350. */
+    /* Cormorant is a light face; 500 is what reads as a card title here
+       where a variable display font would use ~350. */
     font-weight: 500;
-    /* Between step-2 and step-3. Step-3 is the right weight for a card
-       this size but overshoots the measure of a collapsed column. */
-    font-size: clamp(1.55rem, 1.05rem + 1.35vw, 2.15rem);
-    letter-spacing: -0.02em;
-    line-height: 1.05;
+    font-size: clamp(20px, 1.4vw, 26px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
     color: var(--color-navy);
     text-wrap: balance;
-    transition: color 420ms var(--ease-soft);
   }
   /* :global(em), because the title is injected with set:html from
      practiceAreas — Astro's scope attribute lands on elements in this
-     template, never on nodes parsed out of a string, so a scoped `em`
-     would silently miss any emphasis added to that data later. */
+     template, never on nodes parsed out of a string. */
   .pc-title :global(em) { font-style: italic; color: var(--color-brass); }
-  /* Inline in the step label and always present, rather than an arrow
-     that only exists on hover. The head is a link at every width, so
-     its affordance has to be there at every width too. */
-  .pc-cue {
-    display: inline-block;
-    margin-left: 0.5rem;
-    transition: transform 380ms var(--ease-out-expo);
-  }
-  .process-card:hover .pc-cue,
-  .process-card:focus-within .pc-cue { transform: translateX(3px); }
-
-  /* ============================================================
-     THE COPY.
-
-     Default — below 1200px and under reduced motion at any width —
-     it is a disclosure in the card's flow, between the head and the
-     graphic. The four-up query at the bottom lifts it onto a navy
-     sheet that slides in from the left instead.
-     ============================================================ */
-  .pc-window {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    /* Grows into whatever height the tallest card in the row forces, so
-       the free space lands above the graphic rather than below it. */
-    flex: 1 1 auto;
-    min-height: 0;
-    /* The graphic floats inside the window, so the card's own padding is
-       the inset on the left, the right and the bottom, and this top
-       margin is the only one that has to be declared. */
-    margin: var(--pc-pad) 0 0;
-  }
-  /* Takes the slack, which puts the four graphics on one baseline across
-     a row whose cards carry different amounts of copy. */
-  .pc-reveal {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    /* No horizontal padding: it would indent the copy past the title it
-       belongs to. */
-    padding: 0 0 1.75rem;
-  }
   .pc-body {
-    margin: 0;
-    color: var(--color-ink);
+    margin: 10px 0 0;
     font-family: var(--font-sans);
     font-weight: 300;
-    font-size: var(--pc-t-1);
-    line-height: 1.45;
+    font-size: clamp(14.5px, 0.88vw, 16.5px);
+    line-height: 1.6;
+    color: var(--color-ink);
     text-wrap: pretty;
   }
-  /* A step below .pc-body, so the card reads title → summary → detail,
-     and a step above the .pc-meta caption line. */
+
+  /* ----- The disclosure ----- */
+  .pc-toggle {
+    /* margin-top: auto keeps the four buttons on one line across a row
+       of cards whose bodies wrap to different numbers of lines. */
+    margin-top: auto;
+    padding: 12px 0 0;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    font-family: var(--pc-mono);
+    font-size: clamp(10.5px, 0.62vw, 12px);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-brass);
+    /* A quiet text button, but still a real 44px target on touch. */
+    min-height: 44px;
+  }
+  .pc-toggle:focus-visible {
+    outline: 2px solid var(--color-brass);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+  .pc-chev {
+    display: block;
+    transition: transform 0.35s var(--ease-out-expo);
+  }
+  .pc-toggle[aria-expanded="true"] .pc-chev { transform: rotate(180deg); }
+
+  /* Clipped by max-height, never display:none and never hidden, so a
+     screen reader reads all four cards in full whatever is open. */
+  .pc-morewrap {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s var(--ease-out-expo);
+  }
+  /* A ceiling, not a height — it only has to clear the tallest of the
+     four blocks, and a transition needs a length to land on. */
+  .pc-morewrap.is-open { max-height: 22rem; }
+  .pc-morein {
+    padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
   .pc-more {
     margin: 0;
-    color: var(--color-ink);
     font-family: var(--font-sans);
     font-weight: 300;
-    font-size: var(--pc-t-0);
-    line-height: 1.55;
+    font-size: clamp(13.5px, 0.8vw, 15px);
+    line-height: 1.6;
+    color: var(--color-ink);
     text-wrap: pretty;
   }
   .pc-meta {
     display: block;
     font-family: var(--pc-mono);
-    font-size: var(--pc-t--1);
+    font-size: clamp(11px, 0.66vw, 12.5px);
     letter-spacing: 0.05em;
     color: var(--pc-muted);
   }
-  /* Both of these belong to the tap disclosure only. Above the breakpoint
-     the card opens on hover and its head is already the link, so a "tap"
-     instruction would be wrong and a second link redundant. */
-  .pc-hint,
-  .pc-link-out { display: none; }
 
   /* ============================================================
-     PROCESS STEP GRAPHICS — the resting state of every card.
+     THE GRAPHICS.
 
-     These are what a card *is* when nobody is touching it, so the
-     job here is legibility at rest, not on expand.
-
-     They lay out at a fixed design size and get scaled to the card
-     rather than reflowed into it — reflowing keeps the 10–13px mono
-     at full size inside a quarter-width box and tears every one of
-     these compositions apart.
-
-     The design box is 470 × 500, which is the box these compositions
-     were drawn in.
-
-     It was briefly 410 × 316 in fwd — landscape, to fit a card that was
-     not tall enough for a portrait graphic — and the missing height came
-     out of the CONTENT: the calendar lost its fifth week and the log
-     lost a row. The card is sized for the graphic instead, so nothing
-     has to be deleted and nothing is enlarged past the size it was
-     drawn at.
-
-     The scale comes from a container query on .pc-visual (not on the
-     card) so that it tracks the *graphic column* as the card opens and
-     the text panel pushes in from the left, frame by frame, with no
-     transition of its own.
+     Each is drawn in a fixed 470 x 360 box and scaled to the column
+     it lands in — see the fitter script. The box never changes size,
+     so nothing inside one may use a viewport or container unit.
      ============================================================ */
   .pc-visual {
     --stage-w: 470px;
-    --stage-h: 500px;
-    container-type: inline-size;
+    --stage-h: 360px;
     position: relative;
+    /* Unitless on purpose — `470px / 360px` is not a valid
+       aspect-ratio — so keep these two in step with the vars above. */
+    aspect-ratio: 470 / 360;
+    /* Gives the box a definite size on both axes, which is what lets
+       the fitter constrain the height as well as the width. */
+    container-type: size;
     overflow: hidden;
-    /* Stacked layout: the window takes the composition's own aspect
-       rather than a fixed crop height, so a full-width card shows the
-       whole graphic instead of the top 60% of it. Unitless on purpose
-       — `470px / 500px` is not a valid aspect-ratio — so keep these
-       two numbers in step with --stage-w / --stage-h above. */
-    height: auto;
-    aspect-ratio: 470 / 500;
-    /* No paper here. The frame floats and carries its own sheet, border
-       and shadow; a background on the column as well draws a second
-       panel behind the frame, which shows the moment the column is
-       taller than the frame. */
-    background: transparent;
     border-radius: 14px;
+    /* No background: the frame carries its own sheet and shadow, and a
+       second panel behind it would show at the edges. */
+    background: transparent;
   }
   .pc-stage {
-    /* Declared on the stage, not on .pc-visual: an element cannot query
-       itself, and .pc-visual is the container. */
-    /* Dividing a length by a length is not something calc() will do, so a
-       bare `100cqi / var(--stage-w)` is dropped outright and every mockup
-       renders at the @property fallback of 0.8 — 376px of artwork inside a
-       292px column on a phone, which is visible overflow. The ratio is
-       measured in JS below and written here as an inline custom property;
-       this value is only the pre-script fallback. */
+    /* Dividing a length by a length is not something calc() will do, so
+       the ratio is measured in JS and written back here as an inline
+       custom property. This value is only the pre-script fallback. */
     --pc-scale: 0.8;
     position: absolute;
-    top: 0;
+    top: 50%;
     left: 50%;
     width: var(--stage-w);
     height: var(--stage-h);
-    margin-left: calc(var(--stage-w) / -2);
+    margin: calc(var(--stage-h) / -2) 0 0 calc(var(--stage-w) / -2);
     transform: scale(var(--pc-scale));
-    transform-origin: top center;
+    transform-origin: center center;
   }
 
-  /* The frame chassis. Floating rather than seated: the frame is inset
-     from the card on every side by the card's own --pc-pad, so head room
-     and foot room are the same number and match the left and right
-     margins. Seated, it met the card's bottom edge and the whole of the
-     slack in the card landed above it in one dead band. */
   .ps-visual-frame {
     position: relative;
     width: 100%;
     height: 100%;
-    background: var(--pc-sheet);
+    /* The sheet, warming into cream at the foot — the same wash on all
+       four so the set reads as one family. */
+    background: linear-gradient(180deg, var(--pc-sheet) 0%, var(--color-cream) 100%);
     border-radius: 14px;
     border: 1px solid var(--color-line);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 18px 44px -26px rgb(22 36 61 / 0.35);
   }
   .ps-visual-frame > * { flex: 1; min-height: 0; }
+  /* Every composition works to the same 24px margin inside the frame. */
+  .ps-call,
+  .ps-board,
+  .ps-conv,
+  .ps-close {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  .ps-call ul,
+  .ps-close ul { list-style: none; margin: 0; padding: 0; }
 
-  /* ------------------------------------------------------------
-     A note on the constants below.
-
-     fwd wrote the internals of these compositions in vw- and
-     vh-based clamps, left over from when the graphics laid out in
-     the page flow. They do not lay out in the flow here: each one
-     is drawn in a fixed 470 × 500 box and then *scaled* to its
-     column, so a viewport unit inside that box re-proportions the
-     artwork by browser window while the box itself never changes
-     size — the same composition came out with 20px padding on a
-     phone and 32px on a desktop, and one comment's trailing ✓
-     wrapped to its own line at 1440 but not at 390.
-
-     Every one of them is frozen at the value it resolved to at the
-     size these were drawn: the clamp ceilings. The two viewport
-     media queries fwd had inside the compositions (restacking the
-     case file to one column, and the stat footer to one) are gone
-     for the same reason.
-     ------------------------------------------------------------ */
-
-  /* ----- Step 01: free consultation — booking calendar ----- */
-  .ps-frame-cal { background: linear-gradient(180deg, #fffdf9 0%, #f3efe6 100%); }
-  .ps-cal {
-    position: relative;
-    padding: 2rem;
-    display: flex; flex-direction: column;
-    /* flex-start, not center: the foot is seated below rather than
-       absolutely positioned, so the column packs from the top and the
-       foot takes the slack via margin-top: auto. */
-    justify-content: flex-start;
-    /* 1.25rem where the other three compositions use 1.5rem: August 2026
-       needs six rows to reach the 31st, and at 1.5rem the grid ran 3px
-       past the 500px design box, which the frame then clipped. Four
-       pixels off each of the three gaps buys that back with room to
-       spare, and at this size the difference is not visible against the
-       other steps. */
-    gap: 1.25rem;
-  }
-  .ps-cal-head {
-    display: flex; justify-content: space-between; align-items: flex-end;
-    gap: 1rem;
-  }
-  .ps-cal-head-l { display: flex; flex-direction: column; gap: 0.35rem; }
-  .ps-cal-eyebrow {
-    font-family: var(--pc-mono); font-size: 11px;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--pc-muted);
-  }
-  .ps-cal-month {
-    margin: 0; font-family: var(--font-serif); font-weight: 600;
-    font-size: 2rem; line-height: 1;
-    color: var(--color-navy); letter-spacing: -0.015em;
-  }
-  .ps-cal-pill {
-    font-family: var(--pc-mono); font-size: 10px;
-    letter-spacing: 0.12em; color: var(--color-brass);
-    background: var(--pc-sheet); border: 1px solid var(--color-line);
-    padding: 6px 14px; border-radius: 999px; white-space: nowrap;
-  }
-  .ps-cal-dow {
-    display: grid; grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
-    font-family: var(--pc-mono); font-size: 11px;
-    color: var(--pc-muted); letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-  .ps-cal-dow span { text-align: center; padding: 4px 0; }
-  .ps-cal-grid {
-    display: grid; grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
-  }
-  .ps-cal-grid span {
-    aspect-ratio: 1.4 / 1;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--pc-sheet);
-    border: 1px solid var(--color-line);
-    border-radius: 6px;
-    font-family: var(--pc-mono); font-size: 12px;
-    color: var(--color-ink);
-    position: relative;
-    transition: transform 220ms var(--ease-soft);
-  }
-  /* A muted colour, not a low-alpha wash: at 22% alpha the out-of-month
-     days composite to ~1.5:1 against the frame's gradient. */
-  .ps-cal-grid .off {
-    background: transparent; border-color: transparent;
-    color: var(--pc-muted);
-  }
-  .ps-cal-grid .avail {
-    background: #f6efdf;
-    border-color: rgba(201, 162, 83, 0.4);
-    color: var(--color-navy);
-    cursor: pointer;
-  }
-  .ps-cal-grid .picked {
-    background: var(--color-brass);
-    border-color: var(--color-brass);
-    color: var(--pc-sheet);
-    font-weight: 500;
-    box-shadow: 0 8px 20px -8px rgba(156, 122, 60, 0.55);
-  }
-  .ps-cal-grid .picked::after {
-    content: "";
-    position: absolute; inset: -3px;
-    border: 2px solid var(--color-brass);
-    border-radius: 8px;
-    opacity: 0;
-    animation: pcPulseRing 2.4s var(--ease-soft) infinite;
-  }
-  /* Seated as a full-width bar rather than floating bottom-right: it
-     fills the band of bare paper the restored five-week grid leaves, and
-     it is what gives this composition the same bottom margin as the
-     other three. */
-  .ps-cal-foot {
-    position: static;
-    margin-top: auto;
-    display: flex; align-items: center; justify-content: flex-end;
-  }
-  .ps-cal-slot {
-    width: 100%;
-    display: flex; align-items: center; gap: 12px;
+  /* Shared card chassis for the small panels inside the frames. */
+  .ps-call-bar,
+  .ps-call-row,
+  .ps-ev,
+  .ps-conv-strip {
     background: var(--pc-sheet);
     border: 1px solid var(--color-line);
     border-radius: 10px;
-    padding: 12px 16px;
-    box-shadow:
-      0 18px 44px -16px rgba(22, 36, 61, 0.30),
-      0 6px 16px -10px rgba(22, 36, 61, 0.20);
-  }
-  .ps-cal-slot-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: #2f9e6a;
-    box-shadow: 0 0 0 4px rgba(47, 158, 106, 0.18);
-    animation: pcPulseRing 2s var(--ease-soft) infinite;
-    flex-shrink: 0;
-  }
-  .ps-cal-slot-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .ps-cal-slot-day {
-    font-family: var(--font-serif); font-weight: 600;
-    color: var(--color-navy); font-size: 14px; letter-spacing: -0.01em;
-  }
-  .ps-cal-slot-time {
-    font-family: var(--pc-mono); font-size: 11px;
-    color: var(--pc-muted); letter-spacing: 0.05em;
-  }
-  .ps-cal-slot-cta {
-    font-family: var(--pc-mono); font-size: 11px;
-    color: var(--color-brass); letter-spacing: 0.06em;
-    margin-left: auto; padding-left: 8px; white-space: nowrap;
+    box-shadow: 0 12px 28px -18px rgb(22 36 61 / 0.22);
   }
 
-  /* ----- Step 02: strategy & preparation — annotated case file ----- */
-  .ps-frame-rev { background: linear-gradient(180deg, #fffdf9 0%, #f3efe6 100%); }
-  .ps-rev {
-    display: grid;
-    /* Two columns unconditionally: the stage is a fixed 470px box that is
-       scaled, not reflowed, so its internal layout must not depend on the
-       viewport. (fwd gated this on a viewport media query left over from
-       when these graphics laid out in the flow.) */
-    /* 1.5fr, not fwd's 1.7fr: the comment lines here are real sentences
-       rather than three-word notes, and at 1.7 the trailing ✓ of each one
-       wrapped onto a line of its own. */
-    grid-template-columns: 1.5fr 1fr;
-    gap: 1.5rem;
-    padding: 2rem;
-    align-content: stretch;
-    align-items: stretch;
-  }
-  .ps-rev-doc {
-    background: var(--pc-sheet);
-    border: 1px solid var(--color-line);
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 18px 40px -20px rgba(22, 36, 61, 0.22);
-    display: flex; flex-direction: column;
-  }
-  .ps-rev-doc-head {
-    display: flex; justify-content: space-between; align-items: center;
+  /* ----- Step 01: the consultation call ----- */
+  .ps-call { gap: 16px; }
+  .ps-call-bar {
+    display: flex;
+    align-items: center;
     gap: 12px;
-    padding: 10px 16px;
-    background: var(--color-cream);
-    border-bottom: 1px solid var(--color-line);
-    font-family: var(--pc-mono); font-size: 11px;
-    color: var(--pc-muted); letter-spacing: 0.05em;
+    padding: 11px 14px;
   }
-  .ps-rev-doc-tab {
-    color: var(--color-navy); font-weight: 500;
-    min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  }
-  .ps-rev-doc-saved { flex-shrink: 0; white-space: nowrap; }
-  .ps-rev-doc-saved::before {
-    content: ""; display: inline-block;
-    width: 6px; height: 6px; border-radius: 50%;
-    background: #2f9e6a; margin-right: 6px;
-    vertical-align: middle;
-  }
-  .ps-rev-doc-body {
-    flex: 1;
-    padding: 1.75rem;
-    display: flex; flex-direction: column; gap: 16px;
-    min-height: 240px;
-  }
-  .ps-rev-eye { width: 70px; height: 8px; background: var(--color-brass); border-radius: 3px; }
-  .ps-rev-h { width: 70%; height: 18px; background: rgba(22, 36, 61, 0.75); border-radius: 4px; margin-bottom: 6px; }
-  .ps-rev-h.sub { width: 44%; height: 13px; background: rgba(22, 36, 61, 0.55); margin-top: 16px; margin-bottom: 2px; }
-  .ps-rev-line {
-    position: relative;
-    height: 9px; border-radius: 3px;
-    background: rgba(22, 36, 61, 0.16);
-  }
-  .ps-rev-line.edit {
-    background: rgba(156, 122, 60, 0.14);
-    outline: 1px dashed rgba(156, 122, 60, 0.45);
-    outline-offset: 2px;
-  }
-  .ps-rev-caret {
-    position: absolute;
-    right: -2px; top: -3px; bottom: -3px;
-    width: 2px; background: var(--color-brass);
-    animation: pcBlink 1s steps(1) infinite;
-  }
-  .ps-rev-line.struck {
-    background: transparent;
-    border-top: 1px solid #b5654f;
-    height: 0;
-    margin-block: 8px;
-  }
-  .ps-rev-line.struck::before {
-    content: "";
-    position: absolute; left: 0; right: 0; top: -5px;
-    height: 9px;
-    background: linear-gradient(transparent 40%, rgba(181, 101, 79, 0.4) 40%, rgba(181, 101, 79, 0.4) 60%, transparent 60%);
-    border-radius: 3px;
-  }
-  .ps-rev-line.added {
-    background: rgba(47, 158, 106, 0.2);
-    border-left: 2px solid #2f9e6a;
-    padding-left: 4px;
-  }
-  .ps-rev-comments {
-    display: flex; flex-direction: column;
-    justify-content: center;
-    gap: 28px;
-  }
-  .ps-rev-comment {
-    display: flex; align-items: flex-start; gap: 10px;
-    background: var(--pc-sheet);
-    border: 1px solid var(--color-line);
-    border-radius: 10px;
-    padding: 12px 14px;
-    box-shadow: 0 12px 28px -16px rgba(22, 36, 61, 0.18);
-    position: relative;
-  }
-  .ps-rev-comment.offset { margin-left: 24px; }
-  .ps-rev-comment::before {
-    content: "";
-    position: absolute;
-    left: -8px; top: 16px;
-    width: 14px; height: 1px;
-    background: rgba(22, 36, 61, 0.18);
-  }
-  .ps-rev-avatar {
-    width: 28px; height: 28px; border-radius: 50%;
-    background: var(--color-brass); color: var(--pc-sheet);
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-serif); font-weight: 600; font-size: 12px;
+  .ps-call-disc {
+    width: 38px; height: 38px; border-radius: 50%;
     flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--color-navy);
+    color: var(--color-gold);
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 19px;
+    line-height: 1;
   }
-  .ps-rev-avatar.alt { background: var(--color-gold); color: var(--color-navy); }
-  .ps-rev-avatar.muted { background: rgba(22, 36, 61, 0.45); color: var(--pc-sheet); }
-  .ps-rev-bubble { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
-  .ps-rev-meta { display: flex; gap: 8px; align-items: baseline; flex-wrap: nowrap; }
-  .ps-rev-name { font-family: var(--font-serif); font-weight: 600; font-size: 13px; color: var(--color-navy); white-space: nowrap; }
-  .ps-rev-time { font-family: var(--pc-mono); font-size: 10px; color: var(--pc-muted); white-space: nowrap; margin-left: auto; }
-  .ps-rev-text { font-family: var(--font-serif); font-weight: 400; font-style: italic; color: var(--color-ink); font-size: 13px; line-height: 1.3; }
-
-  /* ----- Step 03: negotiation or hearing — offer/counter thread ----- */
-  .ps-frame-neg { background: linear-gradient(180deg, #fffdf9 0%, #f3efe6 100%); }
-  .ps-neg {
-    padding: 2rem;
-    display: flex; flex-direction: column;
-    gap: 1.5rem;
+  .ps-call-id { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .ps-call-name {
+    font-family: var(--font-serif); font-weight: 600;
+    font-size: 15px; letter-spacing: -0.01em;
+    color: var(--color-navy);
   }
-  /* The thread absorbs the slack the way the milestone log does in step
-     04, so the bubbles spread to fill the 470 × 500 canvas instead of
-     stacking at the top of it. */
-  .ps-neg-thread {
+  .ps-call-sub {
+    font-family: var(--pc-mono); font-size: 10px;
+    letter-spacing: 0.11em; color: var(--pc-muted);
+  }
+  .ps-call-live {
+    margin-left: auto; flex-shrink: 0;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--pc-green);
+    box-shadow: 0 0 0 4px rgb(47 158 106 / 0.18);
+    animation: pcPulseRing 2s var(--ease-soft) infinite;
+  }
+  /* The checklist takes the frame's slack so the three rows spread over
+     the middle of the composition rather than stacking at its top. */
+  .ps-call-list {
     flex: 1;
     display: flex; flex-direction: column;
     justify-content: space-between;
-    gap: 18px;
+    gap: 10px;
   }
-  .ps-neg-dot {
-    width: 10px; height: 10px; border-radius: 50%;
-    background: var(--color-brasslight);
-    box-shadow: 0 0 0 4px rgba(201, 162, 83, 0.18);
-    animation: pcPulseRing 2s var(--ease-soft) infinite;
-    flex-shrink: 0;
-  }
-  .ps-neg-pill {
-    display: inline-flex; align-items: center;
-    font-family: var(--pc-mono); font-size: 10px;
-    letter-spacing: 0.16em;
-    background: rgba(227, 201, 147, 0.3); color: var(--color-brass);
-    border: 1px solid rgba(201, 162, 83, 0.45);
-    padding: 4px 10px; border-radius: 999px;
-    white-space: nowrap;
-  }
-  .ps-neg .ps-rev-comment.accepted {
-    border-left: 2px solid #2f9e6a;
-  }
-  .ps-neg .ps-rev-comment.accepted .ps-rev-text { color: #1f6b4a; }
-
-  /* ----- Step 04: resolution, or trial — case-milestone log ----- */
-  .ps-frame-launch { background: linear-gradient(180deg, #fffdf9 0%, #f3efe6 100%); }
-  /* The frame is taller than this content, and space-between would dump
-     all the slack into the two gaps. The log absorbs it instead (below),
-     which keeps the gaps at the same value as every other step and still
-     fills the frame the way steps 01–03 do. */
-  .ps-launch {
-    padding: 2rem;
-    display: flex; flex-direction: column;
-    gap: 1.5rem;
-  }
-  .ps-launch-bar-top {
+  .ps-call-row {
     display: flex; align-items: center; gap: 12px;
-    background: var(--pc-sheet);
-    border: 1px solid var(--color-line);
-    border-radius: 10px;
-    padding: 12px 16px;
-    box-shadow: 0 12px 30px -16px rgba(22, 36, 61, 0.20);
+    padding: 12px 14px;
   }
-  .ps-launch-lock {
-    width: 10px; height: 10px; border-radius: 50%;
-    background: #2f9e6a;
-    box-shadow: 0 0 0 4px rgba(47, 158, 106, 0.18);
-    animation: pcPulseRing 2s var(--ease-soft) infinite;
+  .ps-call-tick {
+    width: 20px; height: 20px; border-radius: 50%;
     flex-shrink: 0;
-  }
-  .ps-launch-domain {
-    flex: 1; min-width: 0;
-    font-family: var(--pc-mono); font-size: 12px;
-    color: var(--pc-muted); letter-spacing: 0.01em;
-  }
-  .ps-launch-domain strong { color: var(--color-navy); font-weight: 500; }
-  .ps-launch-live {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-family: var(--pc-mono); font-size: 10px;
-    letter-spacing: 0.16em;
-    background: rgba(47, 158, 106, 0.12); color: #1f6b4a;
-    border: 1px solid rgba(47, 158, 106, 0.35);
-    padding: 4px 10px; border-radius: 999px;
-    white-space: nowrap;
-  }
-  .ps-launch-live-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: #2f9e6a;
-    animation: pcBlink 1.2s steps(1) infinite;
-  }
-  .ps-launch-log {
-    flex: 1;
-    display: flex; flex-direction: column;
-    background: var(--pc-sheet);
-    border: 1px solid var(--color-line);
-    border-radius: 10px;
-    padding: 8px 4px;
-    font-family: var(--pc-mono); font-size: 13px;
-    box-shadow: 0 12px 30px -16px rgba(22, 36, 61, 0.16);
-  }
-  .ps-launch-row {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 26px 1fr auto;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 16px;
-    border-bottom: 1px solid rgba(22, 36, 61, 0.05);
-  }
-  .ps-launch-row:last-child { border-bottom: 0; }
-  .ps-launch-check {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 18px; height: 18px; border-radius: 50%;
-    background: #2f9e6a; color: var(--pc-sheet);
+    display: flex; align-items: center; justify-content: center;
     font-size: 11px; line-height: 1;
+    background: var(--pc-green);
+    color: var(--pc-sheet);
   }
-  .ps-launch-row.active .ps-launch-check {
-    background: transparent; color: var(--color-brass);
-    border: 0; padding: 0;
+  .ps-call-label {
+    font-family: var(--font-serif); font-size: 14px;
+    color: var(--color-navy);
   }
-  .ps-launch-check.pulse {
-    background: transparent;
-    width: 18px; height: 18px;
-    position: relative;
-  }
-  .ps-launch-check.pulse::before,
-  .ps-launch-check.pulse::after {
-    content: "";
-    position: absolute; inset: 5px;
-    border-radius: 50%;
-    background: var(--color-brass);
-  }
-  .ps-launch-check.pulse::after {
-    inset: 0;
+  /* The row being worked through: ringed in brass, no check yet. */
+  .ps-call-row.now { border-color: rgb(201 162 83 / 0.55); }
+  .ps-call-row.now .ps-call-tick {
     background: transparent;
     border: 1.5px solid var(--color-brass);
-    opacity: 0;
-    animation: pcPulseRing 1.8s var(--ease-soft) infinite;
+    animation: pcPulseRing 2.4s var(--ease-soft) infinite;
   }
-  .ps-launch-step { color: var(--color-navy); }
-  .ps-launch-row.active .ps-launch-step { color: var(--color-brass); }
-  .ps-launch-time {
-    font-size: 11px; letter-spacing: 0.06em;
-    color: var(--pc-muted);
-    text-transform: uppercase;
+  .ps-call-row.now .ps-call-label { color: var(--color-brass); }
+  .ps-call-chips { display: flex; gap: 10px; }
+  .ps-chip {
+    flex: 1;
+    text-align: center;
+    padding: 8px 10px;
+    border-radius: 999px;
+    border: 1px solid rgb(201 162 83 / 0.45);
+    background: rgb(227 201 147 / 0.16);
+    font-family: var(--pc-mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--color-brass);
+    white-space: nowrap;
   }
-  /* Three across, unconditionally — see the note on .ps-rev's columns:
-     the stage is scaled, not reflowed, so a viewport media query here
-     would restack the stats inside a box that never changes size. */
-  .ps-launch-foot {
+
+  /* ----- Step 02: the evidence board ----- */
+  .ps-board { gap: 18px; }
+  .ps-board-grid {
+    flex: 1;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr 1fr;
     gap: 12px;
   }
-  .ps-launch-stat {
-    background: var(--pc-sheet);
-    border: 1px solid var(--color-line);
-    border-radius: 10px;
-    padding: 14px 16px;
-    display: flex; flex-direction: column; gap: 4px;
+  .ps-ev {
+    padding: 14px;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
   }
-  .ps-launch-stat-n {
+  .ps-ev-label {
     font-family: var(--font-serif); font-weight: 600;
-    font-size: 1.7rem;
+    font-size: 14px; line-height: 1.2;
     color: var(--color-navy);
-    letter-spacing: -0.02em;
-    line-height: 1;
   }
-  /* 9px, not fwd's 10: these labels are longer than fwd's ("Years of
-     experience" against "uptime"), and at 10px the two-line one pushed
-     the composition past the 500px design box, which the frame then
-     clipped. This is decorative artwork inside an aria-hidden stage —
-     the real 17+/5.0/291 stats are set at body size elsewhere on the
-     page — so the small size costs nothing that is read. */
-  .ps-launch-stat-l {
+  .ps-ev-chip {
+    align-self: flex-start;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 9px;
+    border-radius: 999px;
     font-family: var(--pc-mono); font-size: 9px;
-    color: var(--pc-muted); letter-spacing: 0.06em;
-    text-transform: uppercase;
-    line-height: 1.3;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    white-space: nowrap;
   }
+  .ps-ev-chip.in {
+    background: rgb(47 158 106 / 0.12);
+    border: 1px solid rgb(47 158 106 / 0.35);
+    color: #1f6b4a;
+  }
+  .ps-ev-chip.out {
+    background: rgb(227 201 147 / 0.2);
+    border: 1px solid rgb(201 162 83 / 0.45);
+    color: var(--color-brass);
+  }
+  .ps-ev-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--color-brass);
+    animation: pcBlink 1.4s steps(1) infinite;
+  }
+  .ps-rail { display: flex; flex-direction: column; gap: 9px; }
+  .ps-rail-label {
+    font-family: var(--pc-mono); font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--pc-muted);
+  }
+  .ps-rail-track {
+    height: 7px; border-radius: 999px;
+    background: rgb(22 36 61 / 0.09);
+    overflow: hidden;
+  }
+  .ps-rail-fill {
+    display: block;
+    width: 70%; height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--color-brass), var(--color-brasslight));
+  }
+  .ps-rail-caption {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: 14px; color: var(--color-ink);
+  }
+
+  /* ----- Step 03: three rounds, converging ----- */
+  .ps-conv { gap: 18px; }
+  .ps-conv-rounds {
+    flex: 1;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .ps-round { display: flex; flex-direction: column; gap: 7px; }
+  .ps-round-label {
+    font-family: var(--pc-mono); font-size: 9.5px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--pc-muted);
+  }
+  .ps-bar-row {
+    display: grid;
+    grid-template-columns: 82px 1fr;
+    align-items: center;
+    gap: 10px;
+  }
+  .ps-bar-label {
+    font-family: var(--pc-mono); font-size: 9.5px;
+    letter-spacing: 0.04em;
+    color: rgb(22 36 61 / 0.6);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .ps-bar-track {
+    height: 10px;
+    border-radius: 999px;
+    background: rgb(22 36 61 / 0.07);
+  }
+  .ps-bar-fill {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+  }
+  .ps-bar-fill.them { background: rgb(22 36 61 / 0.38); }
+  .ps-bar-fill.us {
+    background: linear-gradient(90deg, var(--color-brass), var(--color-brasslight));
+  }
+  .ps-conv-strip {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px;
+    border-color: rgb(47 158 106 / 0.4);
+  }
+  .ps-conv-check {
+    width: 22px; height: 22px; border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--pc-green); color: var(--pc-sheet);
+    font-size: 12px; line-height: 1;
+  }
+  .ps-conv-title {
+    font-family: var(--font-serif); font-weight: 600;
+    font-size: 15px; color: var(--color-navy);
+    letter-spacing: -0.01em;
+  }
+  .ps-conv-note {
+    margin-left: auto;
+    font-family: var(--pc-mono); font-size: 9.5px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--pc-muted);
+    white-space: nowrap;
+  }
+
+  /* ----- Step 04: the matter, closed ----- */
+  .ps-close { gap: 18px; }
+  .ps-close-banner {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 10px;
+  }
+  .ps-close-crest { display: flex; align-items: center; gap: 14px; }
+  /* Two arcs, drawn as thirds of a ring — a laurel without an SVG. */
+  .ps-arc {
+    width: 15px; height: 42px;
+    border: 1.5px solid var(--color-brass);
+    border-radius: 50%;
+    opacity: 0.6;
+  }
+  .ps-arc.l {
+    border-top-color: transparent;
+    border-right-color: transparent;
+    transform: rotate(-16deg);
+  }
+  .ps-arc.r {
+    border-top-color: transparent;
+    border-left-color: transparent;
+    transform: rotate(16deg);
+  }
+  .ps-close-word {
+    font-family: var(--font-serif); font-weight: 600;
+    font-size: 38px; line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--color-navy);
+  }
+  /* A double rule: the element is the upper line, its ::after the lower. */
+  .ps-close-rule {
+    position: relative;
+    width: 128px; height: 1px;
+    background: rgb(156 122 60 / 0.6);
+  }
+  .ps-close-rule::after {
+    content: "";
+    position: absolute;
+    left: 22px; right: 22px; top: 4px;
+    height: 1px;
+    background: rgb(156 122 60 / 0.3);
+  }
+  .ps-close-chip {
+    margin-top: 2px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid rgb(201 162 83 / 0.45);
+    background: rgb(227 201 147 / 0.18);
+    font-family: var(--pc-mono); font-size: 9.5px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--color-brass);
+  }
+  .ps-close-terms {
+    flex: 1;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+  }
+  .ps-close-terms li {
+    display: flex; align-items: center; gap: 11px;
+    font-family: var(--font-serif); font-size: 14px;
+    color: var(--color-navy);
+  }
+  .ps-close-tick {
+    width: 19px; height: 19px; border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--pc-green); color: var(--pc-sheet);
+    font-size: 10px; line-height: 1;
+  }
+  .ps-close-foot {
+    display: flex; align-items: baseline; justify-content: center;
+    gap: 9px;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-line);
+    font-family: var(--pc-mono); font-size: 9.5px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--pc-muted);
+    white-space: nowrap;
+  }
+  .ps-close-foot b {
+    font-family: var(--font-serif); font-weight: 600;
+    font-size: 15px; letter-spacing: 0;
+    color: var(--color-navy);
+  }
+  .ps-close-foot em { font-style: normal; color: var(--color-line); }
 
   /* ============================================================
-     FOUR-UP — the open/closed regime.
+     REDUCED MOTION.
 
-     Everything that depends on one card being open lives inside this
-     one query, gated on width, on a real pointer, AND on the reader
-     tolerating motion. Below 1200px, on touch at any width, and under
-     reduced motion at any width, the cards fall through to the stacked
-     layout above: head, copy, graphic, no hover state at all.
-
-     That gate covers the *layout* only. The mockups' own loops — the
-     pulsing rings and the blinking carets — are not in this query and
-     have to be stopped separately; see the reduced-motion block at the
-     end of this stylesheet.
-
-     The reveal is horizontal, not vertical. The window is a two-column
-     row — text panel first, graphic second — and opening a card grows
-     the panel while the card itself grows. Nothing is ever laid over
-     the graphic; the graphic is pushed across, and the numbers below
-     are set so that it comes out fractionally larger on open and can
-     never come out smaller.
-
-     It sits at the end of the section on purpose — it overrides the
-     stacked rules for .pc-window, .pc-visual and .pc-reveal at the same
-     specificity, so it has to come after them.
-
-     1200, not 1040. At 1040 the three cards that yield are already at
-     the width of the longest word in their own titles, so an opening
-     card has nothing to take and does not grow at all.
-     ============================================================ */
-  @media (min-width: 1200px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    .process-grid { flex-wrap: nowrap; container-type: inline-size; }
-    .process-card {
-      flex: 1 1 0;
-      /* `height` rather than `min-height` because the copy panel is a
-         real in-flow flex item: at a resting width of 0 its text wraps
-         to one word per line, and against a min-height the card would
-         grow to 1,600px to fit it. A definite height means .pc-window's
-         `overflow: hidden` is what deals with that.
-
-         A quarter of the row is ~0.25vw wide, so a 470:500 graphic on it
-         is ~0.266vw tall, and the ~10.1rem is the head and padding above
-         it, which barely moves across the range. */
-      height: clamp(30rem, 26.6vw + 10.1rem, 46rem);
-    }
-    /* Two lines reserved whatever a title actually needs, so the four
-       graphics start on one line across the row instead of two of them
-       hanging below the others. */
-    .pc-title { min-height: calc(2 * 1.05em); }
-
-    /* 2.75 is the floor, not a taste call. With the text panel at 42% of
-       the open card, the graphic keeps 58% of 2.75/5.75 = 27.7% of the
-       row against the 25% it holds at rest — so it comes out very
-       slightly larger, never smaller. Anything below ~2.68 and the
-       graphic shrinks on open, which is the one thing this layout is
-       not allowed to do. */
-    .process-card:hover,
-    .process-card:focus-within { flex-grow: 2.75; }
-
-    /* The window is everything below the head, and in this regime it is
-       a row: copy on the left, graphic on the right. Its height comes
-       from the card, so nothing inside it can move the row. */
-    .pc-window {
-      flex: 1;
-      min-height: 0;
-      overflow: hidden;
-      flex-direction: row;
-      align-items: stretch;
-    }
-
-    /* Clipped, not hidden. At rest the panel is exactly 0 wide and
-       `overflow: hidden` is the only thing keeping its copy off screen
-       — no display:none, no visibility:hidden, no hidden attribute. A
-       screen reader reads all three blocks of all four cards whatever
-       is on screen, and Tab reaches the reveal because .pc-head is a
-       real link and the card opens on :focus-within. */
-    .pc-reveal {
-      flex: 0 0 0%;
-      min-width: 0;
-      overflow: hidden;
-      justify-content: center;
-      gap: 0.5rem;
-      z-index: 2;
-      /* Vertical padding only. Horizontal padding cannot compress below
-         its own sum, so a padded panel would still be ~48px wide at a
-         flex-basis of 0 and would show a strip of navy down the left of
-         every resting card. The inset lives on the children instead. */
-      padding: 1.15rem 0;
-      background: var(--color-navydark);
-      /* The panel is inset with the graphic rather than bleeding to the
-         card's edges, so it rounds its own left corners. */
-      border-radius: 14px 0 0 14px;
-      transition: flex-basis 620ms var(--ease-out-expo);
-    }
-    .pc-reveal > * { margin-inline: 1.25rem 1rem; }
-    /* 42, not 47. The three cards that yield cannot go below the width
-       of the longest word in their own title, so an open card tops out
-       well short of what its flex-grow would otherwise buy it — and at
-       47% the graphic came out NARROWER than it is at rest, which is
-       the one thing this layout must never do. 42% keeps it a couple of
-       px wider than resting at every width the query covers. */
-    .process-card:hover .pc-reveal,
-    .process-card:focus-within .pc-reveal { flex-basis: 42%; }
-    /* The column is roughly half a card rather than a whole one, so the
-       two paragraphs each step down to keep a workable measure. The
-       strings are untouched. */
-    .pc-body { font-size: var(--pc-t--1); line-height: 1.45; }
-    .pc-more { font-size: var(--pc-t--2); line-height: 1.45; }
-
-    /* The graphic's height is no longer derived from its width. It used
-       to be: aspect-ratio against a flex-driven width. Opening a card
-       widened the column, which made the graphic taller than the window,
-       and .pc-window's overflow: hidden took the difference off evenly
-       at the top and the bottom.
-
-       Now the column simply fills the window (a definite height, since
-       the card's is definite) and the stage below scales to fit
-       whichever axis runs out first. */
-    .pc-visual {
-      flex: 1 1 0%;
-      min-width: 0;
-      align-self: stretch;
-      height: auto;
-      aspect-ratio: auto;
-      container-type: size;
-    }
-    .pc-stage {
-      --pc-scale: clamp(0.3, min(100cqi / var(--stage-w), 100cqb / var(--stage-h)), 1.6);
-      top: 50%;
-      margin-top: calc(var(--stage-h) / -2);
-      transform-origin: center center;
-    }
-
-    /* Open card: navy, and every colour set for paper has to flip. */
-    .process-card:hover,
-    .process-card:focus-within { background: var(--color-navydark); }
-    .process-card::before { transform: scaleX(0); opacity: 1; }
-    .process-card:hover::before,
-    .process-card:focus-within::before { transform: scaleX(1); }
-    .pc-body { color: var(--color-mist); }
-    .pc-more { color: rgba(200, 207, 219, 0.78); }
-    .pc-meta { color: var(--color-brasslight); }
-    .process-card:hover .pc-step,
-    .process-card:focus-within .pc-step { color: var(--color-brasslight); }
-    /* Full brasslight, not a wash — the numeral is the card's mark and
-       it should read as one. */
-    .process-card:hover .pc-glyph,
-    .process-card:focus-within .pc-glyph { color: var(--color-brasslight); }
-    .process-card:hover .pc-title,
-    .process-card:focus-within .pc-title { color: var(--color-paper); }
-    .process-card:hover .pc-title :global(em),
-    .process-card:focus-within .pc-title :global(em) { color: var(--color-brasslight); }
-    /* border-color, not border-top-color: the frame carries all four
-       sides now that it floats. */
-    .process-card:hover .ps-visual-frame,
-    .process-card:focus-within .ps-visual-frame {
-      border-color: rgb(255 255 255 / 0.14);
-      box-shadow: 0 22px 60px -30px rgb(16 27 48 / 0.7);
-    }
-  }
-
-  /* ============================================================
-     BELOW THE FOUR-UP BREAKPOINT — the copy opens on tap.
-
-     The graphic is what a card shows at rest — the same contract the
-     four-up regime keeps — and the copy is collapsed until the card is
-     tapped. Clipped by max-height, never display:none and never hidden,
-     so a screen reader still reads all four cards in full whatever is
-     open on screen.
-     ============================================================ */
-  @media (max-width: 1199px) {
-    /* Never render a composition larger than the 470px box it was drawn
-       in. An open card on a tablet is ~817px wide and the graphic
-       follows it all the way up, hitting the scale clamp's 1.6 ceiling
-       and rendering the 11px mono at 17.6px — which more than doubles
-       the height of the grid on one tap.
-
-       align-self, not margin-inline: auto — an auto cross-axis margin
-       cancels the stretch a flex item gets by default, and this one has
-       no in-flow content to size to (the stage is absolutely
-       positioned), so the column would collapse to 0x0. */
-    .pc-visual { width: 100%; max-width: var(--stage-w); align-self: center; }
-
-    .pc-reveal {
-      max-height: 0;
-      padding-block: 0;
-      overflow: hidden;
-      transition: max-height 460ms var(--ease-out-expo);
-    }
-    /* A ceiling, not a height — it only has to clear the tallest of the
-       four bodies, and a transition needs a length to land on. */
-    .process-card.is-open .pc-reveal { max-height: 32rem; padding-bottom: 1.5rem; }
-
-    /* Say what the card does, in words. The arrow alone does not read as
-       "there is more here", so each head carries the instruction and
-       swaps it for "Tap to close" once open. */
-    .pc-hint {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      margin-top: 0.55rem;
-      font-family: var(--pc-mono);
-      font-size: var(--pc-t--2);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--color-brass);
-    }
-    .pc-hint-close { display: none; }
-    .process-card.is-open .pc-hint-open { display: none; }
-    .process-card.is-open .pc-hint-close { display: inline; }
-    /* The whole head is the tap target, so give it a real one. */
-    .pc-head { min-height: 44px; cursor: pointer; }
-
-    /* The head stops navigating below the breakpoint, so the route to
-       the contact form lives inside the panel it opens. */
-    .pc-link-out {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      align-self: flex-start;
-      min-height: 44px;
-      font-family: var(--pc-mono);
-      font-size: var(--pc-t--2);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--color-brass);
-      text-decoration: none;
-    }
-
-    /* The arrow is the only affordance saying the card does something,
-       so it points down while the card is closed.
-
-       The hover selectors are repeated because the nudge-right rule
-       above is (0,3,0) and a bare .pc-cue is (0,1,0) — without them a
-       mouse user in a window under 1200px un-rotates the arrow just by
-       pointing at the card. */
-    .pc-cue,
-    .process-card:hover .pc-cue,
-    .process-card:focus-within .pc-cue { transform: rotate(90deg); }
-    .process-card.is-open .pc-cue,
-    .process-card.is-open:hover .pc-cue,
-    .process-card.is-open:focus-within .pc-cue { transform: rotate(-90deg); }
-  }
-
-  /* Two up from 600px, not the base rule's 640px, so tablets get the 2x2
-     rather than a column of full-width cards. An open card takes a whole
-     row, which leaves the fourth alone on the last one — hence flex-grow
-     0, or that card stretches to full width and reads as a second open
-     card. */
-  @media (min-width: 600px) and (max-width: 1199px) {
-    .process-card { flex: 0 1 calc(50% - 1px); }
-    .process-card.is-open { flex-basis: 100%; }
-  }
-
-  /* Phones stay one column. In a 2x2 at 390px a card is 170px wide,
-     which puts the mockup frame at 141px and its 11px mono at 3.3px —
-     and the scale has already bottomed out on the clamp's 0.3 floor, so
-     it cannot be fixed by scaling. Full width the same frame is ~293px
-     and reads. */
-  @media (max-width: 599px) {
-    .process-card,
-    .process-card.is-open { flex-basis: 100%; }
-  }
-
-  /* ============================================================
-     REDUCED MOTION — the mockups' own loops.
-
-     The four-up query above is gated on prefers-reduced-motion, so
-     the card layout already stands still. The graphics inside do
-     not: seven infinite animations run independently of it at every
-     width — pcPulseRing on the picked date's ring, the calendar
-     slot dot, the session dot, the case lock and the pulsing
-     milestone check, and pcBlink on the editing caret and the
-     status dot.
-
-     fwd needed no block like this because its global.css carries a
-     universal killswitch (`*, *::before, *::after` forced to a
-     0.01ms animation- and transition-duration). Kagasoff's global
-     stylesheet only guards specific components — the reveal
-     utility, the carousel, the team-card bio — so there is no net
-     under these, and the section has to stop its own.
+     Kagasoff's global.css guards specific components (the reveal
+     utility, the carousel, the team-card bio) rather than carrying a
+     universal killswitch, so there is no net under the loops inside
+     these frames — the pulsing call dot, the pulsing intake ring and
+     the blinking "requested" dot — and the section has to stop its
+     own. The disclosure's max-height and the chevron's rotation go
+     with them: the state still changes, it just snaps.
 
      `animation`, not `animation-duration`: these loops are purely
      decorative and there is no final frame worth landing on.
@@ -1367,65 +828,33 @@ const glyphs = ['i.', 'ii.', 'iii.', 'iv.'];
     .process-section *::before,
     .process-section *::after {
       animation: none !important;
+      transition: none !important;
     }
   }
 </style>
 
 <script is:inline>
-  // Process cards — tap to open, below the four-up breakpoint.
-  //
-  // .pc-head stays the real link it already is: the first tap on a closed
-  // card opens it instead of navigating. No markup changes, so the desktop
-  // hover regime and the screen-reader reading order are untouched, and
-  // above the breakpoint this does nothing at all.
+  // Process cards — each "More" button opens the block it names in
+  // aria-controls. Independent per card; no media queries, no shared state.
   (() => {
-    const grid = document.querySelector('.process-grid');
-    if (!grid) return;
-    const cards = Array.from(grid.querySelectorAll('.process-card'));
-    const mq = window.matchMedia('(max-width: 1199px)');
-
-    const sync = () => {
-      cards.forEach((card) => {
-        const head = card.querySelector('.pc-head');
-        if (!head) return;
-        if (mq.matches) {
-          head.setAttribute('aria-expanded', String(card.classList.contains('is-open')));
-        } else {
-          // Leaving aria-expanded on a plain link above the breakpoint
-          // would announce a disclosure that no longer exists.
-          head.removeAttribute('aria-expanded');
-          card.classList.remove('is-open');
-        }
-      });
-    };
-
-    cards.forEach((card) => {
-      const head = card.querySelector('.pc-head');
-      if (!head) return;
-      head.addEventListener('click', (event) => {
-        if (!mq.matches) return;
-        // Below the breakpoint the head is the disclosure's button, not a
-        // link: tapping an open card closes it again. The route to the
-        // contact form moves inside the panel (.pc-link-out).
-        event.preventDefault();
-        const open = card.classList.contains('is-open');
-        // One open at a time, so the grid never grows past two rows.
-        cards.forEach((other) => other.classList.remove('is-open'));
-        if (!open) card.classList.add('is-open');
-        sync();
+    const toggles = document.querySelectorAll('.process-section .pc-toggle');
+    toggles.forEach((btn) => {
+      const wrap = document.getElementById(btn.getAttribute('aria-controls'));
+      if (!wrap) return;
+      btn.addEventListener('click', () => {
+        const open = !wrap.classList.contains('is-open');
+        wrap.classList.toggle('is-open', open);
+        btn.setAttribute('aria-expanded', String(open));
       });
     });
-
-    mq.addEventListener('change', sync);
-    sync();
   })();
 </script>
 
 <script is:inline>
-  // Process mockups — fit each fixed-size stage to the column it lands in.
+  // Process mockups — fit each fixed-size stage to the box it lands in.
   // This is a ratio of two lengths, which CSS calc() cannot compute, so it is
-  // measured here and written back as --pc-scale. Without it the stages render
-  // at the stylesheet's fallback and overflow their cards on a phone.
+  // measured here and written back as --pc-scale. Without it every stage
+  // renders at the stylesheet's 0.8 fallback and overflows its card.
   (() => {
     const stages = Array.from(document.querySelectorAll('.pc-stage'));
     if (!stages.length) return;
@@ -1437,13 +866,10 @@ const glyphs = ['i.', 'ii.', 'iii.', 'iv.'];
         if (!w) return;
         const cs = getComputedStyle(stage);
         const baseW = parseFloat(cs.width) || 470;
-        const baseH = parseFloat(cs.height) || 500;
-        // Fit BOTH axes. Width-only fitting is what cropped the top and the
-        // bottom of the taller compositions: the column is shorter than
-        // 500 * (w / 470) in the four-up regime, and .pc-visual clips the
-        // overflow. Height is only a constraint when the box has a definite
-        // one (the stage is absolutely positioned, so clientHeight is 0 in
-        // the stacked layout, where aspect-ratio already sizes it).
+        const baseH = parseFloat(cs.height) || 360;
+        // Fit BOTH axes: .pc-visual has a definite height (aspect-ratio), and
+        // sub-pixel rounding between it and the stage means a width-only fit
+        // can still clip a hairline off the top and bottom of the frame.
         const h = box.clientHeight;
         const ratio = h > 0 ? Math.min(w / baseW, h / baseH) : w / baseW;
         const s = Math.min(Math.max(ratio, 0.3), 1.6);
