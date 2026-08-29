@@ -488,8 +488,14 @@ textarea.fld {
   .team-row {
     max-width: 1280px;
     margin-inline: auto;
+    /* Size container, so the media layers below can size and translate in
+       cqw units — i.e. relative to the row's fixed width. */
+    container-type: inline-size;
   }
   .teamcard {
+    /* Where the face sits across the portrait (the object-position x),
+       so a squeezed card can keep it in frame. */
+    --face-x: 0.5;
     --card-h: clamp(400px, 46vw, 667px);
     --bio-px: clamp(300px, 24vw, 400px);
     /* The 62% ceiling only bites on a cramped row: the media then gives
@@ -498,7 +504,10 @@ textarea.fld {
     height: var(--card-h);
     flex: 1 1 0;
     min-width: 0;
-    transition: flex-grow 0.62s cubic-bezier(0.16, 1, 0.3, 1);
+    /* The 90ms delay is what lets the pair breathe: crossing the gap
+       between the cards un-hovers one and hovers the other within a few
+       frames, and without the delay that reads as an instant seesaw. */
+    transition: flex-grow 0.62s cubic-bezier(0.16, 1, 0.3, 1) 90ms;
   }
   .teamcard.is-open {
     flex-grow: 2.2;
@@ -589,16 +598,15 @@ textarea.fld {
   background: var(--color-navydark);
   border-left: 1px solid rgba(201, 162, 83, 0.35);
   overflow-y: auto;
-  /* A long bio scrolls; the UA's default light scrollbar reads as a white
-     bar down the card edge on the navy panel. */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(201, 162, 83, 0.4) transparent;
+  /* A long bio can still wheel-scroll, but never shows a bar — a scrollbar
+     sliding into a hover animation reads as a glitch, not a control. */
+  scrollbar-width: none;
   /* visibility keeps the closed bio out of the accessibility tree; delaying it
      behind the transition preserves the slide-out. */
   visibility: hidden;
   /* Parked off-canvas to the right, inside the card's overflow:hidden. */
   transform: translateX(100%);
-  transition: transform 0.62s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.62s;
+  transition: transform 0.62s cubic-bezier(0.16, 1, 0.3, 1) 90ms, visibility 0.62s 90ms;
   pointer-events: none;
 }
 @media (hover: hover) {
@@ -639,6 +647,54 @@ textarea.fld {
 @media (max-width: 480px) {
   .teamcard {
     --bio-w: 70%;
+  }
+}
+
+/* Chromium fallback for the hidden bio scrollbar. */
+.teamcard-bio::-webkit-scrollbar {
+  display: none;
+}
+
+/* From the two-up layout on, the media never resizes — re-cropping a large
+   photo every frame is what made the open animation stutter. The image is
+   a fixed layer as wide as a resting card (sized in cqw against the fixed
+   row), and every state change is a pure, composited translateX: over into
+   the strip the bio leaves when its own card opens, and chasing the face
+   (--face-x mirrors the portrait's object-position) when the card is
+   squeezed by its neighbour. 0.1875 = 2.2/3.2 - 1/2, how far a card edge
+   travels as a fraction of the row. */
+@media (min-width: 640px) {
+  .teamcard-media,
+  .teamcard.is-open .teamcard-media {
+    width: calc((100cqw - 32px) / 2);
+    transition: transform 0.62s cubic-bezier(0.16, 1, 0.3, 1) 90ms;
+  }
+  .teamcard.is-open .teamcard-media {
+    transform: translateX(calc((100cqw - 32px) * 0.1875 - var(--bio-px)));
+  }
+  .teamcard-flip.is-open .teamcard-media {
+    transform: translateX(calc(var(--bio-px) - (100cqw - 32px) * 0.1875));
+  }
+  .team-row:has(.teamcard.is-open) .teamcard:not(.is-open) .teamcard-media {
+    transform: translateX(calc((100cqw - 32px) * -0.1875 * var(--face-x)));
+  }
+  .team-row:has(.teamcard.is-open) .teamcard-flip:not(.is-open) .teamcard-media {
+    transform: translateX(calc((100cqw - 32px) * 0.1875 * (1 - var(--face-x))));
+  }
+}
+@media (min-width: 640px) and (hover: hover) {
+  .teamcard:hover .teamcard-media {
+    width: calc((100cqw - 32px) / 2);
+    transform: translateX(calc((100cqw - 32px) * 0.1875 - var(--bio-px)));
+  }
+  .teamcard-flip:hover .teamcard-media {
+    transform: translateX(calc(var(--bio-px) - (100cqw - 32px) * 0.1875));
+  }
+  .team-row:has(.teamcard:hover) .teamcard:not(:hover) .teamcard-media {
+    transform: translateX(calc((100cqw - 32px) * -0.1875 * var(--face-x)));
+  }
+  .team-row:has(.teamcard:hover) .teamcard-flip:not(:hover) .teamcard-media {
+    transform: translateX(calc((100cqw - 32px) * 0.1875 * (1 - var(--face-x))));
   }
 }
 @media (prefers-reduced-motion: reduce) {
