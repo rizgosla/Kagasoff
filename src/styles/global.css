@@ -468,6 +468,9 @@ textarea.fld {
   border-radius: 8px;
   aspect-ratio: 4/5;
   cursor: pointer;
+  /* How much of the card the bio panel takes on open; the portrait keeps
+     the rest, so the two always split the card exactly. */
+  --bio-w: 62%;
 }
 /* The striped placeholder sets position:relative on itself; inside a team card
    it is the full-bleed image layer. */
@@ -475,23 +478,22 @@ textarea.fld {
   position: absolute;
   inset: 0;
 }
-/* Shared by the <img> (Ashley) and the Placeholder layer (office manager) so
-   one rule slides either portrait aside on reveal. */
+/* Shared by the <img> (Ashley) and the Placeholder layer (office manager).
+   The push is literal: on open the media box itself narrows to the strip
+   the bio leaves free — anchored to the card's outer edge — and object-fit
+   re-crops the portrait into that strip, so the portrait visibly moves
+   aside rather than being covered by the panel. */
 .teamcard-media {
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  /* Scale anchored to the left edge on open — the visible portrait aspect is
-     nearly the card's own aspect, so a plain translate leaves almost no
-     crop room and clips faces at the panel edge; the extra zoom keeps the
-     visible strip centered on the face instead of hair/background. */
-  transform-origin: left center;
+  width: 100%;
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 @media (hover: hover) {
   .teamcard:hover .teamcard-media {
-    transform: translateX(-58%) scale(1.4);
+    width: calc(100% - var(--bio-w));
   }
 }
 .teamcard.is-open .teamcard-media {
-  transform: translateX(-58%) scale(1.4);
+  width: calc(100% - var(--bio-w));
 }
 .teamcard-base {
   position: absolute;
@@ -547,13 +549,17 @@ textarea.fld {
   top: 0;
   right: 0;
   bottom: 0;
-  width: 62%;
+  width: var(--bio-w);
   padding: clamp(20px, 2vw, 32px);
   /* Fully opaque — this is a push, not an overlay, so no ghosting of the
      portrait strip through the panel. */
   background: var(--color-navydark);
   border-left: 1px solid rgba(201, 162, 83, 0.35);
   overflow-y: auto;
+  /* A long bio scrolls; the UA's default light scrollbar reads as a white
+     bar down the card edge on the navy panel. */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 162, 83, 0.4) transparent;
   /* visibility keeps the closed bio out of the accessibility tree; delaying it
      behind the transition preserves the slide-out. */
   visibility: hidden;
@@ -576,17 +582,10 @@ textarea.fld {
 }
 /* Mirrored variant for a card on the right-hand side of the grid: the
    portrait slides right and the bio pushes in from the left, so the two
-   cards open away from each other. */
+   cards open away from each other. Dropping the left pin re-anchors the
+   media to the card's right edge, so the width animation slides it right. */
 .teamcard-flip .teamcard-media {
-  transform-origin: right center;
-}
-@media (hover: hover) {
-  .teamcard-flip:hover .teamcard-media {
-    transform: translateX(58%) scale(1.4);
-  }
-}
-.teamcard-flip.is-open .teamcard-media {
-  transform: translateX(58%) scale(1.4);
+  left: auto;
 }
 .teamcard-flip .teamcard-bio {
   right: auto;
@@ -605,8 +604,8 @@ textarea.fld {
 }
 
 @media (max-width: 480px) {
-  .teamcard-bio {
-    width: 70%;
+  .teamcard {
+    --bio-w: 70%;
   }
 }
 @media (prefers-reduced-motion: reduce) {

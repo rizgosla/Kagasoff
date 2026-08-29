@@ -58,11 +58,7 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
       </p>
     </div>
 
-    {/* Kagasoff's .shell runs to 2300px. Past ~1680px a four-up row of
-        these stops reading as a set of steps and starts reading as four
-        billboards, so the grid keeps its own ceiling inside the shell. */}
-    <div class="process-grid-wrap">
-      <ol class="process-list grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+    <ol class="process-list grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
         <li class="popout process-card p-5 md:p-6" data-reveal>
           <div class="pc-visual" aria-hidden="true">
             {/* Step 01 — the question, on paper.
@@ -341,7 +337,6 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
           </div>
         </li>
       </ol>
-    </div>
 
     <div class="mt-11 text-center md:mt-14" data-reveal>
       <a href="#contact" class="pc-cta lift inline-block rounded-[8px] bg-navy px-[30px] py-4 text-center text-sm font-semibold tracking-[0.04em]">Start with a free consultation →</a>
@@ -362,7 +357,6 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
     --pc-muted: #a39a83;
   }
 
-  .process-grid-wrap { max-width: 1680px; margin-inline: auto; }
   .process-list { list-style: none; margin: 0; padding: 0; }
 
   .process-card {
