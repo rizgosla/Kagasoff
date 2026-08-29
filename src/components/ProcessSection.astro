@@ -69,10 +69,18 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
                 (x 110-260); a brass question mark drawn as one calligraphic
                 stroke over the upper half of the front sheet, three ruled
                 hairlines under it; a pen laid in from the lower right
-                (x 278-371) on the same 45 degrees, its nib pointing back at
-                the sheet. Brass twice: the mark, and the nib. */}
+                on the same 45 degrees, its nib pointing back at the sheet.
+                Brass twice: the mark, and the nib.
+
+                The drawn extent runs 138-399 across and 26-258 down, so the
+                group is translated to sit that centred on 235 with a top
+                margin in the same band as the other three. This is the one
+                composition of the four that does not fill the shared
+                60-410 band: the sheet and the pen are locked to each other
+                on the diagonal, and spreading them to reach the band pulls
+                the pen off the page it belongs to. */}
             <svg class="pc-art" viewBox="0 0 470 300" role="presentation" focusable="false">
-              <g transform="translate(-28 0)">
+              <g transform="translate(-33.5 6)">
                 {/* the sheet behind */}
                 <rect class="ln-t sheet" x="152" y="26" width="148" height="210" rx="5" />
                 {/* the front sheet, corner turned */}
@@ -138,22 +146,27 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
                 <path class="ln-t" d="M182 96 H290 M182 116 H290 M182 136 H290 M182 156 H246" />
                 <path class="br" d="M192 84 V50 A9 9 0 0 1 210 50 V78 A6 6 0 0 1 198 78 V56" />
               </g>
-              {/* The three books. Each carries the same four marks and
+              {/* The three books. Each carries the same three marks and
                   nothing else: the cover line, the page block as a wash
-                  under it, the spine hinge, and a brass rule on the spine.
-                  Two full-width rules per book made them read as ruled
-                  paper rather than as bound covers. */}
+                  under it, and a brass rule on the spine. Two things came
+                  out at shipped size. The spine hinge was a short vertical
+                  that reached neither cover edge, so at 256px it read as a
+                  floating tick rather than a hinge — dropped, and the brass
+                  spine rule carries that end of the book on its own. And the
+                  washes ran to the covers' straight edges, which the rx=4
+                  corners then cut across; they are inset off the corner
+                  radius instead. */}
               <rect class="ln sheet" x="144" y="150" width="182" height="34" rx="4" />
-              <path class="wash-n" d="M162 160 H325 V183 H162 Z" />
-              <path class="ln-t" d="M160 159 H322 M160 156 V180" />
+              <path class="wash-n" d="M162 160 H322 V180 H162 Z" />
+              <path class="ln-t" d="M160 159 H322" />
               <path class="br-t" d="M152 158 V176" />
               <rect class="ln sheet" x="132" y="184" width="206" height="34" rx="4" />
-              <path class="wash-n" d="M150 194 H337 V217 H150 Z" />
-              <path class="ln-t" d="M148 193 H334 M148 190 V214" />
+              <path class="wash-n" d="M150 194 H334 V214 H150 Z" />
+              <path class="ln-t" d="M148 193 H334" />
               <path class="br-t" d="M140 192 V210" />
               <rect class="ln sheet" x="120" y="218" width="230" height="36" rx="4" />
-              <path class="wash-n" d="M138 229 H349 V253 H138 Z" />
-              <path class="ln-t" d="M136 228 H346 M136 224 V250" />
+              <path class="wash-n" d="M138 229 H346 V250 H138 Z" />
+              <path class="ln-t" d="M136 228 H346" />
               <path class="br-t" d="M128 226 V246" />
               {/* the bookmark, out of the top seam */}
               <path class="br sheet" d="M284 184 V240 L292 232 L300 240 V184" />
@@ -187,25 +200,46 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
                 the left figure; the lower-right one brass, tailed at the
                 right figure and drawn second so it sits in front. */}
             <svg class="pc-art" viewBox="0 0 470 300" role="presentation" focusable="false">
-              {/* The two figures. The collar is what keeps a circle over a
-                  dome from reading as an account avatar. */}
-              <path class="ln wash-n" d="M56 252 C56 206 74 188 100 188 C126 188 144 206 144 252" />
-              <path class="ln-t" d="M88 192 L100 210 L112 192" />
-              <circle class="ln wash-n" cx="100" cy="156" r="26" />
-              <path class="ln wash-n" d="M326 252 C326 206 344 188 370 188 C396 188 414 206 414 252" />
-              <path class="ln-t" d="M358 192 L370 210 L382 192" />
-              <circle class="ln wash-n" cx="370" cy="156" r="26" />
+              {/* The two figures, each ONE continuous silhouette rather
+                  than a circle sitting above a dome.
+
+                  The circle-over-dome is the account-avatar convention, and
+                  it survives being drawn in navy line art: at the 256px this
+                  card actually ships at, the 6-unit gap between a head's
+                  bottom and its shoulders was still legible as that icon,
+                  and the collar meant to break it was a 1.5px hairline at
+                  45% — about 0.8px on screen, i.e. not there. So the head,
+                  neck and shoulders are one closed path with no seam to
+                  read, the skull is off-round (a brow, a jaw and a chin on
+                  the side facing the other figure, which also gives each
+                  figure a direction to face), and the collar is promoted to
+                  a full-weight contour.
+
+                  Drawn once, in defs, and mirrored about the centre line for
+                  the second figure — so the two are exactly each other, and
+                  the pair is symmetric by construction. */}
+              <defs>
+                <path id="pc-bust" d="M60 252 C60 214 74 196 94 190 C96 187 96 183 96 179 C84 173 78 159 80 147 C83 129 96 121 110 122 C126 123 136 137 135 153 C134 165 128 174 120 178 C120 183 120 186 121 189 C142 195 156 213 156 252 Z" />
+                <path id="pc-collar" d="M95 191 L108 203 L122 191" />
+              </defs>
+              <use href="#pc-bust" class="ln wash-n" />
+              <use href="#pc-collar" class="ln" />
+              <g transform="translate(470 0) scale(-1 1)">
+                <use href="#pc-bust" class="ln wash-n" />
+                <use href="#pc-collar" class="ln" />
+              </g>
               {/* the table they sit behind */}
-              <rect class="ln wash-n" x="36" y="252" width="398" height="10" rx="3" />
+              <rect class="ln wash-n" x="60" y="252" width="350" height="10" rx="3" />
               {/* What is said. Each bubble is ONE path with its tail cut
                   into the bottom edge — a separate filled triangle laid over
                   a rounded rect leaves the rect's own border running across
                   the tail's mouth, and the tail reads as stuck on. Navy is
-                  drawn first so the brass one overlaps in front. */}
-              <path class="ln sheet" d="M164 56 H286 A16 16 0 0 1 302 72 V106 A16 16 0 0 1 286 122 H188 L150 142 L166 122 H164 A16 16 0 0 1 148 106 V72 A16 16 0 0 1 164 56 Z" />
-              <path class="ln-t" d="M168 80 H282 M168 98 H250" />
-              <path class="br sheet" d="M210 106 H322 A16 16 0 0 1 338 122 V156 A16 16 0 0 1 322 172 H304 L322 192 L286 172 H210 A16 16 0 0 1 194 156 V122 A16 16 0 0 1 210 106 Z" />
-              <path class="br-t" d="M214 130 H318 M214 148 H286" />
+                  drawn first so the brass one overlaps in front. Both sit
+                  clear of the heads now that the busts are taller. */}
+              <path class="ln sheet" d="M164 44 H286 A16 16 0 0 1 302 60 V94 A16 16 0 0 1 286 110 H188 L150 130 L166 110 H164 A16 16 0 0 1 148 94 V60 A16 16 0 0 1 164 44 Z" />
+              <path class="ln-t" d="M168 68 H282 M168 86 H250" />
+              <path class="br sheet" d="M210 94 H314 A16 16 0 0 1 330 110 V144 A16 16 0 0 1 314 160 H304 L316 180 L286 160 H210 A16 16 0 0 1 194 144 V110 A16 16 0 0 1 210 94 Z" />
+              <path class="br-t" d="M214 118 H310 M214 136 H286" />
             </svg>
           </div>
           <p class="pc-step">{steps[2]}</p>
@@ -231,18 +265,22 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
                 Pediment (apex y 34) over an entablature, a wash for the
                 wall behind, an arched doorway, then four columns with
                 slab capitals and bases, then the stylobate and three
-                steps widening to x 52-418. Brass is spent in three
+                steps widening to x 60-410. Brass is spent in three
                 places only: the tympanum outline, the oculus ring and
-                the rule where the building meets its steps. */}
+                the moulding along the stylobate. */}
             <svg class="pc-art" viewBox="0 0 470 300" role="presentation" focusable="false">
-              {/* pediment */}
-              <path class="ln" d="M70 104 L235 34 L400 104" />
-              <path class="br-t wash" d="M96 100 L235 42 L374 100 Z" />
+              {/* The pediment. The raking cornice is a CLOSED triangle: it
+                  overhangs the entablature by 8 either side, as a cornice
+                  should, but left open at the base those two corners hung
+                  in mid-air with nothing carrying them. The closing
+                  horizontal is the cornice's own bottom bed. */}
+              <path class="ln" d="M78 104 L235 34 L392 104 Z" />
+              <path class="br-t wash" d="M98 100 L235 44 L372 100 Z" />
               <circle class="ln sheet" cx="235" cy="76" r="13" />
               <circle class="br-t" cx="235" cy="76" r="6.5" />
               {/* entablature */}
-              <rect class="ln sheet" x="78" y="104" width="314" height="22" rx="2" />
-              <path class="ln-t" d="M86 118 H384" />
+              <rect class="ln sheet" x="86" y="104" width="298" height="22" rx="2" />
+              <path class="ln-t" d="M94 118 H376" />
               {/* The wall behind the colonnade, and the way in. The wash
                   stops just outside the outer columns rather than running
                   the full width of the entablature — carried out to the
@@ -253,43 +291,42 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
                   three gaps between the columns are toned. */}
               <path class="wash-n" d="M134 126 H336 V214 H134 Z" />
               <path class="br wash-n" d="M222 214 V180 A13 13 0 0 1 248 180 V214" />
-              {/* four columns */}
+              {/* Four columns. No flute: a single 1.5px hairline down the
+                  centre of a 22-wide shaft is under a pixel at shipped size,
+                  and four of them only added grey to the colonnade. The
+                  shaft, capital and base carry the column on their own. */}
               <g class="col">
                 <rect class="ln sheet" x="130" y="126" width="30" height="12" rx="1.5" />
                 <path class="ln" d="M134 138 V204 M156 138 V204" />
-                <path class="ln-t" d="M145 142 V200" />
                 <rect class="ln sheet" x="131" y="204" width="28" height="10" rx="1.5" />
               </g>
               <g class="col">
                 <rect class="ln sheet" x="190" y="126" width="30" height="12" rx="1.5" />
                 <path class="ln" d="M194 138 V204 M216 138 V204" />
-                <path class="ln-t" d="M205 142 V200" />
                 <rect class="ln sheet" x="191" y="204" width="28" height="10" rx="1.5" />
               </g>
               <g class="col">
                 <rect class="ln sheet" x="250" y="126" width="30" height="12" rx="1.5" />
                 <path class="ln" d="M254 138 V204 M276 138 V204" />
-                <path class="ln-t" d="M265 142 V200" />
                 <rect class="ln sheet" x="251" y="204" width="28" height="10" rx="1.5" />
               </g>
               <g class="col">
                 <rect class="ln sheet" x="310" y="126" width="30" height="12" rx="1.5" />
                 <path class="ln" d="M314 138 V204 M336 138 V204" />
-                <path class="ln-t" d="M325 142 V200" />
                 <rect class="ln sheet" x="311" y="204" width="28" height="10" rx="1.5" />
               </g>
               {/* stylobate and steps */}
-              <rect class="ln sheet" x="88" y="214" width="294" height="12" rx="2" />
-              <rect class="ln sheet" x="76" y="226" width="318" height="12" rx="2" />
-              <rect class="ln sheet" x="64" y="238" width="342" height="12" rx="2" />
-              <rect class="ln sheet" x="52" y="250" width="366" height="12" rx="2" />
+              <rect class="ln sheet" x="96" y="214" width="278" height="12" rx="2" />
+              <rect class="ln sheet" x="84" y="226" width="302" height="12" rx="2" />
+              <rect class="ln sheet" x="72" y="238" width="326" height="12" rx="2" />
+              <rect class="ln sheet" x="60" y="250" width="350" height="12" rx="2" />
               {/* A moulding along the stylobate, drawn last: sat on the
                   stylobate's bottom edge it was painted over by the first
                   step, which is filled and drawn after it, and moved down
                   onto the step it read as a gold line lying loose across
                   the stair. Inside the stylobate it belongs to the
                   building. */}
-              <path class="br-t" d="M94 222 H376" />
+              <path class="br-t" d="M102 222 H368" />
             </svg>
           </div>
           <p class="pc-step">{steps[3]}</p>
@@ -488,17 +525,25 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
     stroke-linecap: round;
     stroke-linejoin: round;
   }
-  /* Interior detail — rules, hinges, flutes. Thin and stepped back so a
-     drawing reads as one silhouette first and its detail second. */
+  /* Interior detail — rules, cover lines, the sheet behind. Stepped back
+     so a drawing reads as one silhouette first and its detail second.
+
+     1.8 at 60%, not 1.5 at 45%. These drawings ship at 256px in the
+     four-up and 298px on a phone, which is a scale of about 0.55: a
+     1.5 stroke lands at 0.8px and 45% of that is below the floor at
+     which anything is visible at all. The detail layer was being
+     designed at full size and then disappearing in production. Anything
+     that could not survive the correction — the book hinges, the column
+     flutes — was deleted rather than propped up. */
   .pc-art .ln-t {
     fill: none;
     stroke: var(--color-navy);
-    stroke-width: 1.5;
+    stroke-width: 1.8;
     stroke-linecap: round;
     stroke-linejoin: round;
     /* stroke-opacity, not opacity: several of these sit on the same
        element as a wash fill, and element opacity would fade both. */
-    stroke-opacity: 0.45;
+    stroke-opacity: 0.6;
   }
   /* The accent. */
   .pc-art .br {
@@ -508,10 +553,13 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
     stroke-linecap: round;
     stroke-linejoin: round;
   }
+  /* The lighter accent, raised to 1.8 alongside .ln-t and for the same
+     reason — the spine rules, the oculus ring and the stylobate moulding
+     are all this weight. */
   .pc-art .br-t {
     fill: none;
     stroke: var(--color-brasslight);
-    stroke-width: 1.5;
+    stroke-width: 1.8;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
