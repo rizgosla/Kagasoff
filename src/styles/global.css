@@ -478,11 +478,49 @@ textarea.fld {
   position: absolute;
   inset: 0;
 }
+/* From the two-up layout on, the pair is a centered flex row and opening a
+   card EXPANDS it sideways by the bio's width: the portrait keeps its full
+   closed-state frame — anchored to the card's outer edge, never re-cropped
+   when there is room — and the added width holds the text. The card's size
+   comes from a height token (so width can be derived at the portrait's 4:5),
+   and the neighbor card yields via flex when the row runs out of room. */
+@media (min-width: 640px) {
+  .teamcard {
+    /* Tracks the old aspect-driven size: two 4:5 cards in a 1100px row. */
+    --card-h: clamp(400px, 52vw, 667px);
+    --bio-px: clamp(300px, 24vw, 400px);
+    /* The 62% ceiling only bites when flex has shrunk the card below
+       portrait + bio; the media then gives up width instead of the text. */
+    --bio-w: min(var(--bio-px), 62%);
+    height: var(--card-h);
+    width: calc(var(--card-h) * 0.8);
+    flex: 0 1 auto;
+    min-width: 200px;
+    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .teamcard.is-open {
+    width: calc(var(--card-h) * 0.8 + var(--bio-px));
+  }
+  /* While one card is open, the other cedes its space first. */
+  .team-row:has(.teamcard.is-open) .teamcard:not(.is-open) {
+    flex-shrink: 4;
+  }
+}
+@media (min-width: 640px) and (hover: hover) {
+  .teamcard:hover {
+    width: calc(var(--card-h) * 0.8 + var(--bio-px));
+  }
+  .team-row:has(.teamcard:hover) .teamcard:not(:hover) {
+    flex-shrink: 4;
+  }
+}
+
 /* Shared by the <img> (Ashley) and the Placeholder layer (office manager).
-   The push is literal: on open the media box itself narrows to the strip
-   the bio leaves free — anchored to the card's outer edge — and object-fit
-   re-crops the portrait into that strip, so the portrait visibly moves
-   aside rather than being covered by the panel. */
+   The push is literal: on open the media box narrows to the strip the bio
+   leaves free — anchored to the card's outer edge. In the expanded card
+   that strip IS the portrait's full closed-state width, so the image just
+   slides over; only on a cramped row (or the single-column layout) does
+   object-fit re-crop it. */
 .teamcard-media {
   width: 100%;
   transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -609,6 +647,7 @@ textarea.fld {
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .teamcard,
   .teamcard-bio,
   .teamcard-media,
   .teamcard-base {
