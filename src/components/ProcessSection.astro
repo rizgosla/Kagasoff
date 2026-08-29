@@ -1,0 +1,600 @@
+---
+/** "With You Step by Step" — four popout cards, one per step.
+ *
+ * Each card is an illustration over its own words: a line-art drawing of
+ * the *subject* of that stage — a question on a document, the books it is
+ * prepared out of, the two sides talking, the courthouse behind it all —
+ * then the step kicker, the title, the one-line summary, and a click
+ * disclosure holding the detail.
+ *
+ * There is no hover state anywhere in here. Nothing about a card depends
+ * on a pointer being over it, the text is never hidden behind an
+ * interaction, and the only thing a click changes is the disclosure the
+ * button names in aria-controls.
+ *
+ * The four drawings are inline SVG on one shared stage cropped tight to
+ * the artwork (viewBox 48 26 374 248), so they fill their mat and scale
+ * to whatever column they land in on their own — no fitter script, no
+ * fixed-pixel stage, no container query. They also share one stroke
+ * vocabulary (see the .pc-art block in the stylesheet): navy 2.4 for
+ * contours, navy 1.5 at low opacity for interior detail, brass for the
+ * one accent each drawing is allowed, and flat cream/gold washes for
+ * depth. No text and no UI chrome inside any of them.
+ *
+ * All four are aria-hidden decorative artwork.
+ */
+import { process } from '../data/practiceAreas';
+
+/** Caption line closing each disclosure. Authored here rather than in
+    practiceAreas because it belongs to this composition, not to the data. */
+const metas = [
+  '— Free & confidential',
+  '— Prepared as if for trial',
+  '— Leverage at the table',
+  '— 17+ years of results',
+];
+
+/** The detail behind each one-line body, revealed by the card's disclosure. */
+const mores = [
+  'No fee to talk. If we are not the right fit, we will say so on the call.',
+  'Records, reports and medical evidence, gathered early.',
+  'Most matters resolve without a courtroom, because we are ready for one.',
+  'Straight answers on what a resolution is really worth.',
+];
+
+const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
+---
+
+<section class="bg-cream process-section">
+  <div class="shell py-14 md:py-[88px]">
+    <div class="mb-11 max-w-[56ch] md:mb-14" data-reveal>
+      <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">With You Step by Step</p>
+      <h2 class="font-serif text-[clamp(26px,2.6vw,40px)] font-medium leading-[1.2] text-navy">
+        What working with us looks like.
+      </h2>
+      <p class="mt-[18px] text-[clamp(15px,0.95vw,19px)] font-light leading-[1.75] text-ink">
+        A clear, four-step path from your first call to resolution — we stay beside you at every
+        stage, with the same disciplined approach across every practice area.
+      </p>
+    </div>
+
+    <ol class="process-list grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <li class="popout process-card p-5 md:p-6" data-reveal>
+          <div class="pc-visual" aria-hidden="true">
+            {/* Step 01 — the question, on paper.
+                Two sheets, the front one corner-folded, standing on the
+                left half of the band (x 78-272); a brass question mark
+                drawn as one calligraphic stroke over the upper half of the
+                front sheet, ruled hairlines under it; a pen laid in from
+                the lower right on the same 45 degrees, its nib pointing
+                back at the sheet. Brass twice: the mark, and the nib.
+
+                Composed directly into the shared 60-410 band — the sheet
+                enlarged and the pen carried out to the right edge — so it
+                fills the frame like the other three. */}
+            <svg class="pc-art" viewBox="48 26 374 248" role="presentation" focusable="false">
+              {/* the sheet behind */}
+              <rect class="ln-t sheet" x="96" y="34" width="168" height="212" rx="5" />
+              {/* the front sheet, corner turned */}
+              <path class="ln sheet" d="M78 56 H238 L272 90 V266 H78 Z" />
+              <path class="wash-n" d="M238 56 L272 90 L238 90 Z" />
+              <path class="ln" d="M238 56 V90 H272" />
+              {/* The question: a hook around a circle of r36 centred on
+                  (172,132), left off at 70 degrees so the tail can leave
+                  it on the tangent — the tail's first control point sits
+                  on that tangent, which is what turns the step down from
+                  6 to 4 into a taper instead of a notch. */}
+              <path class="br qm-hook" d="M140.8 150 A36 36 0 1 1 184 165.6" />
+              <path class="br qm-tail" d="M184 165.6 C176.8 169.2 173.2 182.4 173.2 204" />
+              <circle class="dot" cx="173.2" cy="228" r="6.5" />
+              {/* ruled lines under it */}
+              <path class="ln-t" d="M104 242 H246 M104 256 H188" />
+              {/* The pen, laid in on the sheet's own 45 degrees. Barrel
+                  and nib meet on a shared edge, so the line between them
+                  reads as the collar rather than as two stuck-together
+                  shapes; the nib is the brass. */}
+              <path class="ln sheet" d="M330 234 L397 167 L407 177 L340 244 Z" />
+              <path class="br wash" d="M330 234 L314 260 L340 244 Z" />
+              <path class="br-t" d="M316 258 L331 241" />
+            </svg>
+          </div>
+          <p class="pc-step">{steps[0]}</p>
+          <h3 class="pc-title" set:html={process[0].title} />
+          <p class="pc-body" set:html={process[0].body} />
+          <button type="button" class="pc-toggle" aria-expanded="false" aria-controls="pc-more-1" aria-label={`More about ${process[0].title}`}>
+            <span aria-hidden="true">More</span>
+            <svg class="pc-chev" viewBox="0 0 12 8" width="11" height="7" fill="none" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div id="pc-more-1" class="pc-morewrap">
+            <div class="pc-morein">
+              <p class="pc-more">{mores[0]}</p>
+              <span class="pc-meta">{metas[0]}</span>
+            </div>
+          </div>
+        </li>
+
+        <li class="popout process-card p-5 md:p-6" data-reveal style="--reveal-delay:100ms">
+          <div class="pc-visual" aria-hidden="true">
+            {/* Step 02 — what the preparation is made of.
+                A legal pad stands upright behind (x 150-320, tipped 4
+                degrees, a brass clip over its head), and three closed
+                books lie flat in front of it, widest at the bottom
+                (x 70-400, y 150-254). Each book carries the same three
+                marks: a brass spine rule, a page-edge hairline, and the
+                page block as a wash. A brass-outlined bookmark falls from
+                the seam between the top two. */}
+            <svg class="pc-art" viewBox="48 26 374 248" role="presentation" focusable="false">
+              {/* The pad, standing behind. A plain sheet with a brass clip
+                  over its head, not a bar with dots along the top — a filled
+                  band across the top of a rectangle reads as a title bar,
+                  which is the one thing these drawings must not look like.
+                  The clip is a single continuous wire: up the front, over
+                  the head, down the back, round the foot and back up. */}
+              <g transform="rotate(-4 235 100)">
+                <rect class="ln sheet" x="150" y="36" width="170" height="128" rx="4" />
+                <path class="ln-t" d="M166 92 H304 M166 112 H304 M166 132 H304 M166 152 H250" />
+                <path class="br" d="M178 84 V50 A9 9 0 0 1 196 50 V78 A6 6 0 0 1 184 78 V56" />
+              </g>
+              {/* The three books. Each carries the same three marks and
+                  nothing else: the cover line, the page block as a wash
+                  under it, and a brass rule on the spine. Two things came
+                  out at shipped size. The spine hinge was a short vertical
+                  that reached neither cover edge, so at 256px it read as a
+                  floating tick rather than a hinge — dropped, and the brass
+                  spine rule carries that end of the book on its own. And the
+                  washes ran to the covers' straight edges, which the rx=4
+                  corners then cut across; they are inset off the corner
+                  radius instead. */}
+              <rect class="ln sheet" x="102" y="150" width="266" height="34" rx="4" />
+              <path class="wash-n" d="M120 160 H364 V180 H120 Z" />
+              <path class="ln-t" d="M118 159 H364" />
+              <path class="br-t" d="M110 158 V176" />
+              <rect class="ln sheet" x="86" y="184" width="298" height="34" rx="4" />
+              <path class="wash-n" d="M104 194 H380 V214 H104 Z" />
+              <path class="ln-t" d="M102 193 H380" />
+              <path class="br-t" d="M94 192 V210" />
+              <rect class="ln sheet" x="70" y="218" width="330" height="36" rx="4" />
+              <path class="wash-n" d="M88 229 H396 V250 H88 Z" />
+              <path class="ln-t" d="M86 228 H396" />
+              <path class="br-t" d="M78 226 V246" />
+              {/* the bookmark, out of the top seam */}
+              <path class="br sheet" d="M310 184 V240 L318 232 L326 240 V184" />
+              <path class="br-t" d="M318 192 V224" />
+            </svg>
+          </div>
+          <p class="pc-step">{steps[1]}</p>
+          <h3 class="pc-title" set:html={process[1].title} />
+          <p class="pc-body" set:html={process[1].body} />
+          <button type="button" class="pc-toggle" aria-expanded="false" aria-controls="pc-more-2" aria-label={`More about ${process[1].title}`}>
+            <span aria-hidden="true">More</span>
+            <svg class="pc-chev" viewBox="0 0 12 8" width="11" height="7" fill="none" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div id="pc-more-2" class="pc-morewrap">
+            <div class="pc-morein">
+              <p class="pc-more">{mores[1]}</p>
+              <span class="pc-meta">{metas[1]}</span>
+            </div>
+          </div>
+        </li>
+
+        <li class="popout process-card p-5 md:p-6" data-reveal style="--reveal-delay:200ms">
+          <div class="pc-visual" aria-hidden="true">
+            {/* Step 03 — the two sides, talking.
+                Two faceless head-and-shoulders figures, mirrored about the
+                centre (x 56-144 and 326-414), sitting behind a table drawn
+                as one long rule at y 252. Between them two speech bubbles
+                overlap on the diagonal: the upper-left one navy, tailed at
+                the left figure; the lower-right one brass, tailed at the
+                right figure and drawn second so it sits in front. */}
+            <svg class="pc-art" viewBox="48 26 374 248" role="presentation" focusable="false">
+              {/* The two figures, each ONE continuous silhouette rather
+                  than a circle sitting above a dome.
+
+                  The circle-over-dome is the account-avatar convention, and
+                  it survives being drawn in navy line art: at the 256px this
+                  card actually ships at, the 6-unit gap between a head's
+                  bottom and its shoulders was still legible as that icon,
+                  and the collar meant to break it was a 1.5px hairline at
+                  45% — about 0.8px on screen, i.e. not there. So the head,
+                  neck and shoulders are one closed path with no seam to
+                  read, the skull is off-round (a brow, a jaw and a chin on
+                  the side facing the other figure, which also gives each
+                  figure a direction to face), and the collar is promoted to
+                  a full-weight contour.
+
+                  Drawn once, in defs, and mirrored about the centre line for
+                  the second figure — so the two are exactly each other, and
+                  the pair is symmetric by construction. */}
+              <defs>
+                <path id="pc-bust" d="M60 252 C60 214 74 196 94 190 C96 187 96 183 96 179 C84 173 78 159 80 147 C83 129 96 121 110 122 C126 123 136 137 135 153 C134 165 128 174 120 178 C120 183 120 186 121 189 C142 195 156 213 156 252 Z" />
+                <path id="pc-collar" d="M95 191 L108 203 L122 191" />
+              </defs>
+              <use href="#pc-bust" class="ln wash-n" />
+              <use href="#pc-collar" class="ln" />
+              <g transform="translate(470 0) scale(-1 1)">
+                <use href="#pc-bust" class="ln wash-n" />
+                <use href="#pc-collar" class="ln" />
+              </g>
+              {/* the table they sit behind */}
+              <rect class="ln wash-n" x="60" y="252" width="350" height="10" rx="3" />
+              {/* What is said. Each bubble is ONE path with its tail cut
+                  into the bottom edge — a separate filled triangle laid over
+                  a rounded rect leaves the rect's own border running across
+                  the tail's mouth, and the tail reads as stuck on. Navy is
+                  drawn first so the brass one overlaps in front. Both sit
+                  clear of the heads now that the busts are taller. */}
+              <path class="ln sheet" d="M164 44 H286 A16 16 0 0 1 302 60 V94 A16 16 0 0 1 286 110 H188 L150 130 L166 110 H164 A16 16 0 0 1 148 94 V60 A16 16 0 0 1 164 44 Z" />
+              <path class="ln-t" d="M168 68 H282 M168 86 H250" />
+              <path class="br sheet" d="M210 94 H314 A16 16 0 0 1 330 110 V144 A16 16 0 0 1 314 160 H304 L316 180 L286 160 H210 A16 16 0 0 1 194 144 V110 A16 16 0 0 1 210 94 Z" />
+              <path class="br-t" d="M214 118 H310 M214 136 H286" />
+            </svg>
+          </div>
+          <p class="pc-step">{steps[2]}</p>
+          <h3 class="pc-title" set:html={process[2].title} />
+          <p class="pc-body" set:html={process[2].body} />
+          <button type="button" class="pc-toggle" aria-expanded="false" aria-controls="pc-more-3" aria-label={`More about ${process[2].title}`}>
+            <span aria-hidden="true">More</span>
+            <svg class="pc-chev" viewBox="0 0 12 8" width="11" height="7" fill="none" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div id="pc-more-3" class="pc-morewrap">
+            <div class="pc-morein">
+              <p class="pc-more">{mores[2]}</p>
+              <span class="pc-meta">{metas[2]}</span>
+            </div>
+          </div>
+        </li>
+
+        <li class="popout process-card p-5 md:p-6" data-reveal style="--reveal-delay:300ms">
+          <div class="pc-visual" aria-hidden="true">
+            {/* Step 04 — the courthouse, drawn back to front.
+                Pediment (apex y 34) over an entablature, a wash for the
+                wall behind, an arched doorway, then four columns with
+                slab capitals and bases, then the stylobate and three
+                steps widening to x 60-410. Brass is spent in three
+                places only: the tympanum outline, the oculus ring and
+                the moulding along the stylobate. */}
+            <svg class="pc-art" viewBox="48 26 374 248" role="presentation" focusable="false">
+              {/* The pediment. The raking cornice is a CLOSED triangle: it
+                  overhangs the entablature by 8 either side, as a cornice
+                  should, but left open at the base those two corners hung
+                  in mid-air with nothing carrying them. The closing
+                  horizontal is the cornice's own bottom bed. */}
+              <path class="ln" d="M78 104 L235 34 L392 104 Z" />
+              <path class="br-t wash" d="M98 100 L235 44 L372 100 Z" />
+              <circle class="ln sheet" cx="235" cy="76" r="13" />
+              <circle class="br-t" cx="235" cy="76" r="6.5" />
+              {/* entablature */}
+              <rect class="ln sheet" x="86" y="104" width="298" height="22" rx="2" />
+              <path class="ln-t" d="M94 118 H376" />
+              {/* The wall behind the colonnade, and the way in. The wash
+                  stops just outside the outer columns rather than running
+                  the full width of the entablature — carried out to the
+                  cornice it stops reading as depth behind the porch and
+                  starts reading as a grey slab pasted on. Its two vertical
+                  edges land exactly on the outer columns' outer shaft
+                  lines, so the wash has no visible edge at all — only the
+                  three gaps between the columns are toned. */}
+              <path class="wash-n" d="M134 126 H336 V214 H134 Z" />
+              <path class="br wash-n" d="M222 214 V180 A13 13 0 0 1 248 180 V214" />
+              {/* Four columns. No flute: a single 1.5px hairline down the
+                  centre of a 22-wide shaft is under a pixel at shipped size,
+                  and four of them only added grey to the colonnade. The
+                  shaft, capital and base carry the column on their own. */}
+              <g class="col">
+                <rect class="ln sheet" x="130" y="126" width="30" height="12" rx="1.5" />
+                <path class="ln" d="M134 138 V204 M156 138 V204" />
+                <rect class="ln sheet" x="131" y="204" width="28" height="10" rx="1.5" />
+              </g>
+              <g class="col">
+                <rect class="ln sheet" x="190" y="126" width="30" height="12" rx="1.5" />
+                <path class="ln" d="M194 138 V204 M216 138 V204" />
+                <rect class="ln sheet" x="191" y="204" width="28" height="10" rx="1.5" />
+              </g>
+              <g class="col">
+                <rect class="ln sheet" x="250" y="126" width="30" height="12" rx="1.5" />
+                <path class="ln" d="M254 138 V204 M276 138 V204" />
+                <rect class="ln sheet" x="251" y="204" width="28" height="10" rx="1.5" />
+              </g>
+              <g class="col">
+                <rect class="ln sheet" x="310" y="126" width="30" height="12" rx="1.5" />
+                <path class="ln" d="M314 138 V204 M336 138 V204" />
+                <rect class="ln sheet" x="311" y="204" width="28" height="10" rx="1.5" />
+              </g>
+              {/* stylobate and steps */}
+              <rect class="ln sheet" x="96" y="214" width="278" height="12" rx="2" />
+              <rect class="ln sheet" x="84" y="226" width="302" height="12" rx="2" />
+              <rect class="ln sheet" x="72" y="238" width="326" height="12" rx="2" />
+              <rect class="ln sheet" x="60" y="250" width="350" height="12" rx="2" />
+              {/* A moulding along the stylobate, drawn last: sat on the
+                  stylobate's bottom edge it was painted over by the first
+                  step, which is filled and drawn after it, and moved down
+                  onto the step it read as a gold line lying loose across
+                  the stair. Inside the stylobate it belongs to the
+                  building. */}
+              <path class="br-t" d="M102 222 H368" />
+            </svg>
+          </div>
+          <p class="pc-step">{steps[3]}</p>
+          <h3 class="pc-title" set:html={process[3].title} />
+          <p class="pc-body" set:html={process[3].body} />
+          <button type="button" class="pc-toggle" aria-expanded="false" aria-controls="pc-more-4" aria-label={`More about ${process[3].title}`}>
+            <span aria-hidden="true">More</span>
+            <svg class="pc-chev" viewBox="0 0 12 8" width="11" height="7" fill="none" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div id="pc-more-4" class="pc-morewrap">
+            <div class="pc-morein">
+              <p class="pc-more">{mores[3]}</p>
+              <span class="pc-meta">{metas[3]}</span>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+    <div class="mt-11 text-center md:mt-14" data-reveal>
+      <a href="#contact" class="pc-cta lift inline-block rounded-[8px] bg-navy px-[30px] py-4 text-center text-sm font-semibold tracking-[0.04em]">Start with a free consultation →</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .process-section {
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --pc-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    /* The paper the drawings are laid on — a touch brighter than
+       --color-paper so a frame reads as a sheet placed on the card. It is
+       also the fill behind every shape that has to occlude another. */
+    --pc-sheet: #fffdf9;
+    /* A muted colour rather than a low-alpha wash: at ~20% alpha the
+       caption under a disclosure composites to about 1.5:1. */
+    --pc-muted: #a39a83;
+  }
+
+  .process-list { list-style: none; margin: 0; padding: 0; }
+
+  .process-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  /* ----- The words under the drawing ----- */
+  .pc-step {
+    margin: 18px 0 0;
+    font-family: var(--pc-mono);
+    font-size: clamp(11px, 0.66vw, 12.5px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--color-brass);
+  }
+  .pc-title {
+    margin: 8px 0 0;
+    font-family: var(--font-serif);
+    /* Cormorant is a light face; 500 is what reads as a card title here
+       where a variable display font would use ~350. */
+    font-weight: 500;
+    font-size: clamp(20px, 1.4vw, 26px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--color-navy);
+    text-wrap: balance;
+  }
+  /* :global(em), because the title is injected with set:html from
+     practiceAreas — Astro's scope attribute lands on elements in this
+     template, never on nodes parsed out of a string. */
+  .pc-title :global(em) { font-style: italic; color: var(--color-brass); }
+  .pc-body {
+    margin: 10px 0 0;
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: clamp(14.5px, 0.88vw, 16.5px);
+    line-height: 1.6;
+    color: var(--color-ink);
+    text-wrap: pretty;
+  }
+
+  /* ----- The disclosure ----- */
+  .pc-toggle {
+    /* margin-top: auto keeps the four buttons on one line across a row
+       of cards whose bodies wrap to different numbers of lines. */
+    margin-top: auto;
+    padding: 12px 0 0;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    font-family: var(--pc-mono);
+    font-size: clamp(10.5px, 0.62vw, 12px);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-brass);
+    /* A quiet text button, but still a real 44px target on touch. */
+    min-height: 44px;
+  }
+  .pc-toggle:focus-visible {
+    outline: 2px solid var(--color-brass);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+  .pc-chev {
+    display: block;
+    transition: transform 0.35s var(--ease-out-expo);
+  }
+  .pc-toggle[aria-expanded="true"] .pc-chev { transform: rotate(180deg); }
+
+  /* Clipped by max-height, never display:none and never hidden, so a
+     screen reader reads all four cards in full whatever is open. */
+  .pc-morewrap {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s var(--ease-out-expo);
+  }
+  /* A ceiling, not a height — it only has to clear the tallest of the
+     four blocks, and a transition needs a length to land on. */
+  .pc-morewrap.is-open { max-height: 22rem; }
+  .pc-morein {
+    padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pc-more {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: clamp(13.5px, 0.8vw, 15px);
+    line-height: 1.6;
+    color: var(--color-ink);
+    text-wrap: pretty;
+  }
+  .pc-meta {
+    display: block;
+    font-family: var(--pc-mono);
+    font-size: clamp(11px, 0.66vw, 12.5px);
+    letter-spacing: 0.05em;
+    color: var(--pc-muted);
+  }
+
+  /* ----- The section's closing button -----
+     The colour is set here rather than with a `text-paper` utility on
+     the anchor. global.css declares `a { color: inherit }` outside any
+     cascade layer, and an unlayered declaration beats every layered one
+     whatever its specificity — so a Tailwind colour utility, which
+     lands in @layer utilities, never reaches an <a>. The utility was
+     silently losing to `inherit` and the button was rendering in ink on
+     navy (about 1.5:1). This rule is unlayered too, and wins on
+     specificity. */
+  .process-section .pc-cta { color: var(--color-paper); }
+
+  /* ============================================================
+     THE DRAWINGS.
+
+     One mat and one stroke vocabulary for all four. The mat is the
+     .pc-visual box — sheet warming into cream, hairline border, the
+     14px radius the rest of the page uses. The drawing is a plain
+     inline SVG on a shared viewBox cropped close to the artwork, so it
+     fills the mat, sets the mat's height and scales with the column;
+     there is nothing here to measure and nothing to fit.
+
+     Every stroke in all four drawings is one of five classes, and the
+     colour is spent in the same order each time: navy carries the
+     subject, navy at 1.5/45% carries interior detail, and brass is
+     rationed — two or three marks per drawing at most, always on the
+     thing worth looking at (the question, the bookmark, the second
+     voice, the pediment).
+     ============================================================ */
+  .pc-visual {
+    border-radius: 14px;
+    border: 1px solid var(--color-line);
+    background: linear-gradient(180deg, var(--pc-sheet) 0%, var(--color-cream) 100%);
+    overflow: hidden;
+  }
+  .pc-art {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Contour. */
+  .pc-art .ln {
+    fill: none;
+    stroke: var(--color-navy);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  /* Interior detail — rules, cover lines, the sheet behind. Stepped back
+     so a drawing reads as one silhouette first and its detail second.
+
+     1.8 at 60%, not 1.5 at 45%. These drawings ship at 256px in the
+     four-up and 298px on a phone, which is a scale of about 0.55: a
+     1.5 stroke lands at 0.8px and 45% of that is below the floor at
+     which anything is visible at all. The detail layer was being
+     designed at full size and then disappearing in production. Anything
+     that could not survive the correction — the book hinges, the column
+     flutes — was deleted rather than propped up. */
+  .pc-art .ln-t {
+    fill: none;
+    stroke: var(--color-navy);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    /* stroke-opacity, not opacity: several of these sit on the same
+       element as a wash fill, and element opacity would fade both. */
+    stroke-opacity: 0.6;
+  }
+  /* The accent. */
+  .pc-art .br {
+    fill: none;
+    stroke: var(--color-brass);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  /* The lighter accent, raised to 1.8 alongside .ln-t and for the same
+     reason — the spine rules, the oculus ring and the stylobate moulding
+     are all this weight. */
+  .pc-art .br-t {
+    fill: none;
+    stroke: var(--color-brasslight);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  /* Fills. Declared after the stroke classes so `class="ln sheet"` —
+     an outlined shape that has to occlude what is behind it — resolves
+     to the fill rather than to the stroke class's fill: none. */
+  .pc-art .sheet { fill: var(--pc-sheet); }
+  .pc-art .wash { fill: var(--color-gold); fill-opacity: 0.22; }
+  .pc-art .wash-n { fill: var(--color-navy); fill-opacity: 0.07; }
+  .pc-art .dot { fill: var(--color-brass); }
+  /* The question mark is the one place the vocabulary widens: a hook
+     drawn heavier than its tail is what keeps the glyph from reading as
+     a piece of typography dropped onto the sheet. */
+  .pc-art .qm-hook { stroke-width: 6; }
+  .pc-art .qm-tail { stroke-width: 4; }
+
+  /* ============================================================
+     REDUCED MOTION.
+
+     Nothing in here loops any more — the drawings are static and the
+     only movement left is the disclosure opening and its chevron
+     turning. Kagasoff's global.css guards specific components rather
+     than carrying a universal killswitch, so those two are guarded
+     here: the state still changes, it just snaps.
+     ============================================================ */
+  @media (prefers-reduced-motion: reduce) {
+    .process-section .pc-morewrap,
+    .process-section .pc-chev {
+      transition: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  // Process cards — each "More" button opens the block it names in
+  // aria-controls. Independent per card; no media queries, no shared state.
+  (() => {
+    const toggles = document.querySelectorAll('.process-section .pc-toggle');
+    toggles.forEach((btn) => {
+      const wrap = document.getElementById(btn.getAttribute('aria-controls'));
+      if (!wrap) return;
+      btn.addEventListener('click', () => {
+        const open = !wrap.classList.contains('is-open');
+        wrap.classList.toggle('is-open', open);
+        btn.setAttribute('aria-expanded', String(open));
+      });
+    });
+  })();
+</script>

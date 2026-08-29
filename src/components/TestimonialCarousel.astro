@@ -1,0 +1,87 @@
+---
+/** Looping carousel of 5-star Google-style testimonials for the home hero
+    (navy .starfield background, light text). Slides "swipe off the page":
+    the active slide exits left while the next slide enters from the right.
+    Vanilla JS, no client framework. */
+import { testimonials } from '../data/testimonials';
+---
+
+<div class="tcar-card">
+  <div class="tcar" aria-label="Client reviews" role="group">
+    {
+      testimonials.map((t, i) => (
+        <figure
+          class="tcar-slide"
+          data-active={i === 0 ? 'true' : undefined}
+          aria-hidden={i !== 0 ? 'true' : 'false'}
+        >
+          <figcaption class="tcar-name text-[13.5px] font-semibold text-navy">
+            {t.name} · <span class="font-normal text-brass">Google Review</span>
+          </figcaption>
+          <span class="stars mt-2" aria-hidden="true">
+            {[0, 1, 2, 3, 4].map(() => (
+              <svg viewBox="0 0 20 20">
+                <path d="M10 1.5l2.472 5.008 5.528.803-4 3.898.944 5.506L10 14.115l-4.944 2.6.944-5.506-4-3.898 5.528-.803L10 1.5z" />
+              </svg>
+            ))}
+          </span>
+          <blockquote
+            class="tcar-quote mt-3 font-serif italic text-navy"
+            style="font-size: clamp(16px, 1.05vw, 19px);"
+          >
+            "{t.quote}"
+          </blockquote>
+        </figure>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  (() => {
+    const car = document.querySelector('.tcar');
+    if (!car) return;
+    const slides = Array.from(car.querySelectorAll('.tcar-slide'));
+    if (slides.length < 2) return;
+
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let cur = 0;
+    let timer: ReturnType<typeof setInterval> | undefined;
+
+    function advance() {
+      const from = slides[cur];
+      const next = (cur + 1) % slides.length;
+      const to = slides[next];
+
+      from.classList.add('is-exit');
+      from.removeAttribute('data-active');
+      from.setAttribute('aria-hidden', 'true');
+
+      to.setAttribute('data-active', 'true');
+      to.setAttribute('aria-hidden', 'false');
+
+      cur = next;
+
+      setTimeout(() => {
+        from.classList.remove('is-exit');
+      }, 600);
+    }
+
+    function start() {
+      if (reduceMotion || timer) return;
+      timer = setInterval(advance, 5500);
+    }
+
+    function stop() {
+      clearInterval(timer);
+      timer = undefined;
+    }
+
+    start();
+    car.addEventListener('mouseenter', stop);
+    car.addEventListener('focusin', stop);
+    car.addEventListener('mouseleave', start);
+    car.addEventListener('focusout', start);
+  })();
+</script>

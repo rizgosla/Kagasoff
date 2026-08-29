@@ -6,7 +6,7 @@
 import { chromium } from 'playwright';
 
 const BASE = process.env.BASE || 'http://localhost:4321';
-const PAGES = ['/', '/about', '/contact', '/practice/personal-injury'];
+const PAGES = ['/', '/services'];
 const VIEWPORTS = [
   { name: 'mobile-360', width: 360, height: 780 },
   { name: 'mobile-390', width: 390, height: 844 },

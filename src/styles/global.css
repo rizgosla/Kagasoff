@@ -14,6 +14,9 @@
   --color-line: #e3ddcd;
   --color-mist: #c8cfdb; /* body text on navy */
   --color-slate: #8493ab; /* footer text on navy */
+  --color-error: #8a3838;
+  --color-error-bg: #f7ecec;
+  --color-error-line: #d8b4b4;
 
   --font-serif: "Cormorant Garamond", serif;
   --font-sans: "Libre Franklin", sans-serif;
@@ -21,6 +24,13 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+[id] {
+  scroll-margin-top: 96px;
 }
 
 
@@ -41,6 +51,14 @@ html {
 /* Comfortable reading measure for long-form copy inside a wide shell. */
 .measure { max-width: 68ch; }
 .measure-tight { max-width: 58ch; }
+
+/* ===== Popout card — rounded panel on the continuous cream ground ===== */
+.popout {
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  box-shadow: 0 24px 48px -32px rgba(22, 36, 61, 0.18);
+}
 
 body {
   margin: 0;
@@ -88,16 +106,6 @@ a {
 }
 
 /* ===== Practice-area moving-card deck (home page) ===== */
-.deck-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: clamp(40px, 5vw, 96px);
-  align-items: center;
-}
-.deck-copy .deck-bar {
-  margin-top: 34px;
-}
-
 .deck-stage {
   position: relative;
   height: clamp(300px, 21vw, 400px);
@@ -108,7 +116,7 @@ a {
   height: clamp(292px, 20vw, 384px);
   display: flex;
   flex-direction: column;
-  background: var(--color-paper);
+  background: #fff;
   border: 1px solid var(--color-line);
   border-radius: 8px;
   padding: clamp(28px, 2.4vw, 40px) clamp(26px, 2.6vw, 44px);
@@ -208,6 +216,7 @@ a {
 .deck-bar {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 18px;
 }
 .deck-arrow {
@@ -216,7 +225,7 @@ a {
   flex-shrink: 0;
   border-radius: 50%;
   border: 1.5px solid var(--color-line);
-  background: var(--color-paper);
+  background: #fff;
   color: var(--color-navy);
   cursor: pointer;
   display: grid;
@@ -256,26 +265,6 @@ a {
   transform: scale(1.4);
 }
 
-@media (max-width: 900px) {
-  .deck-layout {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-  .deck-copy {
-    display: contents;
-  }
-  .deck-stage {
-    order: 1;
-  }
-  .deck-copy .deck-heading {
-    order: 0;
-  }
-  .deck-copy .deck-bar {
-    order: 2;
-    margin-top: 4px;
-    justify-content: center;
-  }
-}
 @media (max-width: 680px) {
   .deck-stage {
     height: 320px;
@@ -292,30 +281,18 @@ a {
   }
 }
 
-/* ===== Practice-area sidebar links ===== */
-.sidelink {
-  transition: color 0.15s, border-color 0.15s;
-}
-.sidelink:hover {
-  color: var(--color-navy);
-  border-color: var(--color-brass);
-}
-
-/* ===== Related-practice cards (service pages) ===== */
-.related-card {
-  transition: border-color 0.18s, box-shadow 0.25s, transform 0.25s;
-}
-.related-card:hover {
-  border-color: var(--color-brasslight);
-  box-shadow: 0 20px 44px -26px rgba(22, 36, 61, 0.45);
-  transform: translateY(-3px);
-}
-
 /* ===== Solid brass button label =====
    Force the light label color regardless of the surrounding section. The base
    `a { color: inherit }` reset is unlayered and would otherwise override the
    text-color utilities, leaving the label to inherit dark ink on cream bands. */
 .btn-brass {
+  color: var(--color-paper);
+}
+
+/* ===== Force white text on a dark-ground link when the surrounding element's
+   own text color (e.g. footer's text-slate) would otherwise win over the
+   `text-paper` utility via the unlayered `a { color: inherit }` rule above. ===== */
+.text-paper-force {
   color: var(--color-paper);
 }
 
@@ -371,108 +348,7 @@ a {
   }
 }
 
-/* ===== Practice-areas marquee (moving bar) ===== */
-.marquee {
-  position: relative;
-  overflow: hidden;
-  --marquee-gap: 3.5rem;
-  --marquee-duration: 40s;
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    #000 8%,
-    #000 92%,
-    transparent
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    #000 8%,
-    #000 92%,
-    transparent
-  );
-}
-.marquee-track {
-  display: flex;
-  width: max-content;
-  gap: var(--marquee-gap);
-  animation: marquee-scroll var(--marquee-duration) linear infinite;
-}
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
-}
-.marquee-copy {
-  display: flex;
-  align-items: center;
-  gap: var(--marquee-gap);
-}
-.marquee-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 1rem;
-  font-family: var(--font-serif);
-  white-space: nowrap;
-}
-.marquee-dot {
-  width: 7px;
-  height: 7px;
-  flex-shrink: 0;
-  transform: rotate(45deg);
-  background: var(--color-brass);
-}
-@keyframes marquee-scroll {
-  to {
-    transform: translateX(calc(-50% - var(--marquee-gap) / 2));
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track {
-    animation: none;
-    transform: none;
-  }
-}
-
-/* ===== Reviews badge — overlapping staff avatars + 5.0 stars ===== */
-.avstack {
-  display: flex;
-  align-items: center;
-}
-.avstack .av {
-  width: var(--av-size, 48px);
-  height: var(--av-size, 48px);
-  border-radius: 9999px;
-  background-image: var(--av-img, url("/team.jpg"));
-  background-repeat: no-repeat;
-  background-size: 480% auto;
-  background-position: var(--px, 50%) var(--py, 30%);
-  box-shadow: 0 0 0 2px var(--av-ring, #16243d),
-    0 6px 14px -6px rgba(0, 0, 0, 0.55);
-  flex-shrink: 0;
-}
-.avstack .av + .av {
-  margin-left: calc(var(--av-size, 48px) * -0.34);
-}
-/* Per-person crops from the 5-up staff photo (left → right). Tuned visually. */
-.av-p1 {
-  --px: 11%;
-  --py: 8%;
-}
-.av-p2 {
-  --px: 22%;
-  --py: 30%;
-}
-.av-p3 {
-  --px: 45%;
-  --py: 33%;
-}
-.av-p4 {
-  --px: 66%;
-  --py: 35%;
-}
-.av-p5 {
-  --px: 91%;
-  --py: 30%;
-}
+/* ===== Testimonial star rating ===== */
 .stars {
   display: inline-flex;
   gap: 2px;
@@ -482,6 +358,56 @@ a {
   width: 17px;
   height: 17px;
   fill: currentColor;
+}
+
+/* ===== Hero testimonial carousel ===== */
+.tcar-card {
+  max-width: 520px;
+  padding: 22px 26px 24px;
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  background: var(--color-paper);
+  box-shadow: 0 24px 48px -32px rgba(22, 36, 61, 0.28);
+}
+.tcar-card .stars {
+  color: var(--color-brass);
+}
+.tcar {
+  position: relative;
+  overflow: hidden;
+  max-width: none;
+  min-height: 150px;
+}
+.tcar-quote {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tcar-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateX(60px);
+  pointer-events: none;
+  transition:
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.45s ease;
+}
+.tcar-slide[data-active] {
+  position: relative;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.tcar-slide.is-exit {
+  opacity: 0;
+  transform: translateX(-70px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tcar-slide {
+    transition: none;
+  }
 }
 
 /* ===== Navy starfield backdrop (themvp-style twinkle on deep navy) ===== */
@@ -508,15 +434,24 @@ a {
   font-family: var(--font-sans);
   font-size: 15px;
   color: var(--color-navy);
-  background: var(--color-paper);
-  border: 1px solid #d9d1bf;
-  border-radius: 6px;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
   padding: 13px 15px;
   outline: none;
-  transition: border-color 0.15s;
+  box-shadow: inset 0 1px 2px rgba(22, 36, 61, 0.05);
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 .fld:focus {
   border-color: var(--color-brass);
+  box-shadow: inset 0 1px 2px rgba(22, 36, 61, 0.05), 0 0 0 3px rgba(156, 122, 60, 0.18);
+}
+select.fld {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239c7a3c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 42px;
 }
 .fld::placeholder {
   color: #a39a83;

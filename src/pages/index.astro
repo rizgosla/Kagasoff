@@ -1,18 +1,32 @@
 ---
-/** Home — Style A split hero, practice marquee, stats/why-us band, the
-    practice-area card deck, attorney band, "what to expect" process, and a
-    large starfield closing CTA. */
+/** Home — the single-page site. Section order: hero, why/practice split (with
+    a sticky intake form), team hover cards, "with you step by step", about
+    (vision + values), and the closing contact band with a second intake form
+    and the office map. */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Photo from '../components/Photo.astro';
-import PracticeMarquee from '../components/PracticeMarquee.astro';
-import ReviewsBadge from '../components/ReviewsBadge.astro';
-import { practiceAreas, process } from '../data/practiceAreas';
+import Placeholder from '../components/Placeholder.astro';
+import IntakeForm from '../components/IntakeForm.astro';
+import TestimonialCarousel from '../components/TestimonialCarousel.astro';
+import ProcessSection from '../components/ProcessSection.astro';
+import { practiceAreas } from '../data/practiceAreas';
 
 const stats = [
   { n: '17+', l: 'Years of experience' },
   { n: '5.0', l: 'Google rating' },
   { n: '291', l: 'Client reviews' },
   { n: '7', l: 'Practice areas' },
+];
+
+const credentials = [
+  { k: '17+ years', v: 'Of trial & advocacy experience' },
+  { k: 'UCLA', v: 'B.A., 2003' },
+  { k: 'Chapman', v: 'J.D., School of Law, 2007' },
+];
+
+const values = [
+  { numeral: 'I.', title: 'Attentiveness', body: 'We stay fully present and engaged — listening to your concerns and shaping legal solutions around your unique situation.' },
+  { numeral: 'II.', title: 'Relentless preparation', body: 'Every case is prepared as if it will be tried. That readiness is what creates leverage at the table.' },
+  { numeral: 'III.', title: 'Straight answers', body: 'We tell you where you stand in plain language, so you can make decisions with confidence.' },
 ];
 ---
 
@@ -33,18 +47,18 @@ const stats = [
           personal advocacy to every client &mdash; across seven practice areas.
         </p>
         <div class="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
-          <a href="tel:6572184947" class="lift inline-block rounded-[7px] bg-brass px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] text-navy">Call (657) 218-4947</a>
-          <a href="/contact" class="lift inline-block rounded-[7px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] text-paper">Free consultation</a>
+          <a href="tel:6572184947" class="btn-brass lift inline-block rounded-[8px] bg-brass px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em]">Call (657) 218-4947</a>
+          <a href="#contact" class="lift inline-block rounded-[8px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] text-paper">Free consultation</a>
         </div>
         <div class="mt-10">
-          <ReviewsBadge count="291" people={[1, 2, 3, 4, 5]} />
+          <TestimonialCarousel />
         </div>
       </div>
 
       <!-- Right: staff photo panel -->
       <div class="relative mx-auto w-full max-w-[560px] md:mx-0 md:max-w-none md:justify-self-stretch" data-reveal="right" style="--reveal-delay:140ms">
         <div aria-hidden="true" class="pointer-events-none absolute -inset-3 rounded-[14px] border border-[rgba(201,190,159,0.4)] md:-inset-4"></div>
-        <div class="relative overflow-hidden rounded-[10px] bg-navydark shadow-[0_40px_80px_-40px_rgba(0,0,0,0.7)]">
+        <div class="relative overflow-hidden rounded-[14px] bg-navydark shadow-[0_40px_80px_-40px_rgba(0,0,0,0.7)]">
           <img src="/team.jpg" alt="The Kagasoff Law Firm team" class="h-full w-full object-cover" style="aspect-ratio:4/5;max-height:min(78vh,760px);object-position:50% 35%" />
           <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[rgba(16,27,48,0.85)] to-transparent"></div>
           <div class="absolute bottom-5 left-5 right-5">
@@ -58,82 +72,97 @@ const stats = [
     </div>
   </section>
 
-  <!-- PRACTICE-AREAS MARQUEE -->
-  <PracticeMarquee theme="navy" />
+  <!-- WHY US + OUR PRACTICE, beside a sticky consultation form -->
+  <section id="why" class="bg-cream">
+    <div class="shell py-14 md:py-[84px]">
+      <div class="grid grid-cols-1 items-start gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+        <!-- Left: why-us + the practice deck -->
+        <div class="flex flex-col gap-14 md:gap-20">
+          <!-- Why Kagasoff -->
+          <div class="popout p-6 md:p-10">
+            <div data-reveal="left">
+              <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">Why Kagasoff</p>
+              <h2 class="font-serif text-[clamp(26px,2.6vw,40px)] font-medium leading-[1.2] text-navy">
+                A boutique firm with a courtroom record.
+              </h2>
+              <p class="mt-[18px] max-w-[46ch] text-[clamp(15px,0.95vw,19px)] font-light leading-[1.75] text-ink">
+                Direct access to your attorney, honest counsel, and preparation that holds up at trial —
+                trusted by hundreds of Orange County clients.
+              </p>
+              <a href="#about" class="lift mt-6 inline-block border-b border-brass pb-1.5 text-sm font-semibold tracking-[0.05em] text-brass">Read our story →</a>
+            </div>
+            <div class="mt-8 grid grid-cols-2 overflow-hidden rounded-[14px] border border-line bg-cream md:mt-12">
+              {
+                stats.map((s, i) => (
+                  <div
+                    class:list={[
+                      'p-5 border-line',
+                      i % 2 === 1 && 'border-l',
+                      i >= 2 && 'border-t',
+                    ]}
+                    data-reveal
+                    style={`--reveal-delay:${i * 100}ms`}
+                  >
+                    <div class="text-left font-serif text-[clamp(38px,3.6vw,58px)] font-medium leading-none text-brass">{s.n}</div>
+                    <div class="mt-2.5 text-left text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.12em] text-ink">{s.l}</div>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
 
-  <!-- STATS / WHY US -->
-  <section class="bg-cream">
-    <div class="shell py-14 md:py-[70px]">
-      <div class="grid grid-cols-1 items-center gap-10 md:grid-cols-[0.9fr_1.1fr] md:gap-16">
-        <div data-reveal="left">
-          <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">Why Kagasoff</p>
-          <h2 class="font-serif text-[clamp(26px,2.6vw,40px)] font-medium leading-[1.2] text-navy">
-            A boutique firm with a courtroom record.
-          </h2>
-          <p class="mt-[18px] max-w-[46ch] text-[clamp(15px,0.95vw,19px)] font-light leading-[1.75] text-ink">
-            Direct access to your attorney, honest counsel, and preparation that holds up at trial —
-            trusted by hundreds of Orange County clients.
-          </p>
-          <a href="/about" class="lift mt-6 inline-block border-b border-brass pb-1.5 text-sm font-semibold tracking-[0.05em] text-brass">Read our story →</a>
-        </div>
-        <div class="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4 md:gap-x-4">
-          {
-            stats.map((s, i) => (
-              <div class="border-t border-brass/30 pt-4" data-reveal style={`--reveal-delay:${i * 100}ms`}>
-                <div class="font-serif text-[clamp(38px,3.6vw,58px)] font-medium leading-none text-brass">{s.n}</div>
-                <div class="mt-2.5 text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.12em] text-ink">{s.l}</div>
-              </div>
-            ))
-          }
-        </div>
-      </div>
-    </div>
-  </section>
+          <!-- Our Practice -->
+          <div id="practice" class="popout p-6 md:p-10">
+            <div data-reveal="left">
+              <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">Our Practice</p>
+              <h2 class="font-serif text-[clamp(26px,2.6vw,40px)] font-medium leading-[1.2] text-navy">Seven areas. One standard of care.</h2>
+              <p class="mt-[18px] max-w-[46ch] text-[clamp(15px,0.95vw,19px)] font-light leading-[1.75] text-ink">
+                Whatever life brings, the firm provides the same direct, attorney-led counsel across every matter.
+              </p>
+            </div>
 
-  <!-- PRACTICE AREAS -->
-  <section class="shell py-14 md:py-[84px]">
-    <div class="deck-layout">
-      <!-- left: copy + deck controls -->
-      <div class="deck-copy" data-reveal="left">
-        <div class="deck-heading">
-          <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">Our Practice</p>
-          <h2 class="font-serif text-[clamp(26px,2.6vw,40px)] font-medium leading-[1.2] text-navy">Seven areas. One standard of care.</h2>
-          <p class="mt-[18px] max-w-[46ch] text-[clamp(15px,0.95vw,19px)] font-light leading-[1.75] text-ink">
-            Whatever life brings, the firm provides the same direct, attorney-led counsel across every matter.
-          </p>
-        </div>
-        <div class="deck-bar">
-          <button class="deck-arrow" id="deckPrev" type="button" aria-label="Previous practice area">
-            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" /></svg>
-          </button>
-          <div class="deck-dots" id="deckDots"></div>
-          <button class="deck-arrow" id="deckNext" type="button" aria-label="Next practice area">
-            <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" /></svg>
-          </button>
-        </div>
-      </div>
+            <div class="deck-stage mt-10" id="practiceDeck">
+              {
+                practiceAreas.map((a, i) => (
+                  <a href={`/services#${a.slug}`} class="kcard" data-pos={String(Math.min(i, 3))}>
+                    <div class="kcard-top">
+                      <span class="kcard-num">{String(i + 1).padStart(2, '0')}</span>
+                      <span class="kcard-count">
+                        {String(i + 1).padStart(2, '0')} / {String(practiceAreas.length).padStart(2, '0')}
+                      </span>
+                    </div>
+                    <div class="kcard-body">
+                      <h3>{a.name}</h3>
+                      <p set:html={a.short} />
+                    </div>
+                    <span class="kcard-cta">
+                      Learn more <span class="parrow">&rarr;</span>
+                    </span>
+                  </a>
+                ))
+              }
+            </div>
 
-      <!-- right: moving card deck -->
-      <div class="deck-stage" id="practiceDeck">
-        {
-          practiceAreas.map((a, i) => (
-            <a href={`/practice/${a.slug}`} class="kcard" data-pos={String(Math.min(i, 3))}>
-              <div class="kcard-top">
-                <span class="kcard-num">{String(i + 1).padStart(2, '0')}</span>
-                <span class="kcard-count">
-                  {String(i + 1).padStart(2, '0')} / {String(practiceAreas.length).padStart(2, '0')}
-                </span>
-              </div>
-              <div class="kcard-body">
-                <h3>{a.name}</h3>
-                <p set:html={a.short} />
-              </div>
-              <span class="kcard-cta">
-                Learn more <span class="parrow">&rarr;</span>
-              </span>
-            </a>
-          ))
-        }
+            <div class="deck-bar mt-6">
+              <button class="deck-arrow" id="deckPrev" type="button" aria-label="Previous practice area">
+                <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" /></svg>
+              </button>
+              <div class="deck-dots" id="deckDots"></div>
+              <button class="deck-arrow" id="deckNext" type="button" aria-label="Next practice area">
+                <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" /></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: sticky consultation form -->
+        <div class="lg:sticky lg:top-24">
+          <div data-reveal="right" style="--reveal-delay:120ms">
+            <p class="mb-[10px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">Free Consultation</p>
+            <p class="mb-6 font-serif text-[clamp(22px,1.7vw,30px)] leading-[1.3] text-navy">Tell us about your case.</p>
+            <IntakeForm uid="a" heading="" />
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -170,16 +199,8 @@ const stats = [
         const exitIdx = cur;
         const top = cards[exitIdx];
 
-        const mobile = window.innerWidth <= 680;
-        if (mobile) {
-          // On mobile: fade + scale so no horizontal overflow triggers page zoom
-          top.style.transition = 'transform .35s cubic-bezier(.4,0,.6,1), opacity .32s ease-in';
-          top.style.transform = 'scale(0.88)';
-        } else {
-          // Desktop: slide the top card off to the right
-          top.style.transition = 'transform .42s cubic-bezier(.4,0,.6,1), opacity .38s ease-in';
-          top.style.transform = 'translateX(115%)';
-        }
+        top.style.transition = 'transform .38s cubic-bezier(.4,0,.6,1), opacity .34s ease-in';
+        top.style.transform = 'scale(0.94) translateY(6px)';
         top.style.opacity = '0';
         top.style.zIndex = '20';
         top.style.pointerEvents = 'none';
@@ -222,84 +243,154 @@ const stats = [
     })();
   </script>
 
-  <!-- ATTORNEY BAND -->
-  <section class="bg-navydark text-paper">
-    <div class="grid shell grid-cols-1 items-center gap-10 py-14 md:grid-cols-[0.9fr_1.1fr] md:gap-[clamp(56px,5vw,110px)] md:py-[100px]">
-      <div class="relative" data-reveal="left">
-        <div aria-hidden="true" class="pointer-events-none absolute rounded-[4px] border border-[rgba(201,190,159,0.45)]" style="inset:20px -20px -20px 20px"></div>
-        <Photo src="/ashley-portrait.jpg" alt="Ashley Kagasoff" dark position="50% 25%" class="relative min-h-[clamp(320px,38vw,620px)] rounded-[4px]" />
-      </div>
-
-      <div data-reveal="right" style="--reveal-delay:120ms">
-        <p class="mb-[26px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brasslight">A Lawyer Who Fights For You</p>
-        <h2 class="mb-2 font-serif text-[clamp(34px,4.2vw,56px)] font-medium leading-[1.04] text-paper">Ashley Kagasoff</h2>
-        <div class="mb-[38px] text-[12.5px] uppercase tracking-[0.16em] text-brasslight">Attorney</div>
-        <p class="mb-10 max-w-[70ch] text-[clamp(15.5px,0.95vw,19px)] font-light leading-[1.8] text-mist">
-          Every matter is handled directly by an attorney who knows your name and your goals. We
-          prepare each case as if it will be tried — because that preparation is what earns the
-          strongest outcomes.
-        </p>
-        <a href="/about" class="lift inline-block border-b border-brass pb-1.5 text-sm font-semibold tracking-[0.05em] text-gold">More about the firm →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- WHAT TO EXPECT / PROCESS -->
-  <section class="bg-paper">
-    <div class="shell py-14 md:py-[88px]">
+  <!-- THE TEAM — static rows: portrait beside the full bio, alternating sides -->
+  <section id="team" class="bg-navydark text-paper">
+    <div class="shell py-14 md:py-[92px]">
       <div class="mb-11 max-w-[56ch] md:mb-14" data-reveal>
-        <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">How It Works</p>
-        <h2 class="font-serif text-[clamp(26px,2.6vw,40px)] font-medium leading-[1.2] text-navy">
-          What working with us looks like.
+        <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brasslight">The Team</p>
+        <h2 class="font-serif text-[clamp(30px,3.4vw,48px)] font-medium leading-[1.1] text-paper">
+          The people in your corner.
         </h2>
-        <p class="mt-[18px] text-[clamp(15px,0.95vw,19px)] font-light leading-[1.75] text-ink">
-          A clear, four-step path from your first call to resolution — the same disciplined approach
-          across every practice area.
+        <p class="mt-[18px] text-[clamp(15px,0.95vw,19px)] font-light leading-[1.75] text-mist">
+          A small team, on purpose — so you always know who is handling your matter.
         </p>
       </div>
-      <div class="grid grid-cols-1 gap-x-8 gap-y-9 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-12">
-        {
-          process.map((step, i) => (
-            <div class="border-t border-line pt-5" data-reveal style={`--reveal-delay:${i * 110}ms`}>
-              <div class="mb-3 font-serif text-[28px] leading-none text-brass">{String(i + 1).padStart(2, '0')}</div>
-              <h3 class="mb-2 font-serif text-[clamp(21px,1.35vw,26px)] font-semibold leading-[1.2] text-navy" set:html={step.title} />
-              <p class="text-[clamp(14px,0.85vw,17px)] font-light leading-[1.65] text-ink" set:html={step.body} />
+
+      <div class="mx-auto flex max-w-[1200px] flex-col gap-10 md:gap-12">
+        <!-- Ashley Kagasoff — portrait left, bio right -->
+        <article class="overflow-hidden rounded-[16px] border border-white/10 bg-navy md:grid md:grid-cols-[minmax(300px,420px)_1fr]" data-reveal>
+          <img
+            src="/ashley-portrait.jpg"
+            alt="Ashley Kagasoff"
+            class="aspect-[4/5] w-full object-cover md:aspect-auto md:h-full"
+            style="object-position:78% 22%"
+          />
+          <div class="p-7 md:p-10 lg:p-12">
+            <h3 class="font-serif text-[clamp(26px,2.2vw,36px)] font-medium leading-[1.1] text-paper">Ashley Kagasoff</h3>
+            <p class="mt-2 text-[12.5px] uppercase tracking-[0.16em] text-brasslight">Attorney at Law &middot; Founder</p>
+            <p class="mt-6 text-[clamp(14.5px,0.9vw,17px)] font-light leading-[1.75] text-mist">
+              Ashley has dedicated over 17 years to results-driven advocacy and personalized service.
+              Her practice spans criminal defense, professional license defense, personal injury,
+              employment, and family law — giving clients comprehensive solutions tailored to their needs.
+            </p>
+            <p class="mt-4 text-[clamp(14.5px,0.9vw,17px)] font-light leading-[1.75] text-mist">
+              Having worked both sides of the law — as a law clerk for the Orange County District
+              Attorney's and Public Defender's offices, then fifteen years in private defense — she
+              brings a rare perspective to every matter she takes on.
+            </p>
+            <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-3">
+              {
+                credentials.map((c) => (
+                  <div class="border-t border-[rgba(201,190,159,0.35)] pt-3">
+                    <div class="mb-1 font-serif text-[19px] font-medium text-paper">{c.k}</div>
+                    <div class="text-[12px] font-light leading-[1.5] text-mist">{c.v}</div>
+                  </div>
+                ))
+              }
             </div>
-          ))
-        }
-      </div>
-      <div class="mt-11 md:mt-14" data-reveal>
-        <a href="/contact" class="lift inline-block rounded-[7px] bg-navy px-[30px] py-4 text-center text-sm font-semibold tracking-[0.04em] text-paper">Start with a free consultation →</a>
+          </div>
+        </article>
+
+        <!-- Office manager — mirrored: bio left, portrait right -->
+        <article class="overflow-hidden rounded-[16px] border border-white/10 bg-navy md:grid md:grid-cols-[1fr_minmax(300px,420px)]" data-reveal style="--reveal-delay:120ms">
+          <Placeholder label="Office manager portrait — replace" class="aspect-[4/5] w-full md:order-2 md:aspect-auto md:h-full" />
+          <div class="p-7 md:order-1 md:p-10 lg:p-12">
+            <h3 class="font-serif text-[clamp(26px,2.2vw,36px)] font-medium leading-[1.1] text-paper">Office Manager Name</h3>
+            <p class="mt-2 text-[12.5px] uppercase tracking-[0.16em] text-brasslight">Office Manager</p>
+            <p class="mt-6 text-[clamp(14.5px,0.9vw,17px)] font-light leading-[1.75] text-mist">
+              [SAMPLE BIO — replace with the office manager's real bio.] She is usually the first
+              voice you'll hear when you call the firm, and she keeps every matter moving — scheduling
+              consultations, gathering records, and making sure clients are never left wondering where
+              their case stands. Clients regularly credit her with making a difficult process feel
+              manageable.
+            </p>
+          </div>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- CLOSING CTA -->
-  <section class="starfield overflow-hidden text-paper">
-    <div class="shell py-16 md:py-[104px]">
-      <div class="grid grid-cols-1 items-center gap-10 md:grid-cols-[1.15fr_0.85fr] md:gap-16">
-        <div data-reveal="left">
-          <p class="mb-[18px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brasslight">Free Initial Consultation</p>
-          <h2 class="font-serif text-[clamp(32px,4.4vw,58px)] font-medium leading-[1.06]">
-            Tell us <span class="text-gold">what happened.</span>
-          </h2>
-          <p class="mt-6 max-w-[52ch] text-[clamp(16px,1.05vw,20px)] font-light leading-[1.75] text-mist">
-            Every consultation is free and confidential. We'll listen, tell you honestly where you
-            stand, and lay out how we can help — with no obligation.
-          </p>
-          <div class="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
-            <a href="tel:6572184947" class="lift inline-block rounded-[7px] bg-brass px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] text-navy">Call (657) 218-4947</a>
-            <a href="/contact" class="lift inline-block rounded-[7px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] text-paper">Send a message</a>
+  <!-- WITH YOU STEP BY STEP -->
+  <ProcessSection />
+
+  <!-- ABOUT — vision + what you can expect, merged into one popout -->
+  <section id="about" class="bg-cream">
+    <div class="shell pt-4 pb-14 md:pt-6 md:pb-[84px]">
+      <div class="popout p-6 md:p-12">
+        <div class="grid grid-cols-1 items-start gap-12 md:grid-cols-2 md:gap-14 lg:gap-20">
+          <!-- Left: the mission, with its supporting copy directly beneath it -->
+          <div data-reveal>
+            <p class="mb-[16px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">About the Firm</p>
+            <h2 class="font-serif text-[clamp(26px,2.4vw,40px)] font-medium leading-[1.25] text-navy">
+              To provide exceptional legal counsel and representation that exceeds our clients' expectations.
+            </h2>
+            <div class="mt-7 h-0.5 w-[54px] bg-brass"></div>
+            <p class="mt-7 max-w-[52ch] text-[clamp(15.5px,0.95vw,19px)] font-light leading-[1.8] text-ink">
+              Based in Westminster and serving clients throughout Orange County and the greater California
+              region, the firm handles matters across seven practice areas — from personal injury and
+              criminal defense to family law and professional licensing. What unites that range is a single
+              approach: thorough preparation, plain-spoken advice, and direct access to the attorney working
+              on your case.
+            </p>
+          </div>
+
+          <!-- Right: the three commitments, stacked as ruled rows -->
+          <div>
+            <p class="mb-[16px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass" data-reveal>What you can expect</p>
+            {
+              values.map((v, i) => (
+                <div
+                  class:list={['flex gap-6 py-6 md:gap-8', i > 0 && 'border-t border-line', i === 0 && 'pt-2']}
+                  data-reveal
+                  style={`--reveal-delay:${(i + 1) * 100}ms`}
+                >
+                  <div class="w-10 shrink-0 pt-0.5 font-serif text-[28px] leading-[1.1] text-brass">{v.numeral}</div>
+                  <div>
+                    <h3 class="font-serif text-[clamp(20px,1.4vw,25px)] font-semibold leading-[1.2] text-navy">{v.title}</h3>
+                    <p class="mt-2 text-[clamp(14.5px,0.9vw,17px)] font-light leading-[1.7] text-ink">{v.body}</p>
+                  </div>
+                </div>
+              ))
+            }
           </div>
         </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="md:justify-self-end" data-reveal="right" style="--reveal-delay:120ms">
-          <div class="rounded-[10px] border border-white/10 bg-[rgba(16,27,48,0.55)] px-7 py-8 backdrop-blur md:px-8">
-            <ReviewsBadge count="291" people={[1, 2, 3, 4, 5]} />
-            <div class="my-7 h-px bg-white/10"></div>
+  <!-- CLOSING CTA + INTAKE + MAP -->
+  <section id="contact" class="starfield overflow-hidden text-paper">
+    <div class="shell py-16 md:py-[104px]">
+      <div class="mb-12 max-w-[62ch] md:mb-16" data-reveal="left">
+        <p class="mb-[18px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brasslight">Free Initial Consultation</p>
+        <h2 class="font-serif text-[clamp(32px,4.4vw,58px)] font-medium leading-[1.06]">
+          Tell us <span class="text-gold">what happened.</span>
+        </h2>
+        <p class="mt-6 max-w-[52ch] text-[clamp(16px,1.05vw,20px)] font-light leading-[1.75] text-mist">
+          Every consultation is free and confidential. We'll listen, tell you honestly where you
+          stand, and lay out how we can help — with no obligation.
+        </p>
+        <div class="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+          <a href="tel:6572184947" class="btn-brass lift inline-block rounded-[8px] bg-brass px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em]">Call (657) 218-4947</a>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14 items-stretch">
+        <IntakeForm uid="b" />
+        <div class="flex flex-col gap-6">
+          <div class="overflow-hidden rounded-[14px] border border-white/10 min-h-[360px] flex-1">
+            <iframe
+              src="https://www.google.com/maps?q=14541+Brookhurst+St+Suite+D4,+Westminster,+CA+92683&output=embed"
+              class="h-full w-full min-h-[360px] border-0"
+              loading="lazy"
+              allowfullscreen
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Kagasoff Law Firm office — 14541 Brookhurst St Suite D4, Westminster, CA"></iframe>
+          </div>
+          <div>
             <p class="mb-1 text-[11px] uppercase tracking-[0.22em] text-brasslight">Westminster Office</p>
             <p class="font-serif text-[19px] leading-[1.4] text-paper">14541 Brookhurst St, Suite D4<br />Westminster, CA 92683</p>
-            <a href="tel:6572184947" class="mt-4 inline-flex items-center gap-2 text-[14px] text-gold">
+            <a href="tel:6572184947" class="mt-4 inline-flex items-center gap-2 text-[14px] text-paper">
               <span class="inline-block h-px w-4 bg-gold/50"></span>(657) 218-4947
             </a>
           </div>
