@@ -47,7 +47,7 @@ const values = [
           personal advocacy to every client &mdash; across seven practice areas.
         </p>
         <div class="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
-          <a href="tel:6572184947" class="lift inline-block rounded-[8px] bg-brass px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] text-navy">Call (657) 218-4947</a>
+          <a href="tel:6572184947" class="btn-brass lift inline-block rounded-[8px] bg-brass px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em]">Call (657) 218-4947</a>
           <a href="#contact" class="lift inline-block rounded-[8px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] text-paper">Free consultation</a>
         </div>
         <div class="mt-10">
@@ -297,8 +297,8 @@ const values = [
           </div>
         </div>
 
-        <!-- Office manager -->
-        <div class="teamcard" data-reveal style="--reveal-delay:120ms">
+        <!-- Office manager — right-hand card, so it opens mirrored -->
+        <div class="teamcard teamcard-flip" data-reveal style="--reveal-delay:120ms">
           <Placeholder label="Office manager portrait — replace" class="teamcard-media absolute inset-0" />
           <div class="teamcard-base">
             <h3 class="font-serif text-[clamp(24px,2vw,32px)] font-medium leading-[1.1] text-paper">Office Manager Name</h3>
@@ -360,29 +360,38 @@ const values = [
   <section id="about" class="bg-cream">
     <div class="shell pt-4 pb-14 md:pt-6 md:pb-[84px]">
       <div class="popout p-6 md:p-12">
-        <p class="mb-[18px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass" data-reveal>About the Firm</p>
-        <div class="grid md:grid-cols-[1.05fr_0.95fr] gap-8 md:gap-12 items-start">
-          <h2 class="font-serif text-[clamp(24px,2.2vw,38px)] font-normal leading-[1.35] text-navy text-left" data-reveal style="--reveal-delay:80ms">
-            To provide exceptional legal counsel and representation that exceeds our clients' expectations.
-          </h2>
-          <p class="text-left text-[clamp(15.5px,0.95vw,19px)] font-light leading-[1.8] text-ink" data-reveal style="--reveal-delay:140ms">
-            Based in Westminster and serving clients throughout Orange County and the greater California
-            region, the firm handles matters across seven practice areas — from personal injury and
-            criminal defense to family law and professional licensing. What unites that range is a single
-            approach: thorough preparation, plain-spoken advice, and direct access to the attorney working
-            on your case.
-          </p>
-        </div>
+        <div class="grid grid-cols-1 items-start gap-12 md:grid-cols-2 md:gap-14 lg:gap-20">
+          <!-- Left: the mission, with its supporting copy directly beneath it -->
+          <div data-reveal>
+            <p class="mb-[16px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">About the Firm</p>
+            <h2 class="font-serif text-[clamp(26px,2.4vw,40px)] font-medium leading-[1.25] text-navy">
+              To provide exceptional legal counsel and representation that exceeds our clients' expectations.
+            </h2>
+            <div class="mt-7 h-0.5 w-[54px] bg-brass"></div>
+            <p class="mt-7 max-w-[52ch] text-[clamp(15.5px,0.95vw,19px)] font-light leading-[1.8] text-ink">
+              Based in Westminster and serving clients throughout Orange County and the greater California
+              region, the firm handles matters across seven practice areas — from personal injury and
+              criminal defense to family law and professional licensing. What unites that range is a single
+              approach: thorough preparation, plain-spoken advice, and direct access to the attorney working
+              on your case.
+            </p>
+          </div>
 
-        <div class="mt-10 border-t border-line pt-10 md:mt-12 md:pt-12">
-          <p class="mb-10 text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass md:mb-[52px]" data-reveal>What you can expect</p>
-          <div class="grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-12">
+          <!-- Right: the three commitments, stacked as ruled rows -->
+          <div>
+            <p class="mb-[16px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass" data-reveal>What you can expect</p>
             {
               values.map((v, i) => (
-                <div class="border-t border-line pt-[22px]" data-reveal style={`--reveal-delay:${i * 120}ms`}>
-                  <div class="mb-[14px] font-serif text-[32px] text-brass">{v.numeral}</div>
-                  <h3 class="mb-3 font-serif text-[23px] font-semibold text-navy">{v.title}</h3>
-                  <p class="text-[clamp(14.5px,0.9vw,17.5px)] font-light leading-[1.7] text-ink">{v.body}</p>
+                <div
+                  class:list={['flex gap-6 py-6 md:gap-8', i > 0 && 'border-t border-line', i === 0 && 'pt-2']}
+                  data-reveal
+                  style={`--reveal-delay:${(i + 1) * 100}ms`}
+                >
+                  <div class="w-10 shrink-0 pt-0.5 font-serif text-[28px] leading-[1.1] text-brass">{v.numeral}</div>
+                  <div>
+                    <h3 class="font-serif text-[clamp(20px,1.4vw,25px)] font-semibold leading-[1.2] text-navy">{v.title}</h3>
+                    <p class="mt-2 text-[clamp(14.5px,0.9vw,17px)] font-light leading-[1.7] text-ink">{v.body}</p>
+                  </div>
                 </div>
               ))
             }
@@ -405,7 +414,7 @@ const values = [
           stand, and lay out how we can help — with no obligation.
         </p>
         <div class="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
-          <a href="tel:6572184947" class="lift inline-block rounded-[8px] bg-brass px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] text-navy">Call (657) 218-4947</a>
+          <a href="tel:6572184947" class="btn-brass lift inline-block rounded-[8px] bg-brass px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em]">Call (657) 218-4947</a>
         </div>
       </div>
 

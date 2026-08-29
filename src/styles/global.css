@@ -574,6 +574,36 @@ textarea.fld {
   transform: translateX(0);
   pointer-events: auto;
 }
+/* Mirrored variant for a card on the right-hand side of the grid: the
+   portrait slides right and the bio pushes in from the left, so the two
+   cards open away from each other. */
+.teamcard-flip .teamcard-media {
+  transform-origin: right center;
+}
+@media (hover: hover) {
+  .teamcard-flip:hover .teamcard-media {
+    transform: translateX(58%) scale(1.4);
+  }
+}
+.teamcard-flip.is-open .teamcard-media {
+  transform: translateX(58%) scale(1.4);
+}
+.teamcard-flip .teamcard-bio {
+  right: auto;
+  left: 0;
+  border-left: 0;
+  border-right: 1px solid rgba(201, 162, 83, 0.35);
+  transform: translateX(-100%);
+}
+@media (hover: hover) {
+  .teamcard-flip:hover .teamcard-bio {
+    transform: translateX(0);
+  }
+}
+.teamcard-flip.is-open .teamcard-bio {
+  transform: translateX(0);
+}
+
 @media (max-width: 480px) {
   .teamcard-bio {
     width: 70%;
