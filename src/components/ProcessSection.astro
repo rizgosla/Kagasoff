@@ -1,25 +1,26 @@
 ---
 /** "With You Step by Step" — four popout cards, one per step.
  *
- * Each card is a fixed-size graphic over its own words: a mockup of what
- * that stage of a matter actually looks like, then the step kicker, the
- * title, the one-line summary, and a click disclosure holding the detail.
+ * Each card is an illustration over its own words: a line-art drawing of
+ * the *subject* of that stage — a question on a document, the books it is
+ * prepared out of, the two sides talking, the courthouse behind it all —
+ * then the step kicker, the title, the one-line summary, and a click
+ * disclosure holding the detail.
  *
  * There is no hover state anywhere in here. Nothing about a card depends
  * on a pointer being over it, the text is never hidden behind an
  * interaction, and the only thing a click changes is the disclosure the
  * button names in aria-controls.
  *
- * The four graphics are drawn at a fixed 470 x 360 and *scaled* to
- * whatever column they land in (see the fitter script at the bottom),
- * rather than reflowed into it: reflowing keeps the 10-12px mono at full
- * size inside a quarter-width box and tears the compositions apart. So
- * every length inside a composition is a plain px — a vw or a cq unit
- * inside a box that is scaled rather than resized re-proportions the
- * artwork by browser window while the box itself never changes.
+ * The four drawings are inline SVG on one shared 470 x 300 stage, so they
+ * scale to whatever column they land in on their own — no fitter script,
+ * no fixed-pixel stage, no container query. They also share one stroke
+ * vocabulary (see the .pc-art block in the stylesheet): navy 2.4 for
+ * contours, navy 1.5 at low opacity for interior detail, brass for the
+ * one accent each drawing is allowed, and flat cream/gold washes for
+ * depth. No text and no UI chrome inside any of them.
  *
- * All four are aria-hidden decorative artwork. Every real number they
- * quote (17+ / 5.0 / 291) is also set at body size elsewhere on the page.
+ * All four are aria-hidden decorative artwork.
  */
 import { process } from '../data/practiceAreas';
 
@@ -63,40 +64,40 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
       <ol class="process-list grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
         <li class="popout process-card p-5 md:p-6" data-reveal>
           <div class="pc-visual" aria-hidden="true">
-            <div class="pc-stage">
-              {/* Step 01 — the free consultation, as a call in progress:
-                  who is on the line, and the ground being covered. */}
-              <div class="ps-visual-frame">
-                <div class="ps-call">
-                  <div class="ps-call-bar">
-                    <span class="ps-call-disc">K</span>
-                    <span class="ps-call-id">
-                      <span class="ps-call-name">Kagasoff Law Firm</span>
-                      <span class="ps-call-sub">FREE CONSULTATION · 00:12</span>
-                    </span>
-                    <span class="ps-call-live"></span>
-                  </div>
-                  <ul class="ps-call-list">
-                    <li class="ps-call-row done">
-                      <span class="ps-call-tick">✓</span>
-                      <span class="ps-call-label">What happened</span>
-                    </li>
-                    <li class="ps-call-row done">
-                      <span class="ps-call-tick">✓</span>
-                      <span class="ps-call-label">Timeline &amp; documents</span>
-                    </li>
-                    <li class="ps-call-row now">
-                      <span class="ps-call-tick"></span>
-                      <span class="ps-call-label">Your options — explained</span>
-                    </li>
-                  </ul>
-                  <div class="ps-call-chips">
-                    <span class="ps-chip">No obligation</span>
-                    <span class="ps-chip">Free &amp; confidential</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* Step 01 — the question, on paper.
+                Two sheets, the front one corner-folded, standing centre-left
+                (x 110-260); a brass question mark drawn as one calligraphic
+                stroke over the upper half of the front sheet, three ruled
+                hairlines under it; a pen laid in from the lower right
+                (x 278-371) on the same 45 degrees, its nib pointing back at
+                the sheet. Brass twice: the mark, and the nib. */}
+            <svg class="pc-art" viewBox="0 0 470 300" role="presentation" focusable="false">
+              <g transform="translate(-28 0)">
+                {/* the sheet behind */}
+                <rect class="ln-t sheet" x="152" y="26" width="148" height="210" rx="5" />
+                {/* the front sheet, corner turned */}
+                <path class="ln sheet" d="M138 46 H262 L288 72 V258 H138 Z" />
+                <path class="wash-n" d="M262 46 L288 72 L262 72 Z" />
+                <path class="ln" d="M262 46 V72 H288" />
+                {/* The question: a hook around a circle of r30 centred on
+                    (213,116), left off at 70 degrees so the tail can leave
+                    it on the tangent — the tail's first control point sits
+                    on that tangent, which is what turns the step down from
+                    6 to 4 into a taper instead of a notch. */}
+                <path class="br qm-hook" d="M187 131 A30 30 0 1 1 223 144" />
+                <path class="br qm-tail" d="M223 144 C217 147 214 158 214 176" />
+                <circle class="dot" cx="214" cy="196" r="5.5" />
+                {/* ruled lines under it */}
+                <path class="ln-t" d="M164 218 H262 M164 234 H262 M164 250 H222" />
+                {/* The pen, laid in on the sheet's own 45 degrees. Barrel
+                    and nib meet on a shared edge, so the line between them
+                    reads as the collar rather than as two stuck-together
+                    shapes; the nib is the brass. */}
+                <path class="ln sheet" d="M322 218 L389 151 L399 161 L332 228 Z" />
+                <path class="br wash" d="M322 218 L306 244 L332 228 Z" />
+                <path class="br-t" d="M308 242 L323 225" />
+              </g>
+            </svg>
           </div>
           <p class="pc-step">{steps[0]}</p>
           <h3 class="pc-title" set:html={process[0].title} />
@@ -117,37 +118,47 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
 
         <li class="popout process-card p-5 md:p-6" data-reveal style="--reveal-delay:100ms">
           <div class="pc-visual" aria-hidden="true">
-            <div class="pc-stage">
-              {/* Step 02 — the evidence board: what has been gathered, what
-                  is still out, and how far the case theory has come. */}
-              <div class="ps-visual-frame">
-                <div class="ps-board">
-                  <div class="ps-board-grid">
-                    <div class="ps-ev">
-                      <span class="ps-ev-label">Police report</span>
-                      <span class="ps-ev-chip in">Received ✓</span>
-                    </div>
-                    <div class="ps-ev">
-                      <span class="ps-ev-label">Medical records</span>
-                      <span class="ps-ev-chip out"><i class="ps-ev-dot"></i>Requested</span>
-                    </div>
-                    <div class="ps-ev">
-                      <span class="ps-ev-label">Witness statements</span>
-                      <span class="ps-ev-chip in">Received ✓</span>
-                    </div>
-                    <div class="ps-ev">
-                      <span class="ps-ev-label">Scene photos</span>
-                      <span class="ps-ev-chip in">Received ✓</span>
-                    </div>
-                  </div>
-                  <div class="ps-rail">
-                    <span class="ps-rail-label">Case theory</span>
-                    <span class="ps-rail-track"><span class="ps-rail-fill"></span></span>
-                    <span class="ps-rail-caption">Prepared as if for trial.</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* Step 02 — what the preparation is made of.
+                A legal pad stands upright behind (x 172-298, tipped 4
+                degrees, brass binding rings along its head), and three
+                closed books lie flat in front of it, widest at the bottom
+                (x 120-350, y 144-254). Each book carries the same three
+                marks: a spine hinge, a brass spine rule, two page-edge
+                hairlines. A brass-outlined bookmark falls from the seam
+                between the top two. */}
+            <svg class="pc-art" viewBox="0 0 470 300" role="presentation" focusable="false">
+              {/* The pad, standing behind. A plain sheet with a brass clip
+                  over its head, not a bar with dots along the top — a filled
+                  band across the top of a rectangle reads as a title bar,
+                  which is the one thing these drawings must not look like.
+                  The clip is a single continuous wire: up the front, over
+                  the head, down the back, round the foot and back up. */}
+              <g transform="rotate(-4 235 110)">
+                <rect class="ln sheet" x="166" y="40" width="140" height="124" rx="4" />
+                <path class="ln-t" d="M182 96 H290 M182 116 H290 M182 136 H290 M182 156 H246" />
+                <path class="br" d="M192 84 V50 A9 9 0 0 1 210 50 V78 A6 6 0 0 1 198 78 V56" />
+              </g>
+              {/* The three books. Each carries the same four marks and
+                  nothing else: the cover line, the page block as a wash
+                  under it, the spine hinge, and a brass rule on the spine.
+                  Two full-width rules per book made them read as ruled
+                  paper rather than as bound covers. */}
+              <rect class="ln sheet" x="144" y="150" width="182" height="34" rx="4" />
+              <path class="wash-n" d="M162 160 H325 V183 H162 Z" />
+              <path class="ln-t" d="M160 159 H322 M160 156 V180" />
+              <path class="br-t" d="M152 158 V176" />
+              <rect class="ln sheet" x="132" y="184" width="206" height="34" rx="4" />
+              <path class="wash-n" d="M150 194 H337 V217 H150 Z" />
+              <path class="ln-t" d="M148 193 H334 M148 190 V214" />
+              <path class="br-t" d="M140 192 V210" />
+              <rect class="ln sheet" x="120" y="218" width="230" height="36" rx="4" />
+              <path class="wash-n" d="M138 229 H349 V253 H138 Z" />
+              <path class="ln-t" d="M136 228 H346 M136 224 V250" />
+              <path class="br-t" d="M128 226 V246" />
+              {/* the bookmark, out of the top seam */}
+              <path class="br sheet" d="M284 184 V240 L292 232 L300 240 V184" />
+              <path class="br-t" d="M292 192 V224" />
+            </svg>
           </div>
           <p class="pc-step">{steps[1]}</p>
           <h3 class="pc-title" set:html={process[1].title} />
@@ -168,55 +179,34 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
 
         <li class="popout process-card p-5 md:p-6" data-reveal style="--reveal-delay:200ms">
           <div class="pc-visual" aria-hidden="true">
-            <div class="pc-stage">
-              {/* Step 03 — three rounds of offer and counter, drawn as two
-                  bars that close on each other round by round. Decorative:
-                  the widths are composition, not data. */}
-              <div class="ps-visual-frame">
-                <div class="ps-conv">
-                  <div class="ps-conv-rounds">
-                    <div class="ps-round">
-                      <span class="ps-round-label">Round 1</span>
-                      <div class="ps-bar-row">
-                        <span class="ps-bar-label">Their offer</span>
-                        <span class="ps-bar-track"><span class="ps-bar-fill them" style="width:25%"></span></span>
-                      </div>
-                      <div class="ps-bar-row">
-                        <span class="ps-bar-label">Our position</span>
-                        <span class="ps-bar-track"><span class="ps-bar-fill us" style="width:85%"></span></span>
-                      </div>
-                    </div>
-                    <div class="ps-round">
-                      <span class="ps-round-label">Round 2</span>
-                      <div class="ps-bar-row">
-                        <span class="ps-bar-label">Their offer</span>
-                        <span class="ps-bar-track"><span class="ps-bar-fill them" style="width:45%"></span></span>
-                      </div>
-                      <div class="ps-bar-row">
-                        <span class="ps-bar-label">Our position</span>
-                        <span class="ps-bar-track"><span class="ps-bar-fill us" style="width:80%"></span></span>
-                      </div>
-                    </div>
-                    <div class="ps-round">
-                      <span class="ps-round-label">Round 3</span>
-                      <div class="ps-bar-row">
-                        <span class="ps-bar-label">Their offer</span>
-                        <span class="ps-bar-track"><span class="ps-bar-fill them" style="width:68%"></span></span>
-                      </div>
-                      <div class="ps-bar-row">
-                        <span class="ps-bar-label">Our position</span>
-                        <span class="ps-bar-track"><span class="ps-bar-fill us" style="width:72%"></span></span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="ps-conv-strip">
-                    <span class="ps-conv-check">✓</span>
-                    <span class="ps-conv-title">Settlement reached</span>
-                    <span class="ps-conv-note">on our terms</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* Step 03 — the two sides, talking.
+                Two faceless head-and-shoulders figures, mirrored about the
+                centre (x 56-144 and 326-414), sitting behind a table drawn
+                as one long rule at y 252. Between them two speech bubbles
+                overlap on the diagonal: the upper-left one navy, tailed at
+                the left figure; the lower-right one brass, tailed at the
+                right figure and drawn second so it sits in front. */}
+            <svg class="pc-art" viewBox="0 0 470 300" role="presentation" focusable="false">
+              {/* The two figures. The collar is what keeps a circle over a
+                  dome from reading as an account avatar. */}
+              <path class="ln wash-n" d="M56 252 C56 206 74 188 100 188 C126 188 144 206 144 252" />
+              <path class="ln-t" d="M88 192 L100 210 L112 192" />
+              <circle class="ln wash-n" cx="100" cy="156" r="26" />
+              <path class="ln wash-n" d="M326 252 C326 206 344 188 370 188 C396 188 414 206 414 252" />
+              <path class="ln-t" d="M358 192 L370 210 L382 192" />
+              <circle class="ln wash-n" cx="370" cy="156" r="26" />
+              {/* the table they sit behind */}
+              <rect class="ln wash-n" x="36" y="252" width="398" height="10" rx="3" />
+              {/* What is said. Each bubble is ONE path with its tail cut
+                  into the bottom edge — a separate filled triangle laid over
+                  a rounded rect leaves the rect's own border running across
+                  the tail's mouth, and the tail reads as stuck on. Navy is
+                  drawn first so the brass one overlaps in front. */}
+              <path class="ln sheet" d="M164 56 H286 A16 16 0 0 1 302 72 V106 A16 16 0 0 1 286 122 H188 L150 142 L166 122 H164 A16 16 0 0 1 148 106 V72 A16 16 0 0 1 164 56 Z" />
+              <path class="ln-t" d="M168 80 H282 M168 98 H250" />
+              <path class="br sheet" d="M210 106 H322 A16 16 0 0 1 338 122 V156 A16 16 0 0 1 322 172 H304 L322 192 L286 172 H210 A16 16 0 0 1 194 156 V122 A16 16 0 0 1 210 106 Z" />
+              <path class="br-t" d="M214 130 H318 M214 148 H286" />
+            </svg>
           </div>
           <p class="pc-step">{steps[2]}</p>
           <h3 class="pc-title" set:html={process[2].title} />
@@ -237,34 +227,70 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
 
         <li class="popout process-card p-5 md:p-6" data-reveal style="--reveal-delay:300ms">
           <div class="pc-visual" aria-hidden="true">
-            <div class="pc-stage">
-              {/* Step 04 — the closing page of the matter: the word, the
-                  terms that were secured, and the firm's record under a
-                  hairline. */}
-              <div class="ps-visual-frame">
-                <div class="ps-close">
-                  <div class="ps-close-banner">
-                    <div class="ps-close-crest">
-                      <span class="ps-arc l"></span>
-                      <span class="ps-close-word">Resolved</span>
-                      <span class="ps-arc r"></span>
-                    </div>
-                    <span class="ps-close-rule"></span>
-                    <span class="ps-close-chip">Case closed</span>
-                  </div>
-                  <ul class="ps-close-terms">
-                    <li><span class="ps-close-tick">✓</span><span>Compensation secured</span></li>
-                    <li><span class="ps-close-tick">✓</span><span>Costs covered</span></li>
-                    <li><span class="ps-close-tick">✓</span><span>Guidance for what&rsquo;s next</span></li>
-                  </ul>
-                  <div class="ps-close-foot">
-                    <span><b>17+</b> Years</span><em>·</em>
-                    <span><b>5.0</b> Rating</span><em>·</em>
-                    <span><b>291</b> Reviews</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* Step 04 — the courthouse, drawn back to front.
+                Pediment (apex y 34) over an entablature, a wash for the
+                wall behind, an arched doorway, then four columns with
+                slab capitals and bases, then the stylobate and three
+                steps widening to x 52-418. Brass is spent in three
+                places only: the tympanum outline, the oculus ring and
+                the rule where the building meets its steps. */}
+            <svg class="pc-art" viewBox="0 0 470 300" role="presentation" focusable="false">
+              {/* pediment */}
+              <path class="ln" d="M70 104 L235 34 L400 104" />
+              <path class="br-t wash" d="M96 100 L235 42 L374 100 Z" />
+              <circle class="ln sheet" cx="235" cy="76" r="13" />
+              <circle class="br-t" cx="235" cy="76" r="6.5" />
+              {/* entablature */}
+              <rect class="ln sheet" x="78" y="104" width="314" height="22" rx="2" />
+              <path class="ln-t" d="M86 118 H384" />
+              {/* The wall behind the colonnade, and the way in. The wash
+                  stops just outside the outer columns rather than running
+                  the full width of the entablature — carried out to the
+                  cornice it stops reading as depth behind the porch and
+                  starts reading as a grey slab pasted on. Its two vertical
+                  edges land exactly on the outer columns' outer shaft
+                  lines, so the wash has no visible edge at all — only the
+                  three gaps between the columns are toned. */}
+              <path class="wash-n" d="M134 126 H336 V214 H134 Z" />
+              <path class="br wash-n" d="M222 214 V180 A13 13 0 0 1 248 180 V214" />
+              {/* four columns */}
+              <g class="col">
+                <rect class="ln sheet" x="130" y="126" width="30" height="12" rx="1.5" />
+                <path class="ln" d="M134 138 V204 M156 138 V204" />
+                <path class="ln-t" d="M145 142 V200" />
+                <rect class="ln sheet" x="131" y="204" width="28" height="10" rx="1.5" />
+              </g>
+              <g class="col">
+                <rect class="ln sheet" x="190" y="126" width="30" height="12" rx="1.5" />
+                <path class="ln" d="M194 138 V204 M216 138 V204" />
+                <path class="ln-t" d="M205 142 V200" />
+                <rect class="ln sheet" x="191" y="204" width="28" height="10" rx="1.5" />
+              </g>
+              <g class="col">
+                <rect class="ln sheet" x="250" y="126" width="30" height="12" rx="1.5" />
+                <path class="ln" d="M254 138 V204 M276 138 V204" />
+                <path class="ln-t" d="M265 142 V200" />
+                <rect class="ln sheet" x="251" y="204" width="28" height="10" rx="1.5" />
+              </g>
+              <g class="col">
+                <rect class="ln sheet" x="310" y="126" width="30" height="12" rx="1.5" />
+                <path class="ln" d="M314 138 V204 M336 138 V204" />
+                <path class="ln-t" d="M325 142 V200" />
+                <rect class="ln sheet" x="311" y="204" width="28" height="10" rx="1.5" />
+              </g>
+              {/* stylobate and steps */}
+              <rect class="ln sheet" x="88" y="214" width="294" height="12" rx="2" />
+              <rect class="ln sheet" x="76" y="226" width="318" height="12" rx="2" />
+              <rect class="ln sheet" x="64" y="238" width="342" height="12" rx="2" />
+              <rect class="ln sheet" x="52" y="250" width="366" height="12" rx="2" />
+              {/* A moulding along the stylobate, drawn last: sat on the
+                  stylobate's bottom edge it was painted over by the first
+                  step, which is filled and drawn after it, and moved down
+                  onto the step it read as a gold line lying loose across
+                  the stair. Inside the stylobate it belongs to the
+                  building. */}
+              <path class="br-t" d="M94 222 H376" />
+            </svg>
           </div>
           <p class="pc-step">{steps[3]}</p>
           <h3 class="pc-title" set:html={process[3].title} />
@@ -285,43 +311,24 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
       </ol>
     </div>
 
-    <div class="mt-11 md:mt-14" data-reveal>
-      <a href="#contact" class="lift inline-block rounded-[8px] bg-navy px-[30px] py-4 text-center text-sm font-semibold tracking-[0.04em] text-paper">Start with a free consultation →</a>
+    <div class="mt-11 text-center md:mt-14" data-reveal>
+      <a href="#contact" class="pc-cta lift inline-block rounded-[8px] bg-navy px-[30px] py-4 text-center text-sm font-semibold tracking-[0.04em]">Start with a free consultation →</a>
     </div>
   </div>
 </section>
 
-<style is:global>
-  /* Registered so that an engine which drops the scale declaration falls
-     back to a usable 0.8 rather than losing the transform outright.
-     @property cannot be scoped, so it sits in its own global block. */
-  @property --pc-scale {
-    syntax: "<number>";
-    inherits: true;
-    initial-value: 0.8;
-  }
-</style>
-
 <style>
   .process-section {
-    --ease-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
     --pc-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-    /* The paper the mockup frames are drawn on — a touch brighter than
-       --color-paper so a frame reads as a sheet laid on the card. */
+    /* The paper the drawings are laid on — a touch brighter than
+       --color-paper so a frame reads as a sheet placed on the card. It is
+       also the fill behind every shape that has to occlude another. */
     --pc-sheet: #fffdf9;
     /* A muted colour rather than a low-alpha wash: at ~20% alpha the
-       secondary text in these frames composites to about 1.5:1. */
+       caption under a disclosure composites to about 1.5:1. */
     --pc-muted: #a39a83;
-    --pc-green: #2f9e6a;
   }
-
-  @keyframes pcPulseRing {
-    0%   { box-shadow: 0 0 0 0    rgb(201 162 83 / 0.5); }
-    70%  { box-shadow: 0 0 0 14px rgb(201 162 83 / 0); }
-    100% { box-shadow: 0 0 0 0    rgb(201 162 83 / 0); }
-  }
-  @keyframes pcBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 
   .process-grid-wrap { max-width: 1680px; margin-inline: auto; }
   .process-list { list-style: none; margin: 0; padding: 0; }
@@ -332,7 +339,7 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
     min-width: 0;
   }
 
-  /* ----- The words under the graphic ----- */
+  /* ----- The words under the drawing ----- */
   .pc-step {
     margin: 18px 0 0;
     font-family: var(--pc-mono);
@@ -433,402 +440,107 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
     color: var(--pc-muted);
   }
 
-  /* ============================================================
-     THE GRAPHICS.
+  /* ----- The section's closing button -----
+     The colour is set here rather than with a `text-paper` utility on
+     the anchor. global.css declares `a { color: inherit }` outside any
+     cascade layer, and an unlayered declaration beats every layered one
+     whatever its specificity — so a Tailwind colour utility, which
+     lands in @layer utilities, never reaches an <a>. The utility was
+     silently losing to `inherit` and the button was rendering in ink on
+     navy (about 1.5:1). This rule is unlayered too, and wins on
+     specificity. */
+  .process-section .pc-cta { color: var(--color-paper); }
 
-     Each is drawn in a fixed 470 x 360 box and scaled to the column
-     it lands in — see the fitter script. The box never changes size,
-     so nothing inside one may use a viewport or container unit.
+  /* ============================================================
+     THE DRAWINGS.
+
+     One mat and one stroke vocabulary for all four. The mat is the
+     .pc-visual box — sheet warming into cream, hairline border, the
+     14px radius the rest of the page uses. The drawing is a plain
+     inline SVG on a 470 x 300 viewBox with its own generous margins,
+     so it sets the mat's height and scales with the column; there is
+     nothing here to measure and nothing to fit.
+
+     Every stroke in all four drawings is one of five classes, and the
+     colour is spent in the same order each time: navy carries the
+     subject, navy at 1.5/45% carries interior detail, and brass is
+     rationed — two or three marks per drawing at most, always on the
+     thing worth looking at (the question, the bookmark, the second
+     voice, the pediment).
      ============================================================ */
   .pc-visual {
-    --stage-w: 470px;
-    --stage-h: 360px;
-    position: relative;
-    /* Unitless on purpose — `470px / 360px` is not a valid
-       aspect-ratio — so keep these two in step with the vars above. */
-    aspect-ratio: 470 / 360;
-    /* Gives the box a definite size on both axes, which is what lets
-       the fitter constrain the height as well as the width. */
-    container-type: size;
-    overflow: hidden;
     border-radius: 14px;
-    /* No background: the frame carries its own sheet and shadow, and a
-       second panel behind it would show at the edges. */
-    background: transparent;
-  }
-  .pc-stage {
-    /* Dividing a length by a length is not something calc() will do, so
-       the ratio is measured in JS and written back here as an inline
-       custom property. This value is only the pre-script fallback. */
-    --pc-scale: 0.8;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: var(--stage-w);
-    height: var(--stage-h);
-    margin: calc(var(--stage-h) / -2) 0 0 calc(var(--stage-w) / -2);
-    transform: scale(var(--pc-scale));
-    transform-origin: center center;
-  }
-
-  .ps-visual-frame {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    /* The sheet, warming into cream at the foot — the same wash on all
-       four so the set reads as one family. */
+    border: 1px solid var(--color-line);
     background: linear-gradient(180deg, var(--pc-sheet) 0%, var(--color-cream) 100%);
-    border-radius: 14px;
-    border: 1px solid var(--color-line);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-  .ps-visual-frame > * { flex: 1; min-height: 0; }
-  /* Every composition works to the same 24px margin inside the frame. */
-  .ps-call,
-  .ps-board,
-  .ps-conv,
-  .ps-close {
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-  }
-  .ps-call ul,
-  .ps-close ul { list-style: none; margin: 0; padding: 0; }
-
-  /* Shared card chassis for the small panels inside the frames. */
-  .ps-call-bar,
-  .ps-call-row,
-  .ps-ev,
-  .ps-conv-strip {
-    background: var(--pc-sheet);
-    border: 1px solid var(--color-line);
-    border-radius: 10px;
-    box-shadow: 0 12px 28px -18px rgb(22 36 61 / 0.22);
-  }
-
-  /* ----- Step 01: the consultation call ----- */
-  .ps-call { gap: 16px; }
-  .ps-call-bar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 14px;
-  }
-  .ps-call-disc {
-    width: 38px; height: 38px; border-radius: 50%;
-    flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--color-navy);
-    color: var(--color-gold);
-    font-family: var(--font-serif);
-    font-weight: 600;
-    font-size: 19px;
-    line-height: 1;
-  }
-  .ps-call-id { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-  .ps-call-name {
-    font-family: var(--font-serif); font-weight: 600;
-    font-size: 15px; letter-spacing: -0.01em;
-    color: var(--color-navy);
-  }
-  .ps-call-sub {
-    font-family: var(--pc-mono); font-size: 10px;
-    letter-spacing: 0.11em; color: var(--pc-muted);
-  }
-  .ps-call-live {
-    margin-left: auto; flex-shrink: 0;
-    width: 9px; height: 9px; border-radius: 50%;
-    background: var(--pc-green);
-    box-shadow: 0 0 0 4px rgb(47 158 106 / 0.18);
-    animation: pcPulseRing 2s var(--ease-soft) infinite;
-  }
-  /* The checklist takes the frame's slack so the three rows spread over
-     the middle of the composition rather than stacking at its top. */
-  .ps-call-list {
-    flex: 1;
-    display: flex; flex-direction: column;
-    justify-content: space-between;
-    gap: 10px;
-  }
-  .ps-call-row {
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px 14px;
-  }
-  .ps-call-tick {
-    width: 20px; height: 20px; border-radius: 50%;
-    flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; line-height: 1;
-    background: var(--pc-green);
-    color: var(--pc-sheet);
-  }
-  .ps-call-label {
-    font-family: var(--font-serif); font-size: 14px;
-    color: var(--color-navy);
-  }
-  /* The row being worked through: ringed in brass, no check yet. */
-  .ps-call-row.now { border-color: rgb(201 162 83 / 0.55); }
-  .ps-call-row.now .ps-call-tick {
-    background: transparent;
-    border: 1.5px solid var(--color-brass);
-    animation: pcPulseRing 2.4s var(--ease-soft) infinite;
-  }
-  .ps-call-row.now .ps-call-label { color: var(--color-brass); }
-  .ps-call-chips { display: flex; gap: 10px; }
-  .ps-chip {
-    flex: 1;
-    text-align: center;
-    padding: 8px 10px;
-    border-radius: 999px;
-    border: 1px solid rgb(201 162 83 / 0.45);
-    background: rgb(227 201 147 / 0.16);
-    font-family: var(--pc-mono); font-size: 10px;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--color-brass);
-    white-space: nowrap;
-  }
-
-  /* ----- Step 02: the evidence board ----- */
-  .ps-board { gap: 18px; }
-  .ps-board-grid {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-  .ps-ev {
-    padding: 14px;
-    display: flex; flex-direction: column;
-    justify-content: space-between;
-    gap: 12px;
-  }
-  .ps-ev-label {
-    font-family: var(--font-serif); font-weight: 600;
-    font-size: 14px; line-height: 1.2;
-    color: var(--color-navy);
-  }
-  .ps-ev-chip {
-    align-self: flex-start;
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 4px 9px;
-    border-radius: 999px;
-    font-family: var(--pc-mono); font-size: 9px;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .ps-ev-chip.in {
-    background: rgb(47 158 106 / 0.12);
-    border: 1px solid rgb(47 158 106 / 0.35);
-    color: #1f6b4a;
-  }
-  .ps-ev-chip.out {
-    background: rgb(227 201 147 / 0.2);
-    border: 1px solid rgb(201 162 83 / 0.45);
-    color: var(--color-brass);
-  }
-  .ps-ev-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--color-brass);
-    animation: pcBlink 1.4s steps(1) infinite;
-  }
-  .ps-rail { display: flex; flex-direction: column; gap: 9px; }
-  .ps-rail-label {
-    font-family: var(--pc-mono); font-size: 10px;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--pc-muted);
-  }
-  .ps-rail-track {
-    height: 7px; border-radius: 999px;
-    background: rgb(22 36 61 / 0.09);
     overflow: hidden;
   }
-  .ps-rail-fill {
+  .pc-art {
     display: block;
-    width: 70%; height: 100%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, var(--color-brass), var(--color-brasslight));
-  }
-  .ps-rail-caption {
-    font-family: var(--font-serif); font-style: italic;
-    font-size: 14px; color: var(--color-ink);
+    width: 100%;
+    height: auto;
   }
 
-  /* ----- Step 03: three rounds, converging ----- */
-  .ps-conv { gap: 18px; }
-  .ps-conv-rounds {
-    flex: 1;
-    display: flex; flex-direction: column;
-    justify-content: space-between;
-    gap: 14px;
+  /* Contour. */
+  .pc-art .ln {
+    fill: none;
+    stroke: var(--color-navy);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
-  .ps-round { display: flex; flex-direction: column; gap: 7px; }
-  .ps-round-label {
-    font-family: var(--pc-mono); font-size: 9.5px;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--pc-muted);
+  /* Interior detail — rules, hinges, flutes. Thin and stepped back so a
+     drawing reads as one silhouette first and its detail second. */
+  .pc-art .ln-t {
+    fill: none;
+    stroke: var(--color-navy);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    /* stroke-opacity, not opacity: several of these sit on the same
+       element as a wash fill, and element opacity would fade both. */
+    stroke-opacity: 0.45;
   }
-  .ps-bar-row {
-    display: grid;
-    grid-template-columns: 82px 1fr;
-    align-items: center;
-    gap: 10px;
+  /* The accent. */
+  .pc-art .br {
+    fill: none;
+    stroke: var(--color-brass);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
-  .ps-bar-label {
-    font-family: var(--pc-mono); font-size: 9.5px;
-    letter-spacing: 0.04em;
-    color: rgb(22 36 61 / 0.6);
-    text-align: right;
-    white-space: nowrap;
+  .pc-art .br-t {
+    fill: none;
+    stroke: var(--color-brasslight);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
-  .ps-bar-track {
-    height: 10px;
-    border-radius: 999px;
-    background: rgb(22 36 61 / 0.07);
-  }
-  .ps-bar-fill {
-    display: block;
-    height: 100%;
-    border-radius: 999px;
-  }
-  .ps-bar-fill.them { background: rgb(22 36 61 / 0.38); }
-  .ps-bar-fill.us {
-    background: linear-gradient(90deg, var(--color-brass), var(--color-brasslight));
-  }
-  .ps-conv-strip {
-    display: flex; align-items: center; gap: 10px;
-    padding: 12px 14px;
-    border-color: rgb(47 158 106 / 0.4);
-  }
-  .ps-conv-check {
-    width: 22px; height: 22px; border-radius: 50%;
-    flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--pc-green); color: var(--pc-sheet);
-    font-size: 12px; line-height: 1;
-  }
-  .ps-conv-title {
-    font-family: var(--font-serif); font-weight: 600;
-    font-size: 15px; color: var(--color-navy);
-    letter-spacing: -0.01em;
-  }
-  .ps-conv-note {
-    margin-left: auto;
-    font-family: var(--pc-mono); font-size: 9.5px;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--pc-muted);
-    white-space: nowrap;
-  }
-
-  /* ----- Step 04: the matter, closed ----- */
-  .ps-close { gap: 18px; }
-  .ps-close-banner {
-    display: flex; flex-direction: column; align-items: center;
-    gap: 10px;
-  }
-  .ps-close-crest { display: flex; align-items: center; gap: 14px; }
-  /* Two arcs, drawn as thirds of a ring — a laurel without an SVG. */
-  .ps-arc {
-    width: 15px; height: 42px;
-    border: 1.5px solid var(--color-brass);
-    border-radius: 50%;
-    opacity: 0.6;
-  }
-  .ps-arc.l {
-    border-top-color: transparent;
-    border-right-color: transparent;
-    transform: rotate(-16deg);
-  }
-  .ps-arc.r {
-    border-top-color: transparent;
-    border-left-color: transparent;
-    transform: rotate(16deg);
-  }
-  .ps-close-word {
-    font-family: var(--font-serif); font-weight: 600;
-    font-size: 38px; line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--color-navy);
-  }
-  /* A double rule: the element is the upper line, its ::after the lower. */
-  .ps-close-rule {
-    position: relative;
-    width: 128px; height: 1px;
-    background: rgb(156 122 60 / 0.6);
-  }
-  .ps-close-rule::after {
-    content: "";
-    position: absolute;
-    left: 22px; right: 22px; top: 4px;
-    height: 1px;
-    background: rgb(156 122 60 / 0.3);
-  }
-  .ps-close-chip {
-    margin-top: 2px;
-    padding: 4px 12px;
-    border-radius: 999px;
-    border: 1px solid rgb(201 162 83 / 0.45);
-    background: rgb(227 201 147 / 0.18);
-    font-family: var(--pc-mono); font-size: 9.5px;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--color-brass);
-  }
-  .ps-close-terms {
-    flex: 1;
-    display: flex; flex-direction: column;
-    justify-content: center;
-    gap: 12px;
-  }
-  .ps-close-terms li {
-    display: flex; align-items: center; gap: 11px;
-    font-family: var(--font-serif); font-size: 14px;
-    color: var(--color-navy);
-  }
-  .ps-close-tick {
-    width: 19px; height: 19px; border-radius: 50%;
-    flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--pc-green); color: var(--pc-sheet);
-    font-size: 10px; line-height: 1;
-  }
-  .ps-close-foot {
-    display: flex; align-items: baseline; justify-content: center;
-    gap: 9px;
-    padding-top: 14px;
-    border-top: 1px solid var(--color-line);
-    font-family: var(--pc-mono); font-size: 9.5px;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--pc-muted);
-    white-space: nowrap;
-  }
-  .ps-close-foot b {
-    font-family: var(--font-serif); font-weight: 600;
-    font-size: 15px; letter-spacing: 0;
-    color: var(--color-navy);
-  }
-  .ps-close-foot em { font-style: normal; color: var(--color-line); }
+  /* Fills. Declared after the stroke classes so `class="ln sheet"` —
+     an outlined shape that has to occlude what is behind it — resolves
+     to the fill rather than to the stroke class's fill: none. */
+  .pc-art .sheet { fill: var(--pc-sheet); }
+  .pc-art .wash { fill: var(--color-gold); fill-opacity: 0.22; }
+  .pc-art .wash-n { fill: var(--color-navy); fill-opacity: 0.07; }
+  .pc-art .dot { fill: var(--color-brass); }
+  /* The question mark is the one place the vocabulary widens: a hook
+     drawn heavier than its tail is what keeps the glyph from reading as
+     a piece of typography dropped onto the sheet. */
+  .pc-art .qm-hook { stroke-width: 6; }
+  .pc-art .qm-tail { stroke-width: 4; }
 
   /* ============================================================
      REDUCED MOTION.
 
-     Kagasoff's global.css guards specific components (the reveal
-     utility, the carousel, the team-card bio) rather than carrying a
-     universal killswitch, so there is no net under the loops inside
-     these frames — the pulsing call dot, the pulsing intake ring and
-     the blinking "requested" dot — and the section has to stop its
-     own. The disclosure's max-height and the chevron's rotation go
-     with them: the state still changes, it just snaps.
-
-     `animation`, not `animation-duration`: these loops are purely
-     decorative and there is no final frame worth landing on.
+     Nothing in here loops any more — the drawings are static and the
+     only movement left is the disclosure opening and its chevron
+     turning. Kagasoff's global.css guards specific components rather
+     than carrying a universal killswitch, so those two are guarded
+     here: the state still changes, it just snaps.
      ============================================================ */
   @media (prefers-reduced-motion: reduce) {
-    .process-section *,
-    .process-section *::before,
-    .process-section *::after {
-      animation: none !important;
-      transition: none !important;
+    .process-section .pc-morewrap,
+    .process-section .pc-chev {
+      transition: none;
     }
   }
 </style>
@@ -847,41 +559,5 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
         btn.setAttribute('aria-expanded', String(open));
       });
     });
-  })();
-</script>
-
-<script is:inline>
-  // Process mockups — fit each fixed-size stage to the box it lands in.
-  // This is a ratio of two lengths, which CSS calc() cannot compute, so it is
-  // measured here and written back as --pc-scale. Without it every stage
-  // renders at the stylesheet's 0.8 fallback and overflows its card.
-  (() => {
-    const stages = Array.from(document.querySelectorAll('.pc-stage'));
-    if (!stages.length) return;
-    const fit = () => {
-      stages.forEach((stage) => {
-        const box = stage.parentElement;
-        if (!box) return;
-        const w = box.clientWidth;
-        if (!w) return;
-        const cs = getComputedStyle(stage);
-        const baseW = parseFloat(cs.width) || 470;
-        const baseH = parseFloat(cs.height) || 360;
-        // Fit BOTH axes: .pc-visual has a definite height (aspect-ratio), and
-        // sub-pixel rounding between it and the stage means a width-only fit
-        // can still clip a hairline off the top and bottom of the frame.
-        const h = box.clientHeight;
-        const ratio = h > 0 ? Math.min(w / baseW, h / baseH) : w / baseW;
-        const s = Math.min(Math.max(ratio, 0.3), 1.6);
-        stage.style.setProperty('--pc-scale', String(s));
-      });
-    };
-    fit();
-    if ('ResizeObserver' in window) {
-      const ro = new ResizeObserver(fit);
-      stages.forEach((s) => s.parentElement && ro.observe(s.parentElement));
-    } else {
-      window.addEventListener('resize', fit, { passive: true });
-    }
   })();
 </script>
