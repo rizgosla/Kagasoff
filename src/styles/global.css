@@ -478,40 +478,35 @@ textarea.fld {
   position: absolute;
   inset: 0;
 }
-/* From the two-up layout on, the pair is a centered flex row and opening a
-   card EXPANDS it sideways by the bio's width: the portrait keeps its full
-   closed-state frame — anchored to the card's outer edge, never re-cropped
-   when there is room — and the added width holds the text. The card's size
-   comes from a height token (so width can be derived at the portrait's 4:5),
-   and the neighbor card yields via flex when the row runs out of room. */
+/* From the two-up layout on, the pair is a fixed-width flex row and the
+   open card grows by animating FLEX-GROW — the sibling shrinks to
+   compensate, so the row's total width never changes: nothing outside the
+   row reflows and no scrollbar can appear. (The expanding-columns pattern
+   from fwddesignconsulting.com's process section.) The bio panel opens
+   inside the grown card; the portrait keeps whatever the bio leaves. */
 @media (min-width: 640px) {
+  .team-row {
+    max-width: 1280px;
+    margin-inline: auto;
+  }
   .teamcard {
-    /* Tracks the old aspect-driven size: two 4:5 cards in a 1100px row. */
-    --card-h: clamp(400px, 52vw, 667px);
+    --card-h: clamp(400px, 46vw, 667px);
     --bio-px: clamp(300px, 24vw, 400px);
-    /* The 62% ceiling only bites when flex has shrunk the card below
-       portrait + bio; the media then gives up width instead of the text. */
+    /* The 62% ceiling only bites on a cramped row: the media then gives
+       up width instead of the text. */
     --bio-w: min(var(--bio-px), 62%);
     height: var(--card-h);
-    width: calc(var(--card-h) * 0.8);
-    flex: 0 1 auto;
-    min-width: 200px;
-    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    flex: 1 1 0;
+    min-width: 0;
+    transition: flex-grow 0.62s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .teamcard.is-open {
-    width: calc(var(--card-h) * 0.8 + var(--bio-px));
-  }
-  /* While one card is open, the other cedes its space first. */
-  .team-row:has(.teamcard.is-open) .teamcard:not(.is-open) {
-    flex-shrink: 4;
+    flex-grow: 2.2;
   }
 }
 @media (min-width: 640px) and (hover: hover) {
   .teamcard:hover {
-    width: calc(var(--card-h) * 0.8 + var(--bio-px));
-  }
-  .team-row:has(.teamcard:hover) .teamcard:not(:hover) {
-    flex-shrink: 4;
+    flex-grow: 2.2;
   }
 }
 
@@ -523,7 +518,7 @@ textarea.fld {
    object-fit re-crop it. */
 .teamcard-media {
   width: 100%;
-  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: width 0.62s cubic-bezier(0.16, 1, 0.3, 1);
 }
 @media (hover: hover) {
   .teamcard:hover .teamcard-media {
@@ -603,7 +598,7 @@ textarea.fld {
   visibility: hidden;
   /* Parked off-canvas to the right, inside the card's overflow:hidden. */
   transform: translateX(100%);
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s;
+  transition: transform 0.62s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.62s;
   pointer-events: none;
 }
 @media (hover: hover) {
