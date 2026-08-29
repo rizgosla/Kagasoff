@@ -475,11 +475,43 @@ textarea.fld {
   position: absolute;
   inset: 0;
 }
+/* Shared by the <img> (Ashley) and the Placeholder layer (office manager) so
+   one rule slides either portrait aside on reveal. */
+.teamcard-media {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Scale anchored to the left edge on open — the visible portrait aspect is
+     nearly the card's own aspect, so a plain translate leaves almost no
+     crop room and clips faces at the panel edge; the extra zoom keeps the
+     visible strip centered on the face instead of hair/background. */
+  transform-origin: left center;
+}
+@media (hover: hover) {
+  .teamcard:hover .teamcard-media {
+    transform: translateX(-58%) scale(1.4);
+  }
+}
+.teamcard.is-open .teamcard-media {
+  transform: translateX(-58%) scale(1.4);
+}
 .teamcard-base {
   position: absolute;
   inset: auto 0 0 0;
   padding: 22px;
   background: linear-gradient(to top, rgba(16, 27, 48, 0.92), transparent);
+  transition: opacity 0.35s ease, visibility 0.35s;
+}
+/* The name/title strip collides with the bio panel once it slides in — fade
+   it rather than let text run under the opaque panel; the name is repeated
+   in the bio heading, so it stays visible either way. */
+@media (hover: hover) {
+  .teamcard:hover .teamcard-base {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+.teamcard.is-open .teamcard-base {
+  opacity: 0;
+  visibility: hidden;
 }
 /* The accessible control that opens the bio — a real <button>, so the pill
    also has to reset the UA button styling. */
@@ -512,33 +544,45 @@ textarea.fld {
 }
 .teamcard-bio {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 62%;
   padding: clamp(20px, 2vw, 32px);
-  background: rgba(16, 27, 48, 0.94);
+  /* Fully opaque — this is a push, not an overlay, so no ghosting of the
+     portrait strip through the panel. */
+  background: var(--color-navydark);
+  border-left: 1px solid rgba(201, 162, 83, 0.35);
   overflow-y: auto;
   /* visibility keeps the closed bio out of the accessibility tree; delaying it
      behind the transition preserves the slide-out. */
   visibility: hidden;
-  /* Fully below the card, inside its overflow:hidden — a true slide-over
-     rather than a fade. */
-  transform: translateY(100%);
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.45s;
+  /* Parked off-canvas to the right, inside the card's overflow:hidden. */
+  transform: translateX(100%);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s;
   pointer-events: none;
 }
 @media (hover: hover) {
   .teamcard:hover .teamcard-bio {
     visibility: visible;
-    transform: translateY(0);
+    transform: translateX(0);
     pointer-events: auto;
   }
 }
 .teamcard.is-open .teamcard-bio {
   visibility: visible;
-  transform: translateY(0);
+  transform: translateX(0);
   pointer-events: auto;
 }
-@media (prefers-reduced-motion: reduce) {
+@media (max-width: 480px) {
   .teamcard-bio {
+    width: 70%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .teamcard-bio,
+  .teamcard-media,
+  .teamcard-base {
     transition: none;
   }
 }

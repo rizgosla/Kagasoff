@@ -260,7 +260,7 @@ const values = [
       <div class="grid gap-8 sm:grid-cols-2 max-w-[1100px] mx-auto">
         <!-- Ashley Kagasoff -->
         <div class="teamcard" data-reveal>
-          <img src="/ashley-portrait.jpg" alt="Ashley Kagasoff" class="absolute inset-0 h-full w-full object-cover" style="object-position:50% 25%" />
+          <img src="/ashley-portrait.jpg" alt="Ashley Kagasoff" class="teamcard-media absolute inset-0 h-full w-full object-cover" style="object-position:78% 22%" />
           <div class="teamcard-base">
             <h3 class="font-serif text-[clamp(24px,2vw,32px)] font-medium leading-[1.1] text-paper">Ashley Kagasoff</h3>
             <p class="mt-1.5 text-[12.5px] uppercase tracking-[0.16em] text-brasslight">Attorney at Law &middot; Founder</p>
@@ -284,7 +284,7 @@ const values = [
               Attorney's and Public Defender's offices, then fifteen years in private defense — she
               brings a rare perspective to every matter she takes on.
             </p>
-            <div class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+            <div class="grid grid-cols-1 gap-3">
               {
                 credentials.map((c) => (
                   <div class="border-t border-[rgba(201,190,159,0.35)] pt-2.5">
@@ -299,7 +299,7 @@ const values = [
 
         <!-- Office manager -->
         <div class="teamcard" data-reveal style="--reveal-delay:120ms">
-          <Placeholder label="Office manager portrait — replace" class="absolute inset-0" />
+          <Placeholder label="Office manager portrait — replace" class="teamcard-media absolute inset-0" />
           <div class="teamcard-base">
             <h3 class="font-serif text-[clamp(24px,2vw,32px)] font-medium leading-[1.1] text-paper">Office Manager Name</h3>
             <p class="mt-1.5 text-[12.5px] uppercase tracking-[0.16em] text-brasslight">Office Manager</p>
