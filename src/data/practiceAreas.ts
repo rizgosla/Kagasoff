@@ -99,26 +99,6 @@ export const practiceAreas: PracticeArea[] = [
     ],
   },
   {
-    slug: 'family-law',
-    name: 'Family Law',
-    short: 'Divorce, custody, and high-conflict disputes.',
-    blurb:
-      'Compassionate, results-focused representation through divorce, custody, and high-conflict family disputes.',
-    overview: [
-      'Family matters are personal, and they are rarely simple. We combine steady, practical guidance with firm advocacy — working toward resolution where possible and standing ready to litigate when your interests demand it.',
-      'Ashley has a record of resolving high-conflict disputes and protecting clients and their children through difficult transitions.',
-    ],
-    casesHeading: 'Matters we handle',
-    cases: [
-      'Divorce & dissolution',
-      'Child custody & visitation',
-      'Child & spousal support',
-      'Property & asset division',
-      'Modifications & enforcement',
-      'High-conflict disputes',
-    ],
-  },
-  {
     slug: 'restraining-orders',
     name: 'Restraining Orders',
     short: 'Decisive protection and defense at hearing.',

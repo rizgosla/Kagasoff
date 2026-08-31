@@ -12,7 +12,7 @@ export default defineConfig({
     '/practice/personal-injury': '/services#personal-injury',
     '/practice/criminal-defense': '/services#criminal-defense',
     '/practice/professional-license-defense': '/services#professional-license-defense',
-    '/practice/family-law': '/services#family-law',
+    '/practice/family-law': '/services',
     '/practice/restraining-orders': '/services#restraining-orders',
     '/practice/employment': '/services#employment',
     '/practice/real-estate': '/services#real-estate',

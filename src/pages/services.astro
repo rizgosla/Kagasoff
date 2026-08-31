@@ -1,22 +1,193 @@
 ---
-/** Services — all seven practice areas consolidated onto one page.
+/** Services — all six practice areas consolidated onto one page.
     Navy hero with jump-chip nav, one alternating-background section per
     practice area (reusing the overview + cases markup from the old
-    per-slug template), and a single shared closing CTA band. */
+    per-slug template) — each laid out as a two-column row with a detailed
+    line-art scene beside the text, sides alternating per area — and a
+    single shared closing CTA band.
+
+    The six scenes borrow the home page process section's drawing
+    vocabulary wholesale: one shared viewBox cropped tight to the artwork
+    (48 26 374 248), navy 2.4 contours, navy 1.8 at 60% for interior
+    detail (nothing lighter — at shipped size anything below that floor
+    disappears), brass rationed to two or three marks per drawing, sheet
+    fills to occlude, cream/gold washes for depth. No text and no UI
+    chrome inside any of them; every panel is aria-hidden decorative. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { practiceAreas } from '../data/practiceAreas';
+
+/* The scenes, keyed by slug. Each is the inner markup of one SVG on the
+   shared stage, injected with set:html — which is why the stroke classes
+   below are declared under :global() in the stylesheet. Comments above
+   each entry describe the composition; the class vocabulary is defined
+   once in this page's <style> block (.svc-art). */
+const areaScenes: Record<string, string> = {
+  /* Personal injury — a car in profile that has met something.
+     The car faces left, drawn as one closed silhouette (nose, hood,
+     A-pillar, roof, rear glass, trunk, tail) with the two side windows
+     as navy-washed panes under the roof, a rocker wash along the lower
+     body for weight, and sheet-filled wheels that occlude the body's
+     bottom edge. The consequence is told twice, quietly: a brass impact
+     burst radiating off the front fender (the drawing's one accent),
+     and two full-weight skid marks laid on the ground hairline behind
+     the wheels. Consequence, not carnage — the body stays whole. */
+  'personal-injury': `
+    <path class="ln sheet" d="M92 228 V192 C92 180 101 172 116 168 L184 156 L226 106 C233 98 245 94 259 94 H328 C343 94 356 100 365 112 L386 148 L402 156 C411 160 416 168 416 180 V228 Z" />
+    <path class="ln-t wash-n" d="M240 150 L266 108 H292 V150 Z" />
+    <path class="ln-t wash-n" d="M306 150 V108 H336 L358 150 Z" />
+    <path class="ln-t" d="M196 158 H388" />
+    <path class="wash-n" d="M100 196 H408 V224 H100 Z" />
+    <path class="ln-t" d="M299 158 V222 M310 172 H326" />
+    <circle class="ln sheet" cx="172" cy="228" r="28" />
+    <circle class="ln-t" cx="172" cy="228" r="10.5" />
+    <circle class="ln sheet" cx="352" cy="228" r="28" />
+    <circle class="ln-t" cx="352" cy="228" r="10.5" />
+    <path class="ln-t" d="M60 260 H410" />
+    <path class="ln" d="M180 260 H248 M360 260 H410" />
+    <path class="br" d="M82 134 L90 156 M60 152 L78 168 M50 186 L72 186 M60 220 L78 204" />
+    <path class="br-t" d="M52 166 L68 176 M54 206 L70 198" />
+  `,
+
+  /* Criminal defense — the scales, standing on the law.
+     A closed book lies flat on the ground rule (cover line, navy-washed
+     page block — the same three-mark book the process section draws),
+     and the scales stand ON it: a small plinth, a flared column, the
+     crossbeam, and two chain pairs dropping to brass dishes with a gold
+     wash in each (the accent). A gavel rests beside the book, head on
+     the ground, handle out to the right, its two collar bands the only
+     other brass. The finial is navy, not brass — the pans are the thing
+     worth looking at. */
+  'criminal-defense': `
+    <path class="ln-t" d="M60 258 H410" />
+    <rect class="ln sheet" x="94" y="224" width="212" height="34" rx="4" />
+    <path class="wash-n" d="M110 234 H292 V250 H110 Z" />
+    <path class="ln-t" d="M108 233 H292" />
+    <rect class="ln sheet" x="174" y="210" width="52" height="14" rx="3" />
+    <path class="ln" d="M186 210 C188 200 193 196 200 196 C207 196 212 200 214 210" />
+    <path class="ln" d="M200 196 V64" />
+    <path class="ln" d="M112 78 H288" />
+    <circle class="ln sheet" cx="200" cy="56" r="6.5" />
+    <path class="ln-t" d="M116 80 L98 126 M116 80 L134 126 M284 80 L266 126 M284 80 L302 126" />
+    <path class="br wash" d="M90 128 A30 30 0 0 0 142 128 Z" />
+    <path class="br wash" d="M258 128 A30 30 0 0 0 310 128 Z" />
+    <path class="ln sheet" d="M307 227 L355 179 L377 201 L329 249 Z" />
+    <path class="br-t" d="M319 220 L336 237 M348 191 L365 208" />
+    <path class="ln sheet" d="M355 222 L392 259 A5.5 5.5 0 0 1 384 267 L347 230 Z" />
+  `,
+
+  /* Professional license defense — the credential itself, on the wall.
+     A framed certificate hangs from a brass nail by two wires. The
+     frame is double: the outer contour, a navy wash between it and the
+     sheet-filled inner rectangle, so the mat between the mouldings reads
+     as depth. Inside: a centred title pair and two body rules, a
+     signature flourish over its own rule at the lower left, and — the
+     brass — a rosette seal at the lower right, gold-washed with an
+     inner ring, two ribbons falling from it. A chair-rail hairline
+     behind grounds the wall. */
+  'professional-license-defense': `
+    <path class="ln-t" d="M60 256 H410" />
+    <circle class="dot" cx="235" cy="42" r="4.5" />
+    <path class="ln-t" d="M235 44 L154 76 M235 44 L316 76" />
+    <rect class="ln sheet" x="112" y="74" width="246" height="172" rx="4" />
+    <rect class="wash-n" x="112" y="74" width="246" height="172" rx="4" />
+    <rect class="ln-t sheet" x="130" y="92" width="210" height="136" rx="2" />
+    <path class="ln-t" d="M164 114 H306 M186 128 H284" />
+    <path class="ln-t" d="M150 152 H288 M150 166 H262" />
+    <path class="ln-t" d="M150 204 C166 192 172 210 188 198 C196 192 202 196 208 194" />
+    <path class="ln-t" d="M148 214 H240" />
+    <circle class="br wash" cx="296" cy="192" r="15" />
+    <circle class="br-t" cx="296" cy="192" r="7" />
+    <path class="br" d="M291 205 L287 228 M301 205 L305 228" />
+  `,
+
+  /* Restraining orders — a shield standing guard before the home.
+     The house sits behind and to the right — roof, chimney, a window
+     with its cross, an arched navy-washed doorway — and the shield is
+     drawn after it, sheet-filled, so it genuinely occludes the house's
+     near corner and the ground line: in front, not beside. The shield
+     carries a brasslight inner border over a faint navy field, quarter
+     lines that break around the centre, and the brass is spent on the
+     boss — a gold-washed ring with a solid brass stud at its heart. */
+  'restraining-orders': `
+    <path class="ln" d="M236 124 L318 62 L400 124" />
+    <path class="ln" d="M356 90 V66 H374 V104" />
+    <rect class="ln sheet" x="248" y="124" width="136" height="132" rx="2" />
+    <rect class="ln-t" x="272" y="150" width="30" height="32" />
+    <path class="ln-t" d="M287 150 V182 M272 166 H302" />
+    <path class="ln-t wash-n" d="M316 256 V210 A16 16 0 0 1 348 210 V256 Z" />
+    <path class="ln-t" d="M60 256 H410" />
+    <path class="ln sheet" d="M172 58 C210 76 242 82 260 82 V166 C260 214 226 246 172 266 C118 246 84 214 84 166 V82 C102 82 134 76 172 58 Z" />
+    <path class="br-t wash-n" d="M172 74 C202 88 228 93 244 93 V164 C244 202 216 230 172 250 C128 230 100 202 100 164 V93 C116 93 142 88 172 74 Z" />
+    <path class="ln-t" d="M172 74 V141 M172 183 V250 M100 162 H151 M193 162 H244" />
+    <circle class="br wash" cx="172" cy="162" r="19" />
+    <circle class="dot" cx="172" cy="162" r="6" />
+  `,
+
+  /* Employment — the working life as a still life on a desk.
+     The desk is the process section's table: one long washed rail. On
+     it a briefcase stands upright — arched handle, lid seam, a navy
+     wash along its base for weight, and two brass clasps straddling the
+     seam (the accent). Beside it, two document sheets lie stacked, each
+     with its page-edge hairline, and a pay envelope sits on top, flap
+     lines meeting at the centre, a brasslight band around its middle. */
+  employment: `
+    <rect class="ln wash-n" x="60" y="250" width="350" height="10" rx="3" />
+    <path class="ln" d="M146 112 V100 A12 12 0 0 1 158 88 H186 A12 12 0 0 1 198 100 V112" />
+    <rect class="ln sheet" x="86" y="112" width="172" height="138" rx="10" />
+    <path class="wash-n" d="M94 220 H250 V244 H94 Z" />
+    <path class="ln-t" d="M86 154 H258" />
+    <rect class="br" x="118" y="146" width="16" height="15" rx="2" />
+    <rect class="br" x="210" y="146" width="16" height="15" rx="2" />
+    <rect class="ln sheet" x="284" y="230" width="120" height="20" rx="3" />
+    <path class="ln-t" d="M290 239 H398" />
+    <rect class="ln sheet" x="292" y="210" width="104" height="20" rx="3" />
+    <path class="ln-t" d="M298 219 H390" />
+    <rect class="ln sheet" x="296" y="172" width="96" height="38" rx="3" />
+    <path class="ln-t" d="M296 176 L344 198 L392 176" />
+  `,
+
+  /* Real estate — the house, and the key to it.
+     The house takes the upper band: an eaved roofline over a gold-washed
+     gable, a chimney rising through it, two crossed windows either side
+     of an arched navy-washed door with a brass knob dot. On the ground
+     hairline it stands on, a large old-fashioned key lies in the
+     foreground, shaft running most of the frame's width to a two-toothed
+     bit — and the brass is spent on the bow, a heavy brass ring with a
+     brasslight ring inside it. */
+  'real-estate': `
+    <path class="wash" d="M122 126 L235 54 L348 126 Z" />
+    <path class="ln" d="M92 134 L235 42 L378 134" />
+    <path class="ln" d="M306 87 V58 H324 V99" />
+    <path class="ln-t" d="M60 226 H410" />
+    <rect class="ln sheet" x="118" y="134" width="234" height="92" rx="2" />
+    <rect class="ln-t" x="146" y="156" width="36" height="36" />
+    <path class="ln-t" d="M164 156 V192 M146 174 H182" />
+    <rect class="ln-t" x="288" y="156" width="36" height="36" />
+    <path class="ln-t" d="M306 156 V192 M288 174 H324" />
+    <path class="ln-t wash-n" d="M212 226 V172 A23 23 0 0 1 258 172 V226 Z" />
+    <circle class="dot" cx="250" cy="200" r="4" />
+    <path class="ln sheet" d="M152 248 H346 V257 H152 Z" />
+    <path class="ln" d="M316 257 V268 H328 V257 M336 257 V272 H348 V257" />
+    <circle class="br" cx="134" cy="252" r="19" />
+    <circle class="br-t" cx="134" cy="252" r="9" />
+  `,
+};
+
+/** Fallback for an unknown slug: the scales-on-book scene — the most
+    practice-agnostic of the six — rather than an empty panel. */
+const fallbackScene = areaScenes['criminal-defense'];
 ---
 
 <BaseLayout
   title="Services — Kagasoff Law Firm, A.P.C."
-  description="Seven practice areas, one standard of care — personal injury, criminal defense, professional license defense, family law, restraining orders, employment, and real estate."
+  description="Six practice areas, one standard of care — personal injury, criminal defense, professional license defense, restraining orders, employment, and real estate."
 >
   <!-- HERO -->
   <section class="starfield overflow-hidden text-paper">
     <div class="shell pb-12 pt-14 md:pb-[70px] md:pt-16">
       <p class="mb-5 text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brasslight" data-reveal>Services</p>
       <h1 class="mb-[18px] font-serif text-[clamp(34px,5.1vw,66px)] font-medium leading-[1.06]" data-reveal style="--reveal-delay:80ms">
-        Seven areas. <span class="text-gold">One standard of care.</span>
+        Six areas. <span class="text-gold">One standard of care.</span>
       </h1>
       <div class="mb-7 h-0.5 w-[54px] bg-brass" data-reveal style="--reveal-delay:130ms"></div>
       <p class="mb-9 max-w-[62ch] text-[clamp(16px,1.05vw,20px)] font-light leading-[1.7] text-mist" data-reveal style="--reveal-delay:170ms">
@@ -37,38 +208,62 @@ import { practiceAreas } from '../data/practiceAreas';
     </div>
   </section>
 
-  <!-- PRACTICE AREA SECTIONS -->
+  <!-- PRACTICE AREA SECTIONS — text beside a line-art scene panel, sides alternating -->
   {
     practiceAreas.map((a, i) => (
       <section id={a.slug} class={i % 2 === 0 ? 'bg-paper' : 'bg-cream'}>
         <div class="shell py-14 md:py-[80px]">
-          <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass" data-reveal>
-            {String(i + 1).padStart(2, '0')} &middot; Practice Area
-          </p>
-          <h2 class="mb-[18px] font-serif text-[clamp(29px,3.2vw,46px)] font-medium leading-[1.1] text-navy" data-reveal style="--reveal-delay:60ms">
-            {a.name}
-          </h2>
-          <div class="mb-7 h-0.5 w-[54px] bg-brass" data-reveal style="--reveal-delay:100ms" />
-          <p
-            class="mb-9 max-w-[68ch] text-[clamp(16px,1.05vw,20px)] font-light leading-[1.7] text-ink"
-            data-reveal
-            style="--reveal-delay:130ms"
-            set:html={a.blurb}
-          />
+          <div class={`grid grid-cols-1 gap-12 lg:items-center lg:gap-16 xl:gap-20 ${i % 2 === 0 ? 'lg:grid-cols-[1.08fr_0.92fr]' : 'lg:grid-cols-[0.92fr_1.08fr]'}`}>
+            <!-- Text column -->
+            <div class={i % 2 === 0 ? 'lg:order-1' : 'lg:order-2'}>
+              <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass" data-reveal>
+                {String(i + 1).padStart(2, '0')} &middot; Practice Area
+              </p>
+              <h2 class="mb-[18px] font-serif text-[clamp(29px,3.2vw,46px)] font-medium leading-[1.1] text-navy" data-reveal style="--reveal-delay:60ms">
+                {a.name}
+              </h2>
+              <div class="mb-7 h-0.5 w-[54px] bg-brass" data-reveal style="--reveal-delay:100ms" />
+              <p
+                class="mb-9 max-w-[68ch] text-[clamp(16px,1.05vw,20px)] font-light leading-[1.7] text-ink"
+                data-reveal
+                style="--reveal-delay:130ms"
+                set:html={a.blurb}
+              />
 
-          <div data-reveal style="--reveal-delay:160ms">
-            {a.overview.map((p) => (
-              <p class="mb-[18px] max-w-[72ch] text-[clamp(15.5px,0.95vw,19px)] font-light leading-[1.8] text-ink" set:html={p} />
-            ))}
+              <div data-reveal style="--reveal-delay:160ms">
+                {a.overview.map((p) => (
+                  <p class="mb-[18px] max-w-[72ch] text-[clamp(15.5px,0.95vw,19px)] font-light leading-[1.8] text-ink" set:html={p} />
+                ))}
 
-            <h3 class="mb-5 mt-9 font-serif text-[22px] font-semibold text-navy md:text-[24px]" set:html={a.casesHeading} />
-            <div class="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2 xl:grid-cols-3">
-              {a.cases.map((c) => (
-                <div class="flex items-baseline gap-3 text-[15px] text-navy">
-                  <span class="text-brass">&mdash;</span>
-                  <span set:html={c} />
+                <h3 class="mb-5 mt-9 font-serif text-[22px] font-semibold text-navy md:text-[24px]" set:html={a.casesHeading} />
+                <div class="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
+                  {a.cases.map((c) => (
+                    <div class="flex items-baseline gap-3 text-[15px] text-navy">
+                      <span class="text-brass">&mdash;</span>
+                      <span set:html={c} />
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+            </div>
+
+            <!-- Decorative scene panel — the drawing on its mat, inside the offset frame -->
+            <div
+              class={`relative mx-auto w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[520px] lg:justify-self-center ${i % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}`}
+              aria-hidden="true"
+              data-reveal={i % 2 === 0 ? 'right' : 'left'}
+              style="--reveal-delay:200ms"
+            >
+              <div class="pointer-events-none absolute -inset-2.5 rounded-[14px] border border-brass/40 md:-inset-4"></div>
+              <div class="svc-mat relative">
+                <svg
+                  class="svc-art"
+                  viewBox="48 26 374 248"
+                  role="presentation"
+                  focusable="false"
+                  set:html={areaScenes[a.slug] ?? fallbackScene}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -88,3 +283,70 @@ import { practiceAreas } from '../data/practiceAreas';
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  /* The mat under each drawing — the process section's .pc-visual:
+     sheet warming into cream, hairline border, the 14px radius the rest
+     of the page uses. The sheet colour also fills every shape that has
+     to occlude another (see .sheet below). */
+  .svc-mat {
+    --svc-sheet: #fffdf9;
+    border-radius: 14px;
+    border: 1px solid var(--color-line);
+    background: linear-gradient(180deg, var(--svc-sheet) 0%, var(--color-cream) 100%);
+    overflow: hidden;
+  }
+  .svc-art {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* The stroke vocabulary, one-for-one with the process section's
+     .pc-art classes. :global(), because the scenes are injected with
+     set:html — Astro's scope attribute lands on elements in this
+     template, never on nodes parsed out of a string. */
+  /* Contour. */
+  .svc-art :global(.ln) {
+    fill: none;
+    stroke: var(--color-navy);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  /* Interior detail — rules, panes, window crosses. 1.8 at 60% is the
+     floor: these panels ship at 300-440px on a ~374-unit viewBox, and
+     anything lighter vanishes at that scale. */
+  .svc-art :global(.ln-t) {
+    fill: none;
+    stroke: var(--color-navy);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    /* stroke-opacity, not opacity: several of these sit on the same
+       element as a wash fill, and element opacity would fade both. */
+    stroke-opacity: 0.6;
+  }
+  /* The accent, rationed to two or three marks per drawing. */
+  .svc-art :global(.br) {
+    fill: none;
+    stroke: var(--color-brass);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .svc-art :global(.br-t) {
+    fill: none;
+    stroke: var(--color-brasslight);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  /* Fills. Declared after the stroke classes so `class="ln sheet"` —
+     an outlined shape that has to occlude what is behind it — resolves
+     to the fill rather than to the stroke class's fill: none. */
+  .svc-art :global(.sheet) { fill: var(--svc-sheet); }
+  .svc-art :global(.wash) { fill: var(--color-gold); fill-opacity: 0.22; }
+  .svc-art :global(.wash-n) { fill: var(--color-navy); fill-opacity: 0.07; }
+  .svc-art :global(.dot) { fill: var(--color-brass); }
+</style>

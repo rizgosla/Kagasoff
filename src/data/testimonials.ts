@@ -17,11 +17,6 @@ export const testimonials: Testimonial[] = [
   },
   {
     quote:
-      "Our custody case was emotional and messy. They kept us focused on what mattered most — our kids — and got us a fair outcome.",
-    name: 'Andrea L.',
-  },
-  {
-    quote:
       "Professional, responsive, and genuinely caring. I felt like a person, not a case number, from our first call in Santa Ana all the way through.",
     name: 'James K.',
   },

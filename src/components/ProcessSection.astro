@@ -47,10 +47,10 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
 
 <section class="bg-cream process-section">
   <div class="shell py-14 md:py-[88px]">
-    <div class="mb-11 max-w-[56ch] md:mb-14" data-reveal>
-      <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">With You Step by Step</p>
+    <div class="mx-auto mb-11 max-w-[56ch] text-center md:mb-14" data-reveal>
+      <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">What working with us looks like</p>
       <h2 class="font-serif text-[clamp(26px,2.6vw,40px)] font-medium leading-[1.2] text-navy">
-        What working with us looks like.
+        With You Step by Step.
       </h2>
       <p class="mt-[18px] text-[clamp(15px,0.95vw,19px)] font-light leading-[1.75] text-ink">
         A clear, four-step path from your first call to resolution — we stay beside you at every
@@ -338,9 +338,6 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
         </li>
       </ol>
 
-    <div class="mt-11 text-center md:mt-14" data-reveal>
-      <a href="#contact" class="pc-cta lift inline-block rounded-[8px] bg-navy px-[30px] py-4 text-center text-sm font-semibold tracking-[0.04em]">Start with a free consultation →</a>
-    </div>
   </div>
 </section>
 
@@ -465,17 +462,6 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
     letter-spacing: 0.05em;
     color: var(--pc-muted);
   }
-
-  /* ----- The section's closing button -----
-     The colour is set here rather than with a `text-paper` utility on
-     the anchor. global.css declares `a { color: inherit }` outside any
-     cascade layer, and an unlayered declaration beats every layered one
-     whatever its specificity — so a Tailwind colour utility, which
-     lands in @layer utilities, never reaches an <a>. The utility was
-     silently losing to `inherit` and the button was rendering in ink on
-     navy (about 1.5:1). This rule is unlayered too, and wins on
-     specificity. */
-  .process-section .pc-cta { color: var(--color-paper); }
 
   /* ============================================================
      THE DRAWINGS.
