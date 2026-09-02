@@ -1,0 +1,42 @@
+---
+/** Hero F — "Centered".
+    A symmetrical, quiet variant: one-line headline centred directly under the
+    nav, then a wide cinematic band below it. Closest in spirit to a printed
+    title page — the most minimal of the set. */
+import HeroMedia from './HeroMedia.astro';
+import { hero } from '../../data/hero';
+
+interface Props {
+  video?: string;
+}
+const { video } = Astro.props;
+---
+
+<section class="starfield overflow-hidden text-paper">
+  <div class="shell pt-8 text-center md:pt-11">
+    <p class="text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brasslight" data-reveal>{hero.eyebrow}</p>
+
+    <h1 class="mx-auto mt-5 max-w-[22ch] font-serif text-[clamp(38px,4.6vw,88px)] font-medium leading-[1.06] tracking-[0.005em]" data-reveal style="--reveal-delay:70ms">
+      {hero.lead} <span class="text-gold">{hero.accent}</span> {hero.tail}
+    </h1>
+
+    <p class="mx-auto mt-6 max-w-[58ch] text-[clamp(16px,1.05vw,19px)] font-light leading-[1.75] text-mist" data-reveal style="--reveal-delay:120ms">
+      {hero.subShort}
+    </p>
+
+    <div class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row" data-reveal style="--reveal-delay:170ms">
+      <a href={hero.phoneHref} class="btn-brass lift inline-block rounded-[8px] bg-brass px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em]">Call {hero.phone}</a>
+      <a href="#contact" class="lift inline-block rounded-[8px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] text-paper">Free consultation</a>
+    </div>
+  </div>
+
+  <div class="shell mt-11 pb-14 md:mt-14 md:pb-[72px]" data-reveal="zoom" style="--reveal-delay:120ms">
+    <HeroMedia
+      src="/team.jpg"
+      video={video}
+      alt="The Kagasoff Law Firm team"
+      position="50% 20%"
+      class="aspect-[16/7] max-h-[min(48vh,440px)] rounded-[14px] border border-[rgba(201,190,159,0.35)] shadow-[0_40px_80px_-40px_rgba(0,0,0,0.7)] md:aspect-[21/7]"
+    />
+  </div>
+</section>

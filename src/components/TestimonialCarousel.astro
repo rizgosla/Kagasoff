@@ -39,49 +39,51 @@ import { testimonials } from '../data/testimonials';
 
 <script>
   (() => {
-    const car = document.querySelector('.tcar');
-    if (!car) return;
-    const slides = Array.from(car.querySelectorAll('.tcar-slide'));
-    if (slides.length < 2) return;
-
+    // Several hero layouts can be on one page (see /hero-lab), so drive every
+    // carousel instance independently rather than only the first one.
     const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    let cur = 0;
-    let timer: ReturnType<typeof setInterval> | undefined;
+    document.querySelectorAll('.tcar').forEach((car) => {
+      const slides = Array.from(car.querySelectorAll('.tcar-slide'));
+      if (slides.length < 2) return;
 
-    function advance() {
-      const from = slides[cur];
-      const next = (cur + 1) % slides.length;
-      const to = slides[next];
+      let cur = 0;
+      let timer: ReturnType<typeof setInterval> | undefined;
 
-      from.classList.add('is-exit');
-      from.removeAttribute('data-active');
-      from.setAttribute('aria-hidden', 'true');
+      function advance() {
+        const from = slides[cur];
+        const next = (cur + 1) % slides.length;
+        const to = slides[next];
 
-      to.setAttribute('data-active', 'true');
-      to.setAttribute('aria-hidden', 'false');
+        from.classList.add('is-exit');
+        from.removeAttribute('data-active');
+        from.setAttribute('aria-hidden', 'true');
 
-      cur = next;
+        to.setAttribute('data-active', 'true');
+        to.setAttribute('aria-hidden', 'false');
 
-      setTimeout(() => {
-        from.classList.remove('is-exit');
-      }, 600);
-    }
+        cur = next;
 
-    function start() {
-      if (reduceMotion || timer) return;
-      timer = setInterval(advance, 5500);
-    }
+        setTimeout(() => {
+          from.classList.remove('is-exit');
+        }, 600);
+      }
 
-    function stop() {
-      clearInterval(timer);
-      timer = undefined;
-    }
+      function start() {
+        if (reduceMotion || timer) return;
+        timer = setInterval(advance, 5500);
+      }
 
-    start();
-    car.addEventListener('mouseenter', stop);
-    car.addEventListener('focusin', stop);
-    car.addEventListener('mouseleave', start);
-    car.addEventListener('focusout', start);
+      function stop() {
+        clearInterval(timer);
+        timer = undefined;
+      }
+
+      start();
+      car.addEventListener('mouseenter', stop);
+      car.addEventListener('focusin', stop);
+      car.addEventListener('mouseleave', start);
+      car.addEventListener('focusout', start);
+    });
   })();
 </script>

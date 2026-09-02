@@ -39,6 +39,39 @@ src/
     global.css            # Tailwind import + @theme design tokens + helpers
 ```
 
+## Hero layouts
+
+The hero is one swappable component. Six candidates live in
+`src/components/hero/`, all reading their copy from `src/data/hero.ts` and their
+large plate from `HeroMedia.astro`:
+
+| | Layout | Shape |
+|---|---|---|
+| A | `HeroSplit` | Copy left, portrait panel right (the original, with the top padding pulled in). |
+| B | `HeroBanner` | Wide landscape plate under the nav, headline beneath it. **Currently live.** |
+| C | `HeroFilmstrip` | Large landscape stage, three portraits per side, one-line headline on a centred plate. |
+| D | `HeroCinematic` | Full-bleed plate, copy bottom-left over a scrim. |
+| E | `HeroMasthead` | Headline flush to the nav, full-bleed band underneath. |
+| F | `HeroCentered` | Centred title page, wide band below. |
+
+Compare them side by side at **`/hero-lab`** (not linked from the nav, and
+`noindex`). To change which one the home page uses, edit the single hero import
+at the top of `src/pages/index.astro`. Once a direction is settled, delete
+`src/pages/hero-lab.astro` and the unused components.
+
+### Going from photo to video
+
+Every layout's large plate is a `<HeroMedia>`. Drop a file in `public/` and pass
+it through:
+
+```astro
+<Hero video="/hero.mp4" />
+```
+
+The still becomes the poster frame and the plate renders a muted, looping,
+inline `<video>` instead — no layout changes. The clip is held on its poster for
+visitors who prefer reduced motion.
+
 ## Editing content
 
 - **Practice areas** — everything (names, blurbs, overview copy, matter lists)

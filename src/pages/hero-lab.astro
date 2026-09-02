@@ -1,0 +1,66 @@
+---
+/** /hero-lab — every candidate hero on one page, in order, each under a label.
+    Not linked from the site nav; it exists so a layout can be chosen by looking
+    at it rather than by describing it. Delete this file (and the unused
+    components) once a direction is picked. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroSplit from '../components/hero/HeroSplit.astro';
+import HeroBanner from '../components/hero/HeroBanner.astro';
+import HeroFilmstrip from '../components/hero/HeroFilmstrip.astro';
+import HeroCinematic from '../components/hero/HeroCinematic.astro';
+import HeroMasthead from '../components/hero/HeroMasthead.astro';
+import HeroCentered from '../components/hero/HeroCentered.astro';
+
+const variants = [
+  { id: 'a', name: 'A — Split (current, tightened)', note: 'Same layout as today. Top padding halved and the portrait capped at 620px so the headline starts just under the nav.' },
+  { id: 'b', name: 'B — Banner', note: 'A wide landscape plate fills the old gap; the headline reads underneath it. The plate is wider than the text column.' },
+  { id: 'c', name: 'C — Filmstrip', note: 'Large landscape stage, three portraits per side, one-line headline on a centred plate. The stage takes a video with one prop.' },
+  { id: 'd', name: 'D — Cinematic', note: 'Full-bleed plate under the nav, copy bottom-left over a scrim. No empty band is possible.' },
+  { id: 'e', name: 'E — Masthead', note: 'No image above the headline — the headline itself is flush to the nav, with a full-bleed band underneath.' },
+  { id: 'f', name: 'F — Centered', note: 'Symmetrical title page: centred headline first, wide band below.' },
+];
+---
+
+<BaseLayout title="Hero layout lab — Kagasoff Law Firm" noindex>
+  <div class="bg-cream">
+    <div class="shell py-10">
+      <p class="text-[12px] uppercase tracking-[0.32em] text-brass">Internal</p>
+      <h1 class="mt-3 font-serif text-[clamp(30px,3vw,46px)] font-medium text-navy">Hero layout lab</h1>
+      <p class="mt-3 max-w-[70ch] text-[15px] font-light leading-[1.7] text-ink">
+        Six candidates for the hero, each shown full width in the order they were built.
+        Every layout draws its copy from <code>src/data/hero.ts</code> and its big plate from
+        <code>HeroMedia</code>, so switching between them is a one-line change in
+        <code>src/pages/index.astro</code> — and any of them becomes a video by passing
+        <code>video="/hero.mp4"</code>.
+      </p>
+      <nav class="mt-6 flex flex-wrap gap-2.5">
+        {
+          variants.map((v) => (
+            <a href={`#hero-${v.id}`} class="rounded-full border border-line bg-paper px-4 py-2 text-[13px] font-semibold tracking-[0.03em] text-navy transition-colors hover:border-brass hover:text-brass">
+              {v.name.split('—')[0].trim()}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </div>
+
+  {
+    variants.map((v) => (
+      <div id={`hero-${v.id}`}>
+        <div class="bg-navydark">
+          <div class="shell flex flex-wrap items-baseline gap-x-6 gap-y-1 py-3">
+            <span class="font-serif text-[19px] font-medium text-gold">{v.name}</span>
+            <span class="text-[13px] font-light text-slate">{v.note}</span>
+          </div>
+        </div>
+        {v.id === 'a' && <HeroSplit />}
+        {v.id === 'b' && <HeroBanner />}
+        {v.id === 'c' && <HeroFilmstrip />}
+        {v.id === 'd' && <HeroCinematic />}
+        {v.id === 'e' && <HeroMasthead />}
+        {v.id === 'f' && <HeroCentered />}
+      </div>
+    ))
+  }
+</BaseLayout>

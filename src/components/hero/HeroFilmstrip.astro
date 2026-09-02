@@ -1,0 +1,163 @@
+---
+/** Hero C — "Filmstrip".
+    One large landscape stage in the middle, flanked by a column of three
+    portrait tiles on each side (six in total), with the headline on a small
+    centred plate over the stage — one unbroken line.
+
+    The centre stage is a <HeroMedia>: pass `video="/hero.mp4"` and the still
+    becomes a looping clip with no other change to this layout. */
+import HeroMedia from './HeroMedia.astro';
+import { hero, heroPortraits } from '../../data/hero';
+
+interface Props {
+  video?: string;
+}
+const { video } = Astro.props;
+
+const left = heroPortraits.slice(0, 3);
+const right = heroPortraits.slice(3, 6);
+---
+
+<section class="starfield overflow-hidden text-paper">
+  <div class="shell pb-14 pt-6 md:pb-[72px] md:pt-7">
+    <div class="filmstrip" data-reveal="zoom">
+      <!-- Left rail -->
+      <div class="strip-rail">
+        {
+          left.map((p, i) => (
+            <HeroMedia
+              src={p.src}
+              alt={p.alt}
+              position={p.position}
+              zoom={p.zoom}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              class="strip-tile"
+            />
+          ))
+        }
+      </div>
+
+      <!-- Centre stage (image today, video tomorrow) -->
+      <div class="strip-stage">
+        <HeroMedia
+          src="/team.jpg"
+          video={video}
+          alt="The Kagasoff Law Firm team"
+          position="50% 24%"
+          class="h-full w-full rounded-[12px]"
+        />
+        <div class="pointer-events-none absolute inset-0 rounded-[12px] bg-[rgba(16,27,48,0.42)]"></div>
+
+        <!-- The headline plate — one line, centred -->
+        <div class="strip-plate">
+          <p class="text-[clamp(10px,0.62vw,12px)] uppercase tracking-[0.34em] text-brass">{hero.eyebrow}</p>
+          <h1 class="strip-headline font-serif font-medium text-navy">{hero.oneLine}</h1>
+          <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
+            <a href={hero.phoneHref} class="btn-brass lift rounded-[8px] bg-brass px-6 py-3 text-[13px] font-semibold tracking-[0.04em]">Call {hero.phone}</a>
+            <a href="#contact" class="lift text-navy-force rounded-[8px] border border-line px-6 py-3 text-[13px] font-semibold tracking-[0.04em]">Free consultation</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right rail -->
+      <div class="strip-rail">
+        {
+          right.map((p) => (
+            <HeroMedia src={p.src} alt={p.alt} position={p.position} zoom={p.zoom} loading="lazy" class="strip-tile" />
+          ))
+        }
+      </div>
+    </div>
+
+    <p class="mx-auto mt-9 max-w-[62ch] text-center text-[clamp(15px,1vw,18px)] font-light leading-[1.75] text-mist" data-reveal>
+      {hero.sub}
+    </p>
+  </div>
+</section>
+
+<style>
+  /* The rails set the height; each tile is a true 3:4 portrait, so the rail
+     columns are `auto` and take exactly the width those portraits need. */
+  .filmstrip {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: clamp(10px, 0.9vw, 18px);
+    height: clamp(420px, 44vw, 640px);
+  }
+
+  .strip-rail {
+    display: grid;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: clamp(10px, 0.9vw, 18px);
+  }
+
+  .strip-rail :global(.strip-tile) {
+    height: 100%;
+    aspect-ratio: 3 / 4;
+    border-radius: 10px;
+    border: 1px solid rgba(201, 190, 159, 0.28);
+  }
+
+  .strip-stage {
+    position: relative;
+    border-radius: 12px;
+    border: 1px solid rgba(201, 190, 159, 0.42);
+    overflow: hidden;
+  }
+
+  .strip-plate {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(88%, 900px);
+    /* Lets the headline size itself off the plate, never the viewport, so the
+       single line fits whatever width the stage happens to have. */
+    container-type: inline-size;
+    text-align: center;
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+    border-radius: 14px;
+    padding: clamp(18px, 1.9vw, 30px) clamp(20px, 2.6vw, 44px);
+    box-shadow: 0 34px 70px -34px rgba(0, 0, 0, 0.75);
+  }
+
+  /* One line, always: the type shrinks with the plate rather than wrapping.
+     The 4.6cqw coefficient is measured against this headline's ~40 characters
+     in Cormorant Garamond — re-check it if the copy gets materially longer. */
+  .strip-headline {
+    margin: 10px 0 0;
+    white-space: nowrap;
+    font-size: clamp(18px, 4.6cqw, 52px);
+    line-height: 1.1;
+    letter-spacing: 0.005em;
+  }
+
+  @media (max-width: 900px) {
+    .filmstrip {
+      grid-template-columns: minmax(0, 1fr);
+      height: auto;
+    }
+    /* Stacked, the stage has to be tall enough to hold the plate over it. */
+    .strip-stage {
+      order: -1;
+      aspect-ratio: 4 / 5;
+    }
+    .strip-rail {
+      grid-template-rows: none;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .strip-rail :global(.strip-tile) {
+      width: 100%;
+      height: auto;
+    }
+    .strip-plate {
+      width: min(92%, 560px);
+      padding: 20px 18px;
+    }
+    .strip-headline {
+      white-space: normal;
+      font-size: clamp(24px, 7cqw, 40px);
+    }
+  }
+</style>

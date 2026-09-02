@@ -295,6 +295,10 @@ a {
 .text-paper-force {
   color: var(--color-paper);
 }
+/* Same problem, opposite ground: a navy link label sitting on paper. */
+.text-navy-force {
+  color: var(--color-navy);
+}
 
 /* ===== Subtle lift on buttons / nav ===== */
 .lift {

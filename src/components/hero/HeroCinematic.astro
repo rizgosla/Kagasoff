@@ -1,0 +1,61 @@
+---
+/** Hero D — "Cinematic".
+    The most direct answer to dead space: there isn't any. One full-bleed plate
+    runs edge to edge under the nav and the copy sits on it, bottom-left, over a
+    navy scrim. Video-ready — the stage is a <HeroMedia>. */
+import HeroMedia from './HeroMedia.astro';
+import { hero } from '../../data/hero';
+
+interface Props {
+  video?: string;
+}
+const { video } = Astro.props;
+
+const proof = [
+  { n: '17+', l: 'Years' },
+  { n: '5.0', l: 'Google rating' },
+  { n: '291', l: 'Reviews' },
+];
+---
+
+<section class="relative overflow-hidden bg-navy text-paper">
+  <!-- HeroMedia positions itself `relative`, so the full-bleed placement lives
+       on a wrapper rather than fighting it with an `absolute` utility. -->
+  <div class="absolute inset-0">
+    <HeroMedia
+      src="/team.jpg"
+      video={video}
+      alt="The Kagasoff Law Firm team"
+      position="50% 24%"
+      class="h-full w-full"
+    />
+  </div>
+  <!-- Scrim: navy from the left and up from the floor, so type stays legible -->
+  <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(16,27,48,0.94)_0%,rgba(16,27,48,0.72)_42%,rgba(16,27,48,0.18)_100%)]"></div>
+  <div class="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[rgba(16,27,48,0.92)] to-transparent"></div>
+
+  <div class="relative shell flex min-h-[clamp(500px,72vh,760px)] flex-col justify-end pb-14 pt-24 md:pb-[72px] md:pt-32">
+    <div data-reveal="left">
+      <p class="mb-5 text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-gold">{hero.eyebrow}</p>
+      <h1 class="max-w-[16ch] font-serif text-[clamp(42px,5.6vw,108px)] font-medium leading-[1.02] tracking-[0.005em]">
+        {hero.lead} <span class="text-gold">{hero.accent}</span> {hero.tail}
+      </h1>
+      <p class="mt-6 max-w-[48ch] text-[clamp(16px,1.05vw,19px)] font-light leading-[1.75] text-mist">{hero.subShort}</p>
+      <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+        <a href={hero.phoneHref} class="btn-brass lift inline-block rounded-[8px] bg-brass px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em]">Call {hero.phone}</a>
+        <a href="#contact" class="lift inline-block rounded-[8px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] text-paper">Free consultation</a>
+      </div>
+    </div>
+
+    <div class="mt-12 flex flex-wrap gap-x-12 gap-y-6 border-t border-[rgba(250,248,243,0.16)] pt-7" data-reveal style="--reveal-delay:160ms">
+      {
+        proof.map((s) => (
+          <div>
+            <div class="font-serif text-[clamp(28px,2.4vw,42px)] font-medium leading-none text-gold">{s.n}</div>
+            <div class="mt-2 text-[clamp(11px,0.7vw,13px)] uppercase tracking-[0.18em] text-mist">{s.l}</div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

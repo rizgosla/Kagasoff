@@ -1,0 +1,78 @@
+---
+/** Hero media stage — a still today, a video the day one exists.
+    Pass `video="/hero.mp4"` and this same element becomes a muted, looping,
+    inline background clip with `src` as its poster frame. No layout in
+    src/components/hero/ has to change to make that swap.
+
+    Size it from the parent (the stage is absolutely filled, object-cover). */
+interface Props {
+  /** Still image — shown on its own, or used as the video poster. */
+  src: string;
+  alt: string;
+  /** When set, renders <video> instead of <img>. */
+  video?: string;
+  /** object-position, e.g. "50% 30%" */
+  position?: string;
+  /** Crop zoom. 1 is the plain cover crop; 2.4 pushes in on `position`. */
+  zoom?: number;
+  class?: string;
+  loading?: 'eager' | 'lazy';
+}
+
+const {
+  src,
+  alt,
+  video,
+  position = '50% 40%',
+  zoom = 1,
+  class: cls = '',
+  loading = 'eager',
+} = Astro.props;
+
+// Scaling about the same point the crop is anchored to keeps that point put
+// while the frame tightens around it.
+const fit =
+  zoom === 1
+    ? `object-position:${position}`
+    : `object-position:${position};transform:scale(${zoom});transform-origin:${position}`;
+---
+
+<div class:list={['relative overflow-hidden bg-navydark', cls]}>
+  {
+    video ? (
+      <video
+        class="absolute inset-0 h-full w-full object-cover"
+        style={fit}
+        src={video}
+        poster={src}
+        aria-label={alt}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        data-hero-video
+      />
+    ) : (
+      <img
+        class="absolute inset-0 h-full w-full object-cover"
+        style={fit}
+        src={src}
+        alt={alt}
+        loading={loading}
+        decoding="async"
+      />
+    )
+  }
+</div>
+
+<script>
+  // A looping hero clip is decoration; hold it on the poster frame for anyone
+  // who has asked the system for less motion.
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll<HTMLVideoElement>('video[data-hero-video]').forEach((v) => {
+      v.autoplay = false;
+      v.pause();
+    });
+  }
+</script>

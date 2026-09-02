@@ -1,0 +1,52 @@
+---
+/** Hero B — "Banner".
+    A wide landscape plate sits immediately under the nav, filling the band that
+    used to be empty navy, and the headline reads underneath it. The plate is
+    deliberately wider than the text column: it is horizon, not portrait. */
+import TestimonialCarousel from '../TestimonialCarousel.astro';
+import HeroMedia from './HeroMedia.astro';
+import { hero } from '../../data/hero';
+
+interface Props {
+  video?: string;
+}
+const { video } = Astro.props;
+---
+
+<section class="starfield overflow-hidden text-paper">
+  <div class="shell pb-16 pt-6 md:pb-20 md:pt-7">
+    <!-- Wide plate — the gap-filler -->
+    <div class="relative" data-reveal="zoom">
+      <HeroMedia
+        src="/team.jpg"
+        video={video}
+        alt="The Kagasoff Law Firm team outside the Westminster office"
+        position="50% 18%"
+        class="aspect-[16/6] max-h-[min(46vh,420px)] rounded-[14px] border border-[rgba(201,190,159,0.35)] shadow-[0_40px_80px_-40px_rgba(0,0,0,0.7)] md:aspect-[21/7]"
+      />
+      <div class="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 rounded-b-[14px] bg-gradient-to-t from-[rgba(16,27,48,0.95)] via-[rgba(16,27,48,0.5)] to-transparent"></div>
+      <p class="absolute bottom-5 left-6 text-[clamp(11px,0.7vw,13px)] uppercase tracking-[0.32em] text-gold md:bottom-6 md:left-8">
+        {hero.eyebrow}
+      </p>
+    </div>
+
+    <!-- Copy under the plate -->
+    <div class="mt-10 grid grid-cols-1 items-end gap-10 md:mt-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
+      <div data-reveal="left">
+        <h1 class="font-serif text-[clamp(40px,5.2vw,100px)] font-medium leading-[1.04] tracking-[0.005em]">
+          {hero.lead} <span class="text-gold">{hero.accent}</span><br />
+          {hero.tail}
+        </h1>
+        <p class="mt-6 max-w-[54ch] text-[clamp(16px,1.1vw,20px)] font-light leading-[1.75] text-mist">{hero.sub}</p>
+        <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+          <a href={hero.phoneHref} class="btn-brass lift inline-block rounded-[8px] bg-brass px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em]">Call {hero.phone}</a>
+          <a href="#contact" class="lift inline-block rounded-[8px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] text-paper">Free consultation</a>
+        </div>
+      </div>
+
+      <div data-reveal="right" style="--reveal-delay:120ms">
+        <TestimonialCarousel />
+      </div>
+    </div>
+  </div>
+</section>
