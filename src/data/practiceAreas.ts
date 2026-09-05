@@ -45,13 +45,13 @@ export const practiceAreas: PracticeArea[] = [
     blurb:
       "When someone else's negligence turns your life upside down, we pursue the full recovery you're owed — and handle the insurers so you can focus on healing.",
     overview: [
-      'A serious injury brings medical bills, lost income, and pressure from insurance adjusters whose job is to pay you as little as possible. Our role is to level that field — to build a clear, documented case for everything you have lost and to negotiate, or litigate, from a position of strength.',
+      'A serious injury brings medical bills, lost income, and pressure from insurance adjusters whose job is to pay you as little as possible. Our role is to level that field, to build a clear, documented case for everything you have lost and to negotiate, or litigate, from a position of strength.',
       'We take the time to understand the full impact of your injury, coordinate with medical providers, and keep you informed at every step.',
     ],
     casesHeading: 'Cases we handle',
     cases: [
       'Automobile & motorcycle accidents',
-      'Slip, trip & fall injuries',
+      'Slip & fall injuries',
       'Pedestrian & bicycle collisions',
       'Dog bites & animal attacks',
       'Premises liability',
@@ -63,10 +63,10 @@ export const practiceAreas: PracticeArea[] = [
     name: 'Criminal Defense',
     short: 'Misdemeanors and felonies, defended at every stage.',
     blurb:
-      'From misdemeanors to felonies, we defend your rights at every stage — with the perspective of an attorney who has worked both sides of the courtroom.',
+      'From misdemeanors to felonies, we defend your rights at every stage, with the unique perspective of an attorney who has worked both sides of the courtroom.',
     overview: [
-      'Having served as a law clerk for both the Orange County District Attorney and Public Defender before fifteen years in private defense, Ashley Kagasoff brings a rare, dual perspective to every criminal matter — an understanding of exactly how the prosecution builds, and breaks down, a case.',
-      'We move quickly to protect your rights, scrutinize the evidence against you, and pursue the strongest possible outcome — from dismissal and reduced charges to acquittal at trial.',
+      'Having served as a law clerk for both the Orange County District Attorney and Public Defender before fifteen years in private defense, Ashley Kagasoff brings a rare, dual perspective to every criminal matter.',
+      'We move quickly to protect your rights, scrutinize the evidence against you, and pursue the strongest possible outcome.',
     ],
     casesHeading: 'Charges we defend',
     cases: [
@@ -85,7 +85,7 @@ export const practiceAreas: PracticeArea[] = [
     blurb:
       'Your license is your livelihood. We defend professionals through investigations, accusations, and hearings before California licensing boards.',
     overview: [
-      'A complaint or accusation can put years of training and a career at risk. We represent licensed professionals at every phase — from the first investigative inquiry through formal accusations and administrative hearings.',
+      'A complaint or accusation can put years of training and a career at risk. We represent licensed professionals at every phase.',
       'Ashley has appeared before licensing authorities across the state and understands what each board expects and how to present the strongest defense of your record and reputation.',
     ],
     casesHeading: 'Boards we appear before',
@@ -105,7 +105,7 @@ export const practiceAreas: PracticeArea[] = [
     blurb:
       "Whether you need protection or you've been wrongly accused, we act quickly and represent you through the hearing.",
     overview: [
-      'Restraining order proceedings move fast and carry lasting consequences. Whether you are seeking protection or defending against an order, prompt, prepared representation matters.',
+      'Restraining order proceedings move fast and carry lasting consequences. Prepared representation matters for every single scenario.',
       'Ashley has obtained dismissals of domestic violence restraining orders after hearing and represents clients on both sides of these urgent matters.',
     ],
     casesHeading: 'How we help',
@@ -125,7 +125,7 @@ export const practiceAreas: PracticeArea[] = [
     blurb:
       'Standing up for employees facing wrongful treatment, harassment, and unpaid wages at work.',
     overview: [
-      'The workplace is where livelihoods are made — and where rights are too often violated. We represent employees against employers who cross the line, pursuing accountability and the compensation our clients are owed.',
+      'The workplace is where livelihoods are made, and where rights are too often violated. We represent employees against employers who cross the line, pursuing accountability and the compensation our clients are owed.',
       'We evaluate your situation candidly and pursue resolution efficiently, through negotiation or litigation.',
     ],
     casesHeading: 'Claims we pursue',
