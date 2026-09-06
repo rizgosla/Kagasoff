@@ -160,8 +160,8 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
               <path class="ln-t" d="M86 228 H396" />
               <path class="br-t" d="M78 226 V246" />
               {/* the bookmark, out of the top seam */}
-              <path class="br sheet" d="M310 184 V240 L318 232 L326 240 V184" />
-              <path class="br-t" d="M318 192 V224" />
+              <path class="br sheet" d="M310 184 V213 L318 206 L326 213 V184" />
+              <path class="br-t" d="M318 190 V200" />
             </svg>
           </div>
           <p class="pc-step">{steps[1]}</p>
@@ -260,64 +260,45 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
                 places only: the tympanum outline, the oculus ring and
                 the moulding along the stylobate. */}
             <svg class="pc-art" viewBox="48 26 374 248" role="presentation" focusable="false">
-              {/* The pediment. The raking cornice is a CLOSED triangle: it
-                  overhangs the entablature by 8 either side, as a cornice
-                  should, but left open at the base those two corners hung
-                  in mid-air with nothing carrying them. The closing
-                  horizontal is the cornice's own bottom bed. */}
+              <!-- Step 04 — the courthouse, drawn back to front. Tetrastyle: the four
+              columns sit 18 inside each end of the entablature (86–384), so the
+              cornice overhangs the colonnade a little; pitch 76 centre to centre,
+              door centred in the middle bay. -->
+              <!-- pediment: closed raking cornice, tympanum wash, brass roundel -->
               <path class="ln" d="M78 104 L235 34 L392 104 Z" />
               <path class="br-t wash" d="M98 100 L235 44 L372 100 Z" />
               <circle class="ln sheet" cx="235" cy="76" r="13" />
               <circle class="br-t" cx="235" cy="76" r="6.5" />
-              {/* entablature */}
+              <!-- entablature (sheet hides the cornice bed behind it) -->
               <rect class="ln sheet" x="86" y="104" width="298" height="22" rx="2" />
               <path class="ln-t" d="M94 118 H376" />
-              {/* The wall behind the colonnade, and the way in. The wash
-                  stops just outside the outer columns rather than running
-                  the full width of the entablature — carried out to the
-                  cornice it stops reading as depth behind the porch and
-                  starts reading as a grey slab pasted on. Its two vertical
-                  edges land exactly on the outer columns' outer shaft
-                  lines, so the wash has no visible edge at all — only the
-                  three gaps between the columns are toned. */}
-              <path class="wash-n" d="M134 126 H336 V214 H134 Z" />
-              <path class="br wash-n" d="M222 214 V180 A13 13 0 0 1 248 180 V214" />
-              {/* Four columns. No flute: a single 1.5px hairline down the
-                  centre of a 22-wide shaft is under a pixel at shipped size,
-                  and four of them only added grey to the colonnade. The
-                  shaft, capital and base carry the column on their own. */}
-              <g class="col">
-                <rect class="ln sheet" x="130" y="126" width="30" height="12" rx="1.5" />
-                <path class="ln" d="M134 138 V204 M156 138 V204" />
-                <rect class="ln sheet" x="131" y="204" width="28" height="10" rx="1.5" />
-              </g>
-              <g class="col">
-                <rect class="ln sheet" x="190" y="126" width="30" height="12" rx="1.5" />
-                <path class="ln" d="M194 138 V204 M216 138 V204" />
-                <rect class="ln sheet" x="191" y="204" width="28" height="10" rx="1.5" />
-              </g>
-              <g class="col">
-                <rect class="ln sheet" x="250" y="126" width="30" height="12" rx="1.5" />
-                <path class="ln" d="M254 138 V204 M276 138 V204" />
-                <rect class="ln sheet" x="251" y="204" width="28" height="10" rx="1.5" />
-              </g>
-              <g class="col">
-                <rect class="ln sheet" x="310" y="126" width="30" height="12" rx="1.5" />
-                <path class="ln" d="M314 138 V204 M336 138 V204" />
-                <rect class="ln sheet" x="311" y="204" width="28" height="10" rx="1.5" />
-              </g>
-              {/* stylobate and steps */}
-              <rect class="ln sheet" x="96" y="214" width="278" height="12" rx="2" />
-              <rect class="ln sheet" x="84" y="226" width="302" height="12" rx="2" />
-              <rect class="ln sheet" x="72" y="238" width="326" height="12" rx="2" />
-              <rect class="ln sheet" x="60" y="250" width="350" height="12" rx="2" />
-              {/* A moulding along the stylobate, drawn last: sat on the
-                  stylobate's bottom edge it was painted over by the first
-                  step, which is filled and drawn after it, and moved down
-                  onto the step it read as a gold line lying loose across
-                  the stair. Inside the stylobate it belongs to the
-                  building. */}
-              <path class="br-t" d="M102 222 H368" />
+              <!-- wall behind the colonnade: edges land on the outer shaft lines -->
+              <path class="wash-n" d="M108 126 H362 V214 H108 Z" />
+              <!-- arched door, centred in the middle bay (shafts 210 | 260) -->
+              <path class="br wash-n" d="M218 214 V183 A17 17 0 0 1 252 183 V214" />
+              <!-- shafts first, run long; capitals and bases are sheet rects laid over
+              their ends so no shaft stroke crosses a capital or base -->
+              <path class="ln" d="M108 132 V208 M134 132 V208" />
+              <path class="ln" d="M184 132 V208 M210 132 V208" />
+              <path class="ln" d="M260 132 V208 M286 132 V208" />
+              <path class="ln" d="M336 132 V208 M362 132 V208" />
+              <!-- capitals -->
+              <rect class="ln sheet" x="104" y="126" width="34" height="12" rx="1.5" />
+              <rect class="ln sheet" x="180" y="126" width="34" height="12" rx="1.5" />
+              <rect class="ln sheet" x="256" y="126" width="34" height="12" rx="1.5" />
+              <rect class="ln sheet" x="332" y="126" width="34" height="12" rx="1.5" />
+              <!-- bases -->
+              <rect class="ln sheet" x="106" y="204" width="30" height="10" rx="1.5" />
+              <rect class="ln sheet" x="182" y="204" width="30" height="10" rx="1.5" />
+              <rect class="ln sheet" x="258" y="204" width="30" height="10" rx="1.5" />
+              <rect class="ln sheet" x="334" y="204" width="30" height="10" rx="1.5" />
+              <!-- stylobate and three steps, each drawn over the one above -->
+              <rect class="ln sheet" x="84" y="214" width="302" height="12" rx="2" />
+              <rect class="ln sheet" x="75" y="226" width="320" height="12" rx="2" />
+              <rect class="ln sheet" x="66" y="238" width="338" height="12" rx="2" />
+              <rect class="ln sheet" x="57" y="250" width="356" height="12" rx="2" />
+              <!-- brass moulding inside the stylobate -->
+              <path class="br-t" d="M92 220 H378" />
             </svg>
           </div>
           <p class="pc-step">{steps[3]}</p>

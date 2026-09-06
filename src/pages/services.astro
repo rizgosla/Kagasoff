@@ -23,27 +23,34 @@ import { practiceAreas } from '../data/practiceAreas';
    once in this page's <style> block (.svc-art). */
 const areaScenes: Record<string, string> = {
   /* Personal injury — a car in profile that has met something.
-     The car faces left, drawn as one closed silhouette (nose, hood,
-     A-pillar, roof, rear glass, trunk, tail) with the two side windows
-     as navy-washed panes under the roof, a rocker wash along the lower
-     body for weight, and sheet-filled wheels that occlude the body's
-     bottom edge. The consequence is told twice, quietly: a brass impact
-     burst radiating off the front fender (the drawing's one accent),
-     and two full-weight skid marks laid on the ground hairline behind
-     the wheels. Consequence, not carnage — the body stays whole. */
+     The car faces left as one closed silhouette whose bottom edge is cut
+     by two wheel arches, so the sheet-filled wheels sit inside the body
+     rather than over it. Details are kept to the vocabulary: two washed
+     panes following the pillars with a B-pillar between, a beltline and
+     two door seams split so nothing crosses, handles, a gold-washed headlight, a tail-light,
+     rim-and-hub caps and a rocker wash bounded by its crease. The
+     consequence is told quietly: a brass impact burst off the front
+     fender (the one accent) and two bold skid segments that take over the
+     ground hairline behind each wheel. The body stays whole. */
   'personal-injury': `
-    <path class="ln sheet" d="M92 228 V192 C92 180 101 172 116 168 L184 156 L226 106 C233 98 245 94 259 94 H328 C343 94 356 100 365 112 L386 148 L402 156 C411 160 416 168 416 180 V228 Z" />
-    <path class="ln-t wash-n" d="M240 150 L266 108 H292 V150 Z" />
-    <path class="ln-t wash-n" d="M306 150 V108 H336 L358 150 Z" />
-    <path class="ln-t" d="M196 158 H388" />
-    <path class="wash-n" d="M100 196 H408 V224 H100 Z" />
-    <path class="ln-t" d="M299 158 V222 M310 172 H326" />
+    <path class="ln sheet" d="M92 228 V192 C92 180 101 172 116 168 L184 156 L226 106 C233 98 245 94 259 94 H328 C343 94 356 100 365 112 L386 148 L402 156 C411 160 416 168 416 180 V228 H385 A33 33 0 0 0 319 228 H205 A33 33 0 0 0 139 228 Z" />
+    <path class="wash-n" d="M208 213.5 H316 V226.5 H208 Z" />
+    <path class="ln-t wash-n" d="M199 150 L232 110 Q235 104 242 104 H289 V150 Z" />
+    <path class="ln-t wash-n" d="M299 150 V104 H340 C348 104 353 107 357 113 L375 146 Q377 150 372 150 Z" />
+    <path class="ln-t" d="M222 158 H288 M300 158 H388" />
+    <path class="ln-t" d="M216 164 V206 M294 164 V206" />
+    <path class="ln-t" d="M270 172 H285 M334 172 H349" />
+    <path class="ln-t" d="M100 212 H130 M210 212 H314" />
+    <path class="ln-t wash" d="M101 194 V186 C101 183 103 182 107 182 H123 C126 182 127 184 126 187 L124 192 C123 194 121 195 119 195 Z" />
+    <rect class="ln-t" x="399" y="170" width="8" height="20" rx="2.5" />
     <circle class="ln sheet" cx="172" cy="228" r="28" />
-    <circle class="ln-t" cx="172" cy="228" r="10.5" />
+    <circle class="ln-t" cx="172" cy="228" r="17" />
+    <circle class="ln-t" cx="172" cy="228" r="5" />
     <circle class="ln sheet" cx="352" cy="228" r="28" />
-    <circle class="ln-t" cx="352" cy="228" r="10.5" />
-    <path class="ln-t" d="M60 260 H410" />
-    <path class="ln" d="M180 260 H248 M360 260 H410" />
+    <circle class="ln-t" cx="352" cy="228" r="17" />
+    <circle class="ln-t" cx="352" cy="228" r="5" />
+    <path class="ln-t" d="M60 258 H160 M246 258 H340" />
+    <path class="ln" d="M186 258 H240 M366 258 H410" />
     <path class="br" d="M82 134 L90 156 M60 152 L78 168 M50 186 L72 186 M60 220 L78 204" />
     <path class="br-t" d="M52 166 L68 176 M54 206 L70 198" />
   `,
@@ -76,49 +83,53 @@ const areaScenes: Record<string, string> = {
   `,
 
   /* Professional license defense — the credential itself, on the wall.
-     A framed certificate hangs from a brass nail by two wires. The
-     frame is double: the outer contour, a navy wash between it and the
-     sheet-filled inner rectangle, so the mat between the mouldings reads
-     as depth. Inside: a centred title pair and two body rules, a
-     signature flourish over its own rule at the lower left, and — the
-     brass — a rosette seal at the lower right, gold-washed with an
-     inner ring, two ribbons falling from it. A chair-rail hairline
-     behind grounds the wall. */
+     A framed certificate hung from a brass nail: outer frame, washed mat,
+     inner sheet, text rules, a level signature flourish on its rule, and
+     a rosette seal — two swallowtail ribbon tails drawn first, then the
+     sheet-filled disc over them so the ring occludes the tail tops. The
+     tails stop above the inner border. A chair-rail hairline behind
+     grounds the wall. */
   'professional-license-defense': `
     <path class="ln-t" d="M60 256 H410" />
-    <circle class="dot" cx="235" cy="42" r="4.5" />
     <path class="ln-t" d="M235 44 L154 76 M235 44 L316 76" />
+    <circle class="dot" cx="235" cy="42" r="4.5" />
     <rect class="ln sheet" x="112" y="74" width="246" height="172" rx="4" />
     <rect class="wash-n" x="112" y="74" width="246" height="172" rx="4" />
     <rect class="ln-t sheet" x="130" y="92" width="210" height="136" rx="2" />
     <path class="ln-t" d="M164 114 H306 M186 128 H284" />
     <path class="ln-t" d="M150 152 H288 M150 166 H262" />
-    <path class="ln-t" d="M150 204 C166 192 172 210 188 198 C196 192 202 196 208 194" />
+    <path class="ln-t" d="M153 210 C155 203 159 199 163 200 C168 201 168 209 173 210 C180 211 183 204 191 205 C199 206 205 204 213 206 C221 208 228 205 234 206" />
     <path class="ln-t" d="M148 214 H240" />
+    <path class="br-t wash" d="M287 195 L273 222 L280 218 L286 224 L298 197 Z" />
+    <path class="br-t wash" d="M294 197 L306 224 L312 218 L319 222 L305 195 Z" />
+    <circle class="sheet" cx="296" cy="192" r="15" />
     <circle class="br wash" cx="296" cy="192" r="15" />
     <circle class="br-t" cx="296" cy="192" r="7" />
-    <path class="br" d="M291 205 L287 228 M301 205 L305 228" />
   `,
 
   /* Restraining orders — a shield standing guard before the home.
-     The house sits behind and to the right — roof, chimney, a window
-     with its cross, an arched navy-washed doorway — and the shield is
-     drawn after it, sheet-filled, so it genuinely occludes the house's
-     near corner and the ground line: in front, not beside. The shield
-     carries a brasslight inner border over a faint navy field, quarter
-     lines that break around the centre, and the brass is spent on the
-     boss — a gold-washed ring with a solid brass stud at its heart. */
+     The house is drawn first: an open-top wall path under a closed,
+     navy-washed roof with eave overhangs, a sheet-filled chimney seated
+     on the slope, two cross-paned windows with sills, an arched washed
+     door on a sheet-filled stoop with a brass knob. The shield comes
+     after, sheet-filled, so it occludes the near corner and the ground
+     line, which is split to stop at the walls. Quarter lines stop short
+     of the boss and the brasslight inner border; the brass is spent on
+     the boss — a gold-washed ring with a solid brass stud at its heart. */
   'restraining-orders': `
-    <path class="ln" d="M236 124 L318 62 L400 124" />
-    <path class="ln" d="M356 90 V66 H374 V104" />
-    <rect class="ln sheet" x="248" y="124" width="136" height="132" rx="2" />
-    <rect class="ln-t" x="272" y="150" width="30" height="32" />
-    <path class="ln-t" d="M287 150 V182 M272 166 H302" />
-    <path class="ln-t wash-n" d="M316 256 V210 A16 16 0 0 1 348 210 V256 Z" />
-    <path class="ln-t" d="M60 256 H410" />
+    <path class="ln-t" d="M60 256 H248 M398 256 H410" />
+    <path class="ln" d="M248 148 V256 H398 V148" />
+    <path class="ln wash-n" d="M236 148 L323 94 L410 148 Z" />
+    <path class="ln sheet" d="M364 119.4 V92 H378 V128.1 Z" />
+    <rect class="ln sheet" x="361" y="86" width="20" height="6" rx="1" />
+    <path class="ln-t" d="M268 170 H298 V200 H268 Z M283 170 V200 M268 185 H298 M264 204 H302" />
+    <path class="ln-t" d="M348 170 H378 V200 H348 Z M363 170 V200 M348 185 H378 M344 204 H382" />
+    <path class="ln-t wash-n" d="M309 249 V220 A14 14 0 0 1 337 220 V249" />
+    <circle class="dot" cx="331" cy="238" r="2.2" />
+    <rect class="ln-t sheet" x="301" y="250" width="44" height="6" rx="1" />
     <path class="ln sheet" d="M172 58 C210 76 242 82 260 82 V166 C260 214 226 246 172 266 C118 246 84 214 84 166 V82 C102 82 134 76 172 58 Z" />
     <path class="br-t wash-n" d="M172 74 C202 88 228 93 244 93 V164 C244 202 216 230 172 250 C128 230 100 202 100 164 V93 C116 93 142 88 172 74 Z" />
-    <path class="ln-t" d="M172 74 V141 M172 183 V250 M100 162 H151 M193 162 H244" />
+    <path class="ln-t" d="M172 77 V139 M172 185 V247 M103 162 H149 M195 162 H241" />
     <circle class="br wash" cx="172" cy="162" r="19" />
     <circle class="dot" cx="172" cy="162" r="6" />
   `,
@@ -136,8 +147,8 @@ const areaScenes: Record<string, string> = {
     <rect class="ln sheet" x="86" y="112" width="172" height="138" rx="10" />
     <path class="wash-n" d="M94 220 H250 V244 H94 Z" />
     <path class="ln-t" d="M86 154 H258" />
-    <rect class="br" x="118" y="146" width="16" height="15" rx="2" />
-    <rect class="br" x="210" y="146" width="16" height="15" rx="2" />
+    <rect class="br sheet" x="118" y="146" width="16" height="15" rx="2" />
+    <rect class="br sheet" x="210" y="146" width="16" height="15" rx="2" />
     <rect class="ln sheet" x="284" y="230" width="120" height="20" rx="3" />
     <path class="ln-t" d="M290 239 H398" />
     <rect class="ln sheet" x="292" y="210" width="104" height="20" rx="3" />
@@ -147,29 +158,42 @@ const areaScenes: Record<string, string> = {
   `,
 
   /* Real estate — the house, and the key to it.
-     The house takes the upper band: an eaved roofline over a gold-washed
-     gable, a chimney rising through it, two crossed windows either side
-     of an arched navy-washed door with a brass knob dot. On the ground
-     hairline it stands on, a large old-fashioned key lies in the
-     foreground, shaft running most of the frame's width to a two-toothed
-     bit — and the brass is spent on the bow, a heavy brass ring with a
-     brasslight ring inside it. */
+     A side-gable cottage: a closed roof plane whose gold wash fills the
+     whole gable, eaves overhanging the walls, a sheet-filled fascia band
+     beneath, a chimney straddling the right rake with a slope-cut base,
+     mullioned windows with sills abutting their frames, and a flat-top
+     door on a small stoop with the brass knob dot. The ground hairline
+     is split to stop at the wall corners. Below, the key: shaft, two
+     sheet-filled teeth flush under the shaft, and the heavy brass bow
+     drawn last so it occludes the shaft end, brasslight ring inside it. */
   'real-estate': `
-    <path class="wash" d="M122 126 L235 54 L348 126 Z" />
-    <path class="ln" d="M92 134 L235 42 L378 134" />
-    <path class="ln" d="M306 87 V58 H324 V99" />
-    <path class="ln-t" d="M60 226 H410" />
-    <rect class="ln sheet" x="118" y="134" width="234" height="92" rx="2" />
-    <rect class="ln-t" x="146" y="156" width="36" height="36" />
-    <path class="ln-t" d="M164 156 V192 M146 174 H182" />
-    <rect class="ln-t" x="288" y="156" width="36" height="36" />
-    <path class="ln-t" d="M306 156 V192 M288 174 H324" />
-    <path class="ln-t wash-n" d="M212 226 V172 A23 23 0 0 1 258 172 V226 Z" />
-    <circle class="dot" cx="250" cy="200" r="4" />
-    <path class="ln sheet" d="M152 248 H346 V257 H152 Z" />
-    <path class="ln" d="M316 257 V268 H328 V257 M336 257 V272 H348 V257" />
-    <circle class="br" cx="134" cy="252" r="19" />
-    <circle class="br-t" cx="134" cy="252" r="9" />
+    <!-- ground hairline, stopped at the walls -->
+    <path class="ln-t" d="M60 222 H144 M326 222 H410" />
+    <!-- chimney straddling the right rake: slope-cut body, then cap -->
+    <path class="ln sheet" d="M292 97.8 V66 H310 V111 Z" />
+    <rect class="ln sheet" x="289" y="61" width="24" height="5" />
+    <!-- walls -->
+    <rect class="ln sheet" x="146" y="136" width="178" height="86" />
+    <!-- roof: side-gable plane, wash fills it; fascia band beneath -->
+    <path class="ln wash" d="M126 136 L194 86 H276 L344 136 Z" />
+    <rect class="ln sheet" x="126" y="136" width="218" height="6" />
+    <!-- windows: frame, mullions flush to the frame, sill -->
+    <rect class="ln-t" x="168" y="160" width="32" height="34" />
+    <path class="ln-t" d="M184 161.8 V192.2 M169.8 177 H182.2 M185.8 177 H198.2" />
+    <path class="ln-t" d="M164 195.8 H204" />
+    <rect class="ln-t" x="270" y="160" width="32" height="34" />
+    <path class="ln-t" d="M286 161.8 V192.2 M271.8 177 H284.2 M287.8 177 H300.2" />
+    <path class="ln-t" d="M266 195.8 H306" />
+    <!-- door on its stoop, brass knob -->
+    <path class="ln-t wash-n" d="M222 216 V162 H248 V216 Z" />
+    <circle class="dot" cx="244" cy="190" r="3" />
+    <rect class="ln sheet" x="214" y="216" width="42" height="6" />
+    <!-- key: shaft, teeth occluding the shaft edge, bow over the shaft end -->
+    <path class="ln sheet" d="M150 248 H346 V256 H150" />
+    <rect class="ln sheet" x="318" y="256" width="10" height="10" />
+    <rect class="ln sheet" x="336" y="256" width="10" height="14" />
+    <circle class="br" cx="134" cy="252" r="16" />
+    <circle class="br-t" cx="134" cy="252" r="8" />
   `,
 };
 
