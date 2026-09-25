@@ -80,12 +80,14 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
               <path class="wash-n" d="M238 56 L272 90 L238 90 Z" />
               <path class="ln" d="M238 56 V90 H272" />
               {/* The question: a hook around a circle of r36 centred on
-                  (172,132), left off at 70 degrees so the tail can leave
-                  it on the tangent — the tail's first control point sits
-                  on that tangent, which is what turns the step down from
-                  6 to 4 into a taper instead of a notch. */}
-              <path class="br qm-hook" d="M140.8 150 A36 36 0 1 1 184 165.6" />
-              <path class="br qm-tail" d="M184 165.6 C176.8 169.2 173.2 182.4 173.2 204" />
+                  (172,132), released at 55 degrees — far enough back that
+                  the tail leaves on the tangent and falls to the dot in
+                  one continuous curve, rather than having to reverse out
+                  of a stroke that is already curling back under itself.
+                  One path, one width: the earlier pair put a width step
+                  (6 into 4) and a 7-degree tangent break at the same
+                  point, and the two together read as a notch. */}
+              <path class="br qm" d="M140.8 150 A36 36 0 1 1 192.5 161.2 C177.1 172 173.2 185.2 173.2 204" />
               <circle class="dot" cx="173.2" cy="228" r="6.5" />
               {/* ruled lines under it */}
               <path class="ln-t" d="M104 242 H246 M104 256 H188" />
@@ -526,11 +528,12 @@ const steps = ['Step 01', 'Step 02', 'Step 03', 'Step 04'];
   .pc-art .wash { fill: var(--color-gold); fill-opacity: 0.22; }
   .pc-art .wash-n { fill: var(--color-navy); fill-opacity: 0.07; }
   .pc-art .dot { fill: var(--color-brass); }
-  /* The question mark is the one place the vocabulary widens: a hook
-     drawn heavier than its tail is what keeps the glyph from reading as
-     a piece of typography dropped onto the sheet. */
-  .pc-art .qm-hook { stroke-width: 6; }
-  .pc-art .qm-tail { stroke-width: 4; }
+  /* The question mark is the one place the vocabulary widens — at 2.4 the
+     glyph reads as a stray rule rather than as the subject of the drawing.
+     One weight across hook and tail, at the mean of the 6/4 pair it
+     replaces: a heavier hook run into a lighter tail steps at the join,
+     and a step there is the one thing the eye goes straight to. */
+  .pc-art .qm { stroke-width: 5; }
 
   /* ============================================================
      REDUCED MOTION.
