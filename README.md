@@ -11,11 +11,15 @@ Libre Franklin body, on a deep-navy / warm-paper / brass palette.
 ```bash
 npm install
 npm run dev      # local dev server at http://localhost:4321
-npm run build    # static production build → ./dist
-npm run preview  # preview the production build locally
+npm run build    # production build → ./dist
+npm run preview  # build, then serve on the real Workers runtime (port 4321)
+npm run deploy   # build, then wrangler deploy
 ```
 
 Requires Node 18.20+ / 20.3+ / 22+.
+
+Every page is still prerendered. The one exception is `/api/intake`, which runs
+on demand — see **Contact form** below.
 
 ## Project structure
 
@@ -63,19 +67,54 @@ Maps iframe.
 
 ## Contact form
 
-`contact.astro` validates name / phone / message client-side and shows a
-confirmation state. It does **not** yet deliver messages — wire the submit handler
-to your provider of choice:
+`IntakeForm.astro` validates name / phone / message in the browser, then POSTs
+JSON to `src/pages/api/intake.ts`, which hands the message to
+[Resend](https://resend.com) and emails it to the firm. The confirmation panel
+only appears once the server has accepted the message — a failed send shows an
+error and tells the visitor to call instead.
 
-- **Netlify Forms** — add `data-netlify="true"` to the `<form>` and remove the
-  `preventDefault` handler, or
-- **Formspree / API route** — `POST` the form data in the submit handler, or
-- an **Astro API route** under `src/pages/api/`.
+The route also drops anything that fills the off-screen `company` honeypot,
+answering `200` so a bot gets no signal that it was rejected.
 
-See the `NOTE` comment in the `<script>` block.
+### Required secrets
+
+| Name | What it is |
+| --- | --- |
+| `RESEND_API_KEY` | From <https://resend.com/api-keys> |
+| `INTAKE_TO` | Where consultation requests are delivered |
+| `INTAKE_FROM` | Sender, e.g. `Kagasoff Law Firm <intake@kagasofflaw.com>` |
+
+`INTAKE_FROM` **must** be on a domain verified in Resend
+(<https://resend.com/domains>) or sending fails with a 403. Resend's
+`onboarding@resend.dev` works without DNS setup but can only deliver to the
+address that owns the Resend account, so it is for testing only.
+
+Set them in production once per environment:
+
+```bash
+npx wrangler secret put RESEND_API_KEY
+npx wrangler secret put INTAKE_TO
+npx wrangler secret put INTAKE_FROM
+```
+
+Locally, copy `.dev.vars.example` to `.dev.vars` (gitignored) — both
+`npm run dev` and `npm run preview` read it.
 
 ## Deploying
 
-`npm run build` outputs a fully static site to `dist/` — host it on Netlify,
-Vercel, Cloudflare Pages, GitHub Pages, or any static host. No server required
-unless you add an API route for the contact form.
+Cloudflare Workers, via `@astrojs/cloudflare`. `npm run build` writes `dist/`:
+the prerendered pages plus the Worker that serves `/api/intake`. Static assets
+are matched first, so pages are still served straight from the edge and the
+Worker only runs for the form endpoint.
+
+```bash
+npm run deploy   # astro build && wrangler deploy
+```
+
+Worker name, compatibility date and the assets binding live in `wrangler.jsonc`.
+
+> **Note:** `main` in `wrangler.jsonc` points at `dist/_worker.js/index.js`
+> because this project is on Astro 5 with `@astrojs/cloudflare` v12. Astro 6 /
+> adapter v13 replaces that path with the
+> `@astrojs/cloudflare/entrypoints/server` entrypoint — don't change it before
+> upgrading, or the build output and the config stop matching.

@@ -1,0 +1,30 @@
+{
+  // Cloudflare Workers config. `npm run build` writes dist/: the prerendered
+  // pages plus the Worker that serves the one on-demand route, /api/intake.
+  // Assets are matched first, so every page is still served straight from the
+  // edge as a static file and the Worker only runs for /api/intake.
+  //
+  // NOTE: `main` points at the built worker because this project is on Astro 5
+  // with @astrojs/cloudflare v12. Astro 6 / adapter v13 replaces this path with
+  // the "@astrojs/cloudflare/entrypoints/server" entrypoint — change it there
+  // and not before, or the build output and the config stop matching.
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "kagasoff-law",
+  "main": "./dist/_worker.js/index.js",
+  "compatibility_date": "2026-09-24",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist"
+  },
+  "observability": {
+    // So a failed intake send is greppable in the Workers logs rather than
+    // silently lost — the console.error calls in the route land here.
+    "enabled": true
+  }
+  // Secrets are NOT declared here. Set them once per environment with:
+  //   npx wrangler secret put RESEND_API_KEY
+  //   npx wrangler secret put INTAKE_TO
+  //   npx wrangler secret put INTAKE_FROM
+  // For local dev, put the same three in .dev.vars (gitignored).
+}

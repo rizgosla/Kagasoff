@@ -1,1 +1,6 @@
 # Cloudflare Workers Assets ignore file
+# Keep the Worker bundle and its Pages-style route manifest out of the public
+# asset store — wrangler uploads `main` separately, and neither should be
+# fetchable over HTTP.
+_worker.js
+_routes.json
