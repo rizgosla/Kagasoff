@@ -33,9 +33,16 @@ const {
       document.documentElement.classList.add('js-reveal');
     </script>
   </head>
-  <body class="bg-paper font-sans text-ink antialiased">
+  <!-- Sticky footer: the page is always at least one screen tall and <main>
+       takes up the slack, so a short page (an empty or one-post /blog) ends
+       with the footer at the bottom of the screen instead of bare background
+       below it. <main> stays a plain block, so the sections inside lay out
+       exactly as before. -->
+  <body class="flex min-h-svh flex-col bg-paper font-sans text-ink antialiased">
     <Header />
-    <slot />
+    <main class="flex-1">
+      <slot />
+    </main>
     <Footer />
 
     <!-- Reveal-on-scroll: fade/slide elements in as they enter the viewport. -->

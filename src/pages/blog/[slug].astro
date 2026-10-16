@@ -1,6 +1,7 @@
 ---
 /** Blog post — prerendered per published post (drafts included in dev only). */
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactSection from '../../components/ContactSection.astro';
 import { getCollection, render } from 'astro:content';
 
 export const prerender = true;
@@ -79,15 +80,6 @@ const iso = publishedDate.toISOString().slice(0, 10);
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="starfield overflow-hidden text-paper">
-    <div class="shell py-14 text-center md:py-[70px]">
-      <h2 class="mb-3.5 font-serif text-[clamp(28px,3.2vw,44px)] font-medium">Have a <span class="text-gold">question?</span></h2>
-      <p class="mb-[30px] text-[16px] font-light text-mist">Let's talk today. Your first consultation is free and confidential.</p>
-      <div class="flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center">
-        <a href="tel:6572184947" class="btn-brass lift inline-block w-full rounded-[8px] bg-brass px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] sm:w-auto">Call (657) 218-4947</a>
-        <a href="/#contact" class="lift inline-block w-full rounded-[8px] border border-[rgba(250,248,243,0.4)] px-9 py-[18px] text-center text-[clamp(15px,0.9vw,17px)] font-semibold tracking-[0.04em] text-paper sm:w-auto">Send a message</a>
-      </div>
-    </div>
-  </section>
+  <!-- Same closing contact band as the home page: intake form + office map -->
+  <ContactSection />
 </BaseLayout>
