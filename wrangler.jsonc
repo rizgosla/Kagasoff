@@ -22,6 +22,11 @@
     // silently lost — the console.error calls in the route land here.
     "enabled": true
   }
+  // The blog editor (/keystatic and /api/keystatic) runs in this same Worker and
+  // needs no extra bindings or secrets: editors sign in through Keystatic Cloud.
+  // The build log's note about a "SESSION" KV binding is Astro's default session
+  // driver; nothing here uses sessions, so no KV namespace is declared.
+  //
   // Secrets are NOT declared here. Set them once per environment with:
   //   npx wrangler secret put RESEND_API_KEY
   //   npx wrangler secret put INTAKE_TO
