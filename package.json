@@ -6,16 +6,27 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "astro build && wrangler dev --port 4321",
+    "deploy": "astro build && wrangler deploy",
     "audit:responsive": "node scripts/responsive-audit.mjs",
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.6.0"
+    "@astrojs/cloudflare": "^12.6.13",
+    "@astrojs/markdoc": "^0.15.11",
+    "@astrojs/react": "^4.4.2",
+    "@keystatic/astro": "^5.2.0",
+    "@keystatic/core": "^0.6.9",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "astro": "^5.6.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.0",
     "playwright": "^1.62.1",
-    "tailwindcss": "^4.1.0"
+    "tailwindcss": "^4.1.0",
+    "wrangler": "^4.139.0"
   }
 }

@@ -17,3 +17,10 @@ pnpm-debug.log*
 .DS_Store
 .vscode/
 audit-shots/  
+
+# cloudflare / wrangler local secrets
+.dev.vars
+.wrangler/
+
+# claude code local settings and worktrees (contains a nested git worktree)
+.claude/

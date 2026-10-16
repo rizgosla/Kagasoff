@@ -1,9 +1,14 @@
 ---
-/** Reusable consultation intake form (client-side validated, with a
-    confirmation state). Rendered multiple times on a page — every id/for
-    pair is namespaced by `uid` so labels stay associated without
-    collisions, and the shared script wires each instance via
-    querySelectorAll (Astro dedupes component <script>s across instances). */
+/** Reusable consultation intake form. Validates in the browser, then POSTs to
+    /api/intake, which is what actually delivers the message (via Resend).
+    Rendered multiple times on a page — every id/for pair is namespaced by
+    `uid` so labels stay associated without collisions, and the shared script
+    wires each instance via querySelectorAll, because Astro dedupes a
+    component's client script across its instances.
+
+    Note: no literal script tag in this comment. The compiler reads one even
+    inside a comment, splits the file there, and hands esbuild the remainder
+    as JavaScript — which fails the dev server's dependency scan. */
 import { practiceAreas } from '../data/practiceAreas';
 
 interface Props {
@@ -52,7 +57,14 @@ const labelCls = 'mb-2 block text-xs uppercase tracking-[0.08em] text-ink';
       <textarea class="fld" id={`${uid}-message`} name="message" placeholder="Briefly describe your situation. Do not include confidential details you wouldn't want sent by email."></textarea>
     </div>
 
-    <div class="form-error mb-5 hidden rounded-md border border-error-line bg-error-bg px-4 py-3 text-[13.5px] text-error">
+    {/* Honeypot. Positioned off-screen and hidden from assistive tech, so only
+        a bot ever fills it; /api/intake drops anything that arrives with it set. */}
+    <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+      <label for={`${uid}-company`}>Company</label>
+      <input id={`${uid}-company`} name="company" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="form-error mb-5 hidden rounded-md border border-error-line bg-error-bg px-4 py-3 text-[13.5px] text-error" role="alert">
       Please enter your name, a phone number, and a short message.
     </div>
 
@@ -81,38 +93,75 @@ const labelCls = 'mb-2 block text-xs uppercase tracking-[0.08em] text-ink';
 </div>
 
 <script>
-  // Client-side validation + confirmation state.
-  // NOTE: this only SHOWS a confirmation — it does NOT deliver the message.
-  // Wire delivery here: add data-netlify="true" to the <form> (Netlify Forms),
-  // POST to Formspree, or handle it in an Astro API route under src/pages/api/.
+  // Validate here, then hand the message to /api/intake, which is what sends
+  // it. The confirmation panel only appears once the server has accepted it —
+  // a failed send has to say so rather than show a thank-you for a message
+  // that never arrived.
   document.querySelectorAll('.consult').forEach((root) => {
     const form = root.querySelector('.consult-form') as HTMLFormElement | null;
-    const errorBox = root.querySelector('.form-error');
+    if (!form) return;
+    const errorBox = root.querySelector('.form-error') as HTMLElement | null;
     const confirmPanel = root.querySelector('.confirm-panel');
     const nameOut = root.querySelector('.confirm-name');
     const resetBtn = root.querySelector('.reset-form');
+    const submitBtn = form.querySelector('button[type=submit]') as HTMLButtonElement | null;
+    const submitLabel = submitBtn?.textContent ?? 'Submit request';
 
-    form?.addEventListener('submit', (e) => {
+    const showError = (msg: string) => {
+      if (!errorBox) return;
+      errorBox.textContent = msg;
+      errorBox.classList.remove('hidden');
+    };
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const data = new FormData(form);
-      const name = (data.get('name') || '').toString().trim();
-      const phone = (data.get('phone') || '').toString().trim();
-      const message = (data.get('message') || '').toString().trim();
+      const field = (k: string) => (data.get(k) || '').toString().trim();
+      const name = field('name');
 
-      if (name && phone && message) {
-        errorBox?.classList.add('hidden');
+      if (!name || !field('phone') || !field('message')) {
+        showError('Please enter your name, a phone number, and a short message.');
+        return;
+      }
+
+      errorBox?.classList.add('hidden');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending…';
+      }
+
+      try {
+        const res = await fetch('/api/intake', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            phone: field('phone'),
+            email: field('email'),
+            area: field('area'),
+            message: field('message'),
+            company: field('company'),
+          }),
+        });
+        if (!res.ok) throw new Error(`intake responded ${res.status}`);
+
         if (nameOut) nameOut.textContent = name.split(/\s+/)[0];
         form.style.display = 'none';
         confirmPanel?.classList.remove('hidden');
-      } else {
-        errorBox?.classList.remove('hidden');
+      } catch {
+        showError('Sorry — that didn’t send. Please try again, or call (657) 218-4947.');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = submitLabel;
+        }
       }
     });
 
     resetBtn?.addEventListener('click', () => {
-      form?.reset();
+      form.reset();
       confirmPanel?.classList.add('hidden');
-      if (form) form.style.display = '';
+      form.style.display = '';
     });
   });
 </script>

@@ -13,6 +13,7 @@ const nav = [
 const path = Astro.url.pathname;
 const isActive = (href: string) => href === '/' && path === '/';
 const servicesActive = path.startsWith('/services');
+const blogActive = path.startsWith('/blog');
 ---
 
 <header class="sticky top-0 z-50 bg-navy text-paper">
@@ -77,6 +78,17 @@ const servicesActive = path.startsWith('/services');
         </div>
       </div>
 
+      <!-- Blog -->
+      <a
+        href="/blog"
+        class:list={[
+          'border-b pb-[3px] tracking-[0.03em] transition-opacity',
+          blogActive ? 'border-brass opacity-100' : 'border-transparent opacity-80 hover:opacity-100',
+        ]}
+      >
+        Blog
+      </a>
+
       <!-- Phone CTA -->
       <a
         href="tel:6572184947"
@@ -139,6 +151,13 @@ const servicesActive = path.startsWith('/services');
           }
         </div>
       </div>
+
+      <a
+        href="/blog"
+        class:list={['mt-2 rounded-md px-2 py-2.5 tracking-[0.02em]', blogActive ? 'text-brasslight' : 'text-paper/85']}
+      >
+        Blog
+      </a>
 
       <!-- Phone CTA -->
       <a

@@ -1,0 +1,68 @@
+---
+/** One post in the /blog listing: optional cover, date, serif title, summary,
+    and a "Read more" link whose hit area is stretched over the whole card. */
+interface Props {
+  slug: string;
+  title: string;
+  summary: string;
+  publishedDate: Date;
+  coverImage?: string;
+  coverImageAlt?: string;
+  draft?: boolean;
+}
+
+const { slug, title, summary, publishedDate, coverImage, coverImageAlt, draft = false } = Astro.props;
+
+const dateLabel = publishedDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
+const iso = publishedDate.toISOString().slice(0, 10);
+---
+
+<article class="blog-card group relative flex h-full flex-col overflow-hidden rounded-[10px] border border-line bg-white transition-colors hover:border-brasslight">
+  {
+    coverImage && (
+      <div class="aspect-[16/9] overflow-hidden bg-cream">
+        <img
+          src={coverImage}
+          alt={coverImageAlt ?? ''}
+          loading="lazy"
+          decoding="async"
+          class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+      </div>
+    )
+  }
+  <div class="flex flex-1 flex-col p-6 md:p-7">
+    <div class="mb-3 flex flex-wrap items-center gap-3 text-[12px] uppercase tracking-[0.16em] text-brass">
+      <time datetime={iso}>{dateLabel}</time>
+      {
+        draft && (
+          <span class="rounded-full border border-brass/60 px-2.5 py-0.5 text-[10.5px] font-semibold tracking-[0.14em]">Draft</span>
+        )
+      }
+    </div>
+    <h2 class="mb-3 font-serif text-[clamp(24px,1.9vw,30px)] font-semibold leading-[1.15] text-navy">{title}</h2>
+    <p class="mb-6 text-[15.5px] font-light leading-[1.7] text-ink">{summary}</p>
+    <a
+      href={`/blog/${slug}`}
+      class="blog-card-link mt-auto inline-flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.12em] text-brass"
+    >
+      Read more
+      <span class="inline-block transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
+    </a>
+  </div>
+</article>
+
+<style>
+  /* Stretch the link's hit area over the whole card without nesting block
+     content inside an anchor. */
+  .blog-card-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+</style>

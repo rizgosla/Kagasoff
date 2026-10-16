@@ -1,0 +1,12 @@
+# Copy to .dev.vars (gitignored) for local development. The same three values
+# are set in production with `npx wrangler secret put <NAME>`.
+
+# Resend API key — https://resend.com/api-keys
+RESEND_API_KEY="re_xxxxxxxxxxxxxxxxxxxx"
+
+# Where consultation requests are delivered.
+INTAKE_TO="intake@kagasofflaw.com"
+
+# Must be an address on a domain verified in Resend, or sending fails.
+# https://resend.com/domains
+INTAKE_FROM="Kagasoff Law Firm <intake@kagasofflaw.com>"
