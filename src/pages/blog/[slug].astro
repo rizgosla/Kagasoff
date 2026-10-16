@@ -1,17 +1,29 @@
 ---
-/** Blog post — prerendered per published post (drafts included in dev only). */
+/** Blog post — prerendered per published post (drafts included in dev only).
+    Laid out like the home page's "why" section: a navy starfield hero (with a
+    breadcrumb back to /blog, and the cover image beside the headline when the
+    post has one), then a cream band holding the article as a popout card next
+    to a sidebar (consultation card + practice areas; beside the article and sticky from xl, two cards under it below that). Up to three more
+    posts follow, then the shared closing contact band. */
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogPostCard from '../../components/BlogPostCard.astro';
 import ContactSection from '../../components/ContactSection.astro';
+import { practiceAreas } from '../../data/practiceAreas';
 import { getCollection, render } from 'astro:content';
 
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts', ({ data }) => !import.meta.env.PROD || !data.draft);
-  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+  const posts = (await getCollection('posts', ({ data }) => !import.meta.env.PROD || !data.draft)).sort(
+    (a, b) => b.data.publishedDate.valueOf() - a.data.publishedDate.valueOf(),
+  );
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post, more: posts.filter((p) => p.id !== post.id).slice(0, 3) },
+  }));
 }
 
-const { post } = Astro.props;
+const { post, more } = Astro.props;
 const { title, summary, publishedDate, coverImage, coverImageAlt, draft } = post.data;
 const { Content } = await render(post);
 
@@ -22,61 +34,142 @@ const dateLabel = publishedDate.toLocaleDateString('en-US', {
   timeZone: 'UTC',
 });
 const iso = publishedDate.toISOString().slice(0, 10);
+// ~230 words a minute, never less than one.
+const minutes = Math.max(1, Math.round((post.body ?? '').split(/\s+/).filter(Boolean).length / 230));
 ---
 
 <BaseLayout title={`${title} — Kagasoff Law Firm`} description={summary}>
-  <!-- ARTICLE HEADER -->
-  <section class="bg-paper">
-    <div class="shell pt-10 md:pt-14">
-      <div class="blog-col">
-        <a href="/blog" class="mb-8 inline-flex items-center gap-2 text-[12.5px] font-semibold uppercase tracking-[0.14em] text-brass">
-          <span aria-hidden="true">&larr;</span> All articles
-        </a>
-        <div class="mb-4 flex flex-wrap items-center gap-3 text-[12.5px] uppercase tracking-[0.18em] text-brass">
-          <time datetime={iso}>{dateLabel}</time>
-          {
-            draft && (
-              <span class="rounded-full border border-brass/60 px-2.5 py-0.5 text-[10.5px] font-semibold tracking-[0.14em]">Draft</span>
-            )
-          }
-        </div>
-        <h1 class="mb-5 font-serif text-[clamp(34px,4.6vw,58px)] font-medium leading-[1.08] text-navy">{title}</h1>
-        <div class="mb-6 h-0.5 w-[54px] bg-brass"></div>
-        <p class="font-serif text-[clamp(20px,1.7vw,26px)] italic leading-[1.45] text-ink">{summary}</p>
-      </div>
+  <!-- HERO -->
+  <section class="starfield overflow-hidden text-paper">
+    <div class="shell pb-12 pt-10 md:pb-[70px] md:pt-12">
+      <nav aria-label="Breadcrumb" class="mb-10 md:mb-12" data-reveal>
+        <ol class="flex flex-wrap items-center gap-2.5 text-[12px] uppercase tracking-[0.2em] text-mist/80">
+          <li><a href="/" class="transition-colors hover:text-paper">Home</a></li>
+          <li aria-hidden="true" class="text-brasslight/70">/</li>
+          <li><a href="/blog" class="transition-colors hover:text-paper">Blog</a></li>
+        </ol>
+      </nav>
 
-      {
-        coverImage && (
-          <figure class="mx-auto mt-10 max-w-[1000px]">
-            <img
-              src={coverImage}
-              alt={coverImageAlt ?? ''}
-              class="aspect-[16/9] w-full rounded-[10px] border border-line object-cover"
-              decoding="async"
-            />
-          </figure>
-        )
-      }
+      <div class:list={['grid grid-cols-1 items-center gap-10', coverImage && 'lg:grid-cols-[1.1fr_0.9fr] lg:gap-16']}>
+        <div>
+          <div class="mb-5 flex flex-wrap items-center gap-x-3 gap-y-2 text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.28em] text-brasslight" data-reveal>
+            <time datetime={iso}>{dateLabel}</time>
+            <span aria-hidden="true" class="h-px w-5 bg-brasslight/50"></span>
+            <span>{minutes} min read</span>
+            {
+              draft && (
+                <span class="rounded-full border border-brasslight/60 px-2.5 py-0.5 text-[10.5px] font-semibold tracking-[0.14em]">Draft</span>
+              )
+            }
+          </div>
+          <h1 class="mb-[18px] max-w-[22ch] font-serif text-[clamp(34px,4.6vw,64px)] font-medium leading-[1.06]" data-reveal style="--reveal-delay:80ms">
+            {title}
+          </h1>
+          <div class="mb-7 h-0.5 w-[54px] bg-brass" data-reveal style="--reveal-delay:130ms"></div>
+          <p class="max-w-[60ch] text-[clamp(16px,1.05vw,20px)] font-light leading-[1.7] text-mist" data-reveal style="--reveal-delay:170ms">
+            {summary}
+          </p>
+        </div>
+
+        {
+          coverImage && (
+            <figure class="overflow-hidden rounded-[16px] border border-white/10" data-reveal="right" style="--reveal-delay:120ms">
+              <img src={coverImage} alt={coverImageAlt ?? ''} class="aspect-[4/3] w-full object-cover" decoding="async" />
+            </figure>
+          )
+        }
+      </div>
     </div>
   </section>
 
-  <!-- ARTICLE BODY -->
-  <section class="bg-paper">
-    <div class="shell pb-14 pt-10 md:pb-[70px] md:pt-12">
-      <div class="blog-col">
-        <div class="prose-blog">
-          <Content />
-        </div>
+  <!-- ARTICLE + SIDEBAR -->
+  <section class="bg-cream">
+    <div class="shell py-12 md:py-[84px]">
+      <div class="grid grid-cols-1 items-start gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(380px,0.5fr)] xl:gap-14">
+        <!-- Article -->
+        <article class="popout p-6 sm:p-9 md:p-12 xl:p-14">
+          <div class="prose-blog">
+            <Content />
+          </div>
 
-        <!-- Disclaimer -->
-        <aside class="mt-14 rounded-[10px] border border-line bg-cream px-6 py-6 md:px-8" aria-label="Legal disclaimer">
-          <p class="mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-brass">Please note</p>
-          <p class="text-[14.5px] font-light leading-[1.75] text-ink">
-            This article is general information, not legal advice. Reading it does not create an attorney&ndash;client
-            relationship. For advice about your situation, contact the firm for a free consultation.
-          </p>
+          <!-- Disclaimer -->
+          <aside class="mt-12 rounded-[12px] border border-line bg-cream px-6 py-6 md:px-8" aria-label="Legal disclaimer">
+            <p class="mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-brass">Please note</p>
+            <p class="text-[14.5px] font-light leading-[1.75] text-ink">
+              This article is general information, not legal advice. Reading it does not create an attorney&ndash;client
+              relationship. For advice about your situation, contact the firm for a free consultation.
+            </p>
+          </aside>
+
+          <div class="mt-10 border-t border-line pt-8">
+            <a href="/blog" class="lift inline-flex items-center gap-2.5 rounded-[8px] border border-brass px-6 py-3.5 text-[13px] font-semibold uppercase tracking-[0.12em] text-brass transition-colors hover:bg-brass hover:text-paper">
+              <span aria-hidden="true">&larr;</span> All articles
+            </a>
+          </div>
+        </article>
+
+        <!-- Sidebar -->
+        <aside class="grid grid-cols-1 items-start gap-8 md:grid-cols-2 xl:sticky xl:top-24 xl:flex xl:flex-col xl:items-stretch" aria-label="Contact and practice areas">
+          <div class="starfield overflow-hidden rounded-[16px] border border-white/10 p-7 text-paper md:p-9" data-reveal="right">
+            <p class="mb-3 text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brasslight">Free Consultation</p>
+            <p class="font-serif text-[clamp(24px,1.9vw,32px)] font-medium leading-[1.2]">
+              Talk to an attorney about <span class="text-gold">your situation.</span>
+            </p>
+            <p class="mt-4 text-[15px] font-light leading-[1.7] text-mist">
+              Every consultation is free and confidential. We'll tell you honestly where you stand.
+            </p>
+            <div class="mt-7 flex flex-col gap-3">
+              <a href="tel:6572184947" class="btn-brass lift inline-block rounded-[8px] bg-brass px-6 py-4 text-center text-[15px] font-semibold tracking-[0.04em]">Call (657) 218-4947</a>
+              <a href="#contact" class="lift inline-block rounded-[8px] border border-[rgba(250,248,243,0.4)] px-6 py-4 text-center text-[15px] font-semibold tracking-[0.04em] text-paper">Send a message</a>
+            </div>
+          </div>
+
+          <div class="popout p-7 md:p-9" data-reveal="right" style="--reveal-delay:100ms">
+            <p class="mb-4 text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">Practice Areas</p>
+            <ul>
+              {
+                practiceAreas.map((a, i) => (
+                  <li class:list={[i > 0 && 'border-t border-line']}>
+                    <a href={`/services#${a.slug}`} class="group flex items-center justify-between gap-4 py-3.5 font-serif text-[19px] text-navy transition-colors hover:text-brass">
+                      {a.name}
+                      <span aria-hidden="true" class="text-brass transition-transform group-hover:translate-x-1">&rarr;</span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
         </aside>
       </div>
+
+      {
+        more.length > 0 && (
+          <div class="mt-16 md:mt-24">
+            <div class="mb-8 flex flex-wrap items-end justify-between gap-4 md:mb-10" data-reveal>
+              <div>
+                <p class="mb-[14px] text-[clamp(12px,0.72vw,14px)] uppercase tracking-[0.32em] text-brass">Keep Reading</p>
+                <h2 class="font-serif text-[clamp(28px,3vw,44px)] font-medium leading-[1.1] text-navy">More from the firm.</h2>
+              </div>
+              <a href="/blog" class="lift inline-block border-b border-brass pb-1.5 text-sm font-semibold tracking-[0.05em] text-brass">All articles &rarr;</a>
+            </div>
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 xl:grid-cols-3">
+              {more.map((p, i) => (
+                <div data-reveal style={`--reveal-delay:${i * 60}ms`}>
+                  <BlogPostCard
+                    slug={p.id}
+                    title={p.data.title}
+                    summary={p.data.summary}
+                    publishedDate={p.data.publishedDate}
+                    coverImage={p.data.coverImage}
+                    coverImageAlt={p.data.coverImageAlt}
+                    draft={p.data.draft}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      }
     </div>
   </section>
 
