@@ -4,7 +4,6 @@
     (vision + values), and the closing contact band with a second intake form
     and the office map. */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Placeholder from '../components/Placeholder.astro';
 import IntakeForm from '../components/IntakeForm.astro';
 import TestimonialCarousel from '../components/TestimonialCarousel.astro';
 import ProcessSection from '../components/ProcessSection.astro';
@@ -287,22 +286,8 @@ const values = [
             </div>
           </div>
         </article>
-
-        <!-- Office manager — mirrored: bio left, portrait right -->
-        <article class="overflow-hidden rounded-[16px] border border-white/10 bg-navy md:grid md:grid-cols-[1fr_minmax(300px,420px)]" data-reveal style="--reveal-delay:120ms">
-          <Placeholder label="Office manager portrait — replace" class="aspect-[4/5] w-full md:order-2 md:aspect-auto md:h-full" />
-          <div class="p-7 md:order-1 md:p-10 lg:p-12">
-            <h3 class="font-serif text-[clamp(26px,2.2vw,36px)] font-medium leading-[1.1] text-paper">Melo</h3>
-            <p class="mt-2 text-[12.5px] uppercase tracking-[0.16em] text-brasslight">Office Manager</p>
-            <p class="mt-6 text-[clamp(14.5px,0.9vw,17px)] font-light leading-[1.75] text-mist">
-              [SAMPLE BIO — replace with the office manager's real bio.] She is usually the first
-              voice you'll hear when you call the firm, and she keeps every matter moving — scheduling
-              consultations, gathering records, and making sure clients are never left wondering where
-              their case stands. Clients regularly credit her with making a difficult process feel
-              manageable.
-            </p>
-          </div>
-        </article>
+        {/* Office manager (Melo) row removed for now until her real photo and
+            bio are ready — restore it from git history. */}
       </div>
     </div>
   </section>
