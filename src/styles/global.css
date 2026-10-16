@@ -461,14 +461,12 @@ textarea.fld {
   min-height: 130px;
 }
 
-/* ===== Blog: article column + long-form typography =====
+/* ===== Blog: long-form typography =====
    No typography plugin in Tailwind v4 here, so the Markdoc output is styled
-   by element under .prose-blog. */
-.blog-col {
-  max-width: 720px;
-  margin-inline: auto;
-}
+   by element under .prose-blog. The measure cap keeps lines readable when the
+   article card is wide on large desktops. */
 .prose-blog {
+  max-width: 74ch;
   color: var(--color-ink);
   font-size: clamp(16.5px, 1.1vw, 19px);
   font-weight: 300;
