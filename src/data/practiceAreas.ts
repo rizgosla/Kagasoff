@@ -65,7 +65,7 @@ export const practiceAreas: PracticeArea[] = [
     blurb:
       'From misdemeanors to felonies, we defend your rights at every stage, with the unique perspective of an attorney who has worked both sides of the courtroom.',
     overview: [
-      'Having served as a law clerk for both the Orange County District Attorney and Public Defender before fifteen years in private defense, Ashley Kagasoff brings a rare, dual perspective to every criminal matter.',
+      'Having served as a law clerk for both the Orange County District Attorney and Public Defender before two decades in private defense, Ashley Kagasoff brings a rare, dual perspective to every criminal matter.',
       'We move quickly to protect your rights, scrutinize the evidence against you, and pursue the strongest possible outcome.',
     ],
     casesHeading: 'Charges we defend',
