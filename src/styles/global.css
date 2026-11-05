@@ -428,30 +428,6 @@ a {
   background-repeat: no-repeat;
 }
 
-/* ===== Home hero team photo =====
-   The photo has a light wall behind the team, so it has to be nearly gone
-   wherever hero copy sits over it: the left fade eases in slowly and only
-   reaches full strength past the copy column. Top and bottom fade so the
-   photo dissolves into the starfield instead of ending on a hard edge. Two
-   masks, intersected. Mobile (photo stacked under the copy) only fades the
-   top and bottom. */
-.hero-photo img {
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 16%, #000 80%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 16%, #000 80%, transparent 100%);
-}
-@media (min-width: 768px) {
-  .hero-photo img {
-    -webkit-mask-image:
-      linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.12) 18%, rgba(0, 0, 0, 0.55) 32%, #000 46%),
-      linear-gradient(to bottom, transparent 0%, #000 18%, #000 78%, transparent 100%);
-    mask-image:
-      linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.12) 18%, rgba(0, 0, 0, 0.55) 32%, #000 46%),
-      linear-gradient(to bottom, transparent 0%, #000 18%, #000 78%, transparent 100%);
-    -webkit-mask-composite: source-in;
-    mask-composite: intersect;
-  }
-}
-
 /* ===== Form fields ===== */
 .fld {
   width: 100%;
