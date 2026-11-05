@@ -90,7 +90,7 @@ password manager. The developer gets added as a collaborator where needed.
 
 ### 5. Content
 
-- [ ] **Team photo:** replace `public/team.jpg` (home page hero) with the
+- [x] **Team photo:** replace `public/team.jpg` (home page hero) with the
       updated photo.
 - [ ] **Office manager:** Melo's card was removed from the Team section on the
       home page until her real photo and bio are ready. To bring it back,
